@@ -165,7 +165,12 @@ log_message(f"Proceso de combinación completado. Archivo guardado en: {output_f
 
 # Configuración de tablas y relaciones PK-FK
 config_tablas = {
-    "cca_usuario": {"pk": "T_Id", "relaciones": {"cca_predio": "usuario"}},
+
+    "cca_usuario": {
+        "pk": "T_Id", "relaciones": {
+            "cca_predio": "usuario"
+            }
+    },
     "cca_predio": {
         "pk": "T_Id",
         "relaciones": {
