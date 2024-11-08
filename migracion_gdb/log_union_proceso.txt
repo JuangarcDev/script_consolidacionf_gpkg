@@ -1,0 +1,265 @@
+Registro de ejecución del script de unión de GPKG
+
+Archivo 'Final 160002.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160003.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160004.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160005.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160008.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160009.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160010.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160011.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160012.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160013.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 160014.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 16A001.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'Final 16A002.pdf' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009153512698.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009154544112.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009165539456.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009180056685.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009180251572.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009180347820.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009191355477.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009194728604.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009200407132.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009200622759.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009201042546.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009201148090.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009201501024.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009201603022.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009202024857.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009202131640.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009202415452.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009205535825.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009205653540.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009210553166.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009211308227.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009211451792.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009212252301.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009212415590.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009212545780.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241009212929622.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018151019740.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018151209044.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018152644828.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018153318239.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018153420548.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018153542062.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018160125189.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018160444028.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018160550356.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018160654137.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018160751562.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018160823498.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018161011020.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018161136382.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018161914688.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018172720981.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018190409224.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018193609907.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018193916707.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018195052294.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018195146042.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018195241644.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018195337953.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018195518127.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018195810343.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018201723616.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018201823472.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018202022212.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018202140335.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018202259569.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018202551290.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018202843917.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018204204777.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018210406252.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241018210658202.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241022234051933.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241022234156424.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023011002998.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023011315362.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023011745895.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023011848479.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023013323543.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023013446312.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023020326443.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023021546107.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023021703670.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023021807775.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023021913165.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023022834831.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023022935425.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023023708447.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023024223558.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023024400954.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023025213705.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023025322222.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023030307541.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023030453213.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023030722101.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023030814526.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023030857917.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023031716435.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023031818859.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023034747029.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023035720678.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023035821522.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023035931920.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040041540.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040129841.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040233452.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040334977.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040426917.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040510354.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040545740.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040650007.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040733238.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040814074.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040853571.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023040941135.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023041118736.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023041218079.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023041335985.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023042733640.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023043106438.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023044428759.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023045343872.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023045635454.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023045724488.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023045818549.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023045930838.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050032121.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050203073.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050300312.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050359367.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050621829.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050710176.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050800334.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050853915.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023050926956.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'JPEG_20241023051021719.jpg' copiado a la carpeta DCIM combinada.
+Archivo 'WhatsApp Image 2024-10-23 at 11.29.05 PM.jpeg' copiado a la carpeta DCIM combinada.
+Procesando 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg' con las capas: ['gm_surface3dlistvalue', 'extdireccion', 'cca_areaintervencionespecifica', 'cca_areaintervenciongeneral', 'cca_comisiones', 'cca_construccionhistorica', 'cca_marcas', 'cca_saldosconservacion', 'cca_terreno', 'cca_terrenohistorico', 'cca_unidadconstruccionhistorica', 'cca_construccion', 'cca_unidadconstruccion', 'cca_puntocontrol', 'cca_puntolevantamiento', 'cca_puntolindero', 'cca_puntoreferencia', 'terrenos_manzana_16', 'construcciones_manzana_16', 'gm_multisurface3d', 'cca_amenazariesgovulnerabilidadtipo_', 'cca_adjunto', 'cca_agrupacioninteresados', 'cca_calificacionconvencional', 'cca_caracteristicasunidadconstruccion', 'cca_derecho', 'cca_estructuranovedadnumeropredial', 'cca_novedadfmi', 'cca_ofertasmercadoinmobiliario', 'cca_omisiones', 'cca_premarcas', 'cca_restriccion', 'cca_usuario', 'extamenazariesgovulnerabilidad', 'extreferenciaregistralsistemaantiguo', 'cca_fuenteadministrativa', 'cca_interesado', 'cca_predio', 'cca_fuenteadministrativa_derecho', 'cca_predio_copropiedad', 'cca_predio_informalidad', 'col_miembros', 'T_ILI2DB_BASKET', 'T_ILI2DB_DATASET', 'T_ILI2DB_INHERITANCE', 'T_ILI2DB_SETTINGS', 'T_ILI2DB_TRAFO', 'T_ILI2DB_MODEL', 'cca_amenazariesgovulnerabilidadtipo', 'cca_cubrimientomurostipo', 'cca_restricciontipo', 'cca_fotoidentificaciontipo', 'cca_puntoreferenciatipo', 'cca_roltipo', 'cca_adjunto_relacion_soporte', 'cca_origenderechotipo', 'cca_calificartipo', 'cca_grupoetnicotipo', 'cca_booleanotipo', 'cca_puntotipo', 'cca_tamaniobaniotipo', 'extdireccion_sector_ciudad', 'cca_novedadfmi_tipo_novedadfmi', 'col_metodoproducciontipo', 'cca_mobiliariotipo', 'cca_adjunto_dependencia_ucons', 'cca_acuerdotipo', 'cca_prediotipo', 'cca_resultadovisitatipo', 'cca_controltipo', 'cca_tamaniococinatipo', 'extdireccion_tipo_direccion', 'cca_fuenteadministrativatipo', 'cca_pisotipo', 'cca_cubiertatipo', 'cca_sexotipo', 'cca_procedimientocatastralregistraltipo', 'cca_marcas_tipo', 'cca_construccionplantatipo', 'extdireccion_sector_predio', 'cca_condicionprediotipo', 'cca_interesadotipo', 'cca_clasesuelotipo', 'cca_saldosconservacion_tipo', 'cca_estadociviltipo', 'cca_fachadatipo', 'cca_interesadodocumentotipo', 'cca_cerchastipo', 'cca_categoriasuelotipo', 'cca_grupointeresadotipo', 'cca_estratotipo', 'cca_derechotipo', 'cca_armazontipo', 'cca_ofertatipo', 'cca_estructuranovedadnumeropredial_tipo_novedad', 'cca_unidadconstrucciontipo', 'cca_clasecalificaciontipo', 'cca_destinacioneconomicatipo', 'cca_murostipo', 'cca_adjunto_tipo_archivo', 'extreferenciaregistralsistemaantiguo_tipo_referencia', 'cca_construcciontipo', 'cca_estadotipo', 'cca_predio_estado_folio', 'extdireccion_clase_via_principal', 'cca_enchapetipo', 'cca_tipologiatipo', 'cca_estadoconservaciontipo', 'cca_usouconstipo', 'col_interpolaciontipo', 'cca_puntolevtipo', 'cca_anexotipo', 'cca_dominioconstrucciontipo', 'T_ILI2DB_CLASSNAME', 'T_ILI2DB_ATTRNAME', 'T_ILI2DB_COLUMN_PROP', 'T_ILI2DB_TABLE_PROP', 'T_KEY_OBJECT', 'T_ILI2DB_META_ATTRS', 'gc_predio', 'gc_interesado', 'gc_agrupacioninteresados']
+Añadiendo nueva capa 'gm_surface3dlistvalue' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'extdireccion' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_areaintervencionespecifica' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_areaintervenciongeneral' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_comisiones' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_construccionhistorica' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_marcas' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_saldosconservacion' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_terreno' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_terrenohistorico' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_unidadconstruccionhistorica' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_construccion' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_unidadconstruccion' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_puntocontrol' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_puntolevantamiento' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_puntolindero' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'cca_puntoreferencia' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'terrenos_manzana_16' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Añadiendo nueva capa 'construcciones_manzana_16' de 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg'.
+Error al leer la capa 'gm_multisurface3d' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_amenazariesgovulnerabilidadtipo_' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_adjunto' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_agrupacioninteresados' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_calificacionconvencional' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_caracteristicasunidadconstruccion' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_derecho' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_estructuranovedadnumeropredial' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_novedadfmi' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_ofertasmercadoinmobiliario' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_omisiones' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_premarcas' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_restriccion' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_usuario' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extamenazariesgovulnerabilidad' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extreferenciaregistralsistemaantiguo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_fuenteadministrativa' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_interesado' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_predio' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_fuenteadministrativa_derecho' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_predio_copropiedad' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_predio_informalidad' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'col_miembros' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_BASKET' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_DATASET' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_INHERITANCE' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_SETTINGS' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_TRAFO' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_MODEL' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_amenazariesgovulnerabilidadtipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_cubrimientomurostipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_restricciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_fotoidentificaciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_puntoreferenciatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_roltipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_adjunto_relacion_soporte' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_origenderechotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_calificartipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_grupoetnicotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_booleanotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_puntotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_tamaniobaniotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extdireccion_sector_ciudad' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_novedadfmi_tipo_novedadfmi' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'col_metodoproducciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_mobiliariotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_adjunto_dependencia_ucons' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_acuerdotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_prediotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_resultadovisitatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_controltipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_tamaniococinatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extdireccion_tipo_direccion' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_fuenteadministrativatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_pisotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_cubiertatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_sexotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_procedimientocatastralregistraltipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_marcas_tipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_construccionplantatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extdireccion_sector_predio' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_condicionprediotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_interesadotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_clasesuelotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_saldosconservacion_tipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_estadociviltipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_fachadatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_interesadodocumentotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_cerchastipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_categoriasuelotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_grupointeresadotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_estratotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_derechotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_armazontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_ofertatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_estructuranovedadnumeropredial_tipo_novedad' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_unidadconstrucciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_clasecalificaciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_destinacioneconomicatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_murostipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_adjunto_tipo_archivo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extreferenciaregistralsistemaantiguo_tipo_referencia' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_construcciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_estadotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_predio_estado_folio' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'extdireccion_clase_via_principal' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_enchapetipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_tipologiatipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_estadoconservaciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_usouconstipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'col_interpolaciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_puntolevtipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_anexotipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'cca_dominioconstrucciontipo' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_CLASSNAME' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_ATTRNAME' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_COLUMN_PROP' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_TABLE_PROP' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_KEY_OBJECT' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'T_ILI2DB_META_ATTRS' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'gc_predio' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'gc_interesado' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Error al leer la capa 'gc_agrupacioninteresados' en 'C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg': 'DataFrame' object has no attribute 'geom_type'
+Se ha creado el archivo combinado: C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\captura_campo_20240920.gpkg
