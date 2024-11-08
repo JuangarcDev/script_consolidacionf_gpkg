@@ -166,11 +166,6 @@ log_message(f"Proceso de combinación completado. Archivo guardado en: {output_f
 # Configuración de tablas y relaciones PK-FK
 config_tablas = {
 
-    "cca_usuario": {
-        "pk": "T_Id", "relaciones": {
-            "cca_predio": "usuario"
-            }
-    },
     "cca_predio": {
         "pk": "T_Id",
         "relaciones": {
@@ -178,6 +173,13 @@ config_tablas = {
             "cca_derecho": "predio",
             "cca_construccion": "predio"
         }
+    },
+
+    "cca_usuario": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_predio": "usuario"
+            }
     },
     #"cca_terreno": {"pk": "T_Id", "relaciones": {""}}
     # Añadir más tablas y relaciones según sea necesario
@@ -193,42 +195,86 @@ def obtener_max_id(conn, table, pk_field):
     max_id = cursor.fetchone()[0]
     return max_id if max_id else 0
 
-# Función para ajustar IDs en la tabla base y registrar la correspondencia en un diccionario
-def ajustar_ids(df, offset, pk_field, id_set):
+# Función para verificar y ajustar IDs en la tabla base
+def ajustar_ids_unicos(df, pk_field, id_set):
+    """
+    Ajusta los IDs en la tabla base para que no haya duplicados en las tablas relacionadas.
+    :param df: DataFrame de la tabla base.
+    :param pk_field: El nombre del campo PK en la tabla base.
+    :param id_set: Conjunto de IDs ya usados en la base de datos.
+    :return: DataFrame con IDs ajustados.
+    """
     id_map = {}  # Mapeo de IDs originales a IDs ajustados
-    if pk_field not in df.columns:
-        log_message(f"Advertencia: El campo PK '{pk_field}' no se encuentra en la tabla.")
-        return df, id_map
     for index, row in df.iterrows():
         original_id = row[pk_field]
-        new_id = original_id + offset
+        new_id = original_id
         
-        # Evitar duplicados en el conjunto de IDs
+        # Verificar que el nuevo ID no esté duplicado en las tablas relacionadas
         while new_id in id_set:
-            new_id += 1  # Incrementa el nuevo ID si ya existe en el conjunto
+            new_id += 1  # Incrementar el nuevo ID si ya existe en el conjunto
 
         df.at[index, pk_field] = new_id
-        id_map[original_id] = new_id  # Mapeo del PK original al nuevo PK
-        id_set.add(new_id)  # Añadir el nuevo ID al conjunto para seguimiento
+        id_map[original_id] = new_id
+        id_set.add(new_id)
+    
     return df, id_map
 
-# Función para alinear atributos según la estructura del archivo base
 def alinear_atributos(df, columnas_base):
+    """
+    Alinea las columnas del DataFrame con la estructura base.
+    :param df: DataFrame de la tabla a alinear.
+    :param columnas_base: Lista de columnas en la tabla base.
+    :return: DataFrame alineado.
+    """
     for columna in columnas_base:
         if columna not in df.columns:
-            df[columna] = None  # Agrega la columna faltante con valor NULL
-    # Ignorar columnas adicionales que no están en el archivo base
+            df[columna] = None  # Agregar columna faltante con valores NULL
+    # Ignorar columnas adicionales que no están en la base
     df = df[[col for col in columnas_base if col in df.columns]]
     return df
 
-# Función para actualizar las FKs en las tablas relacionadas usando `id_map`
 def actualizar_fk_en_relaciones(df, fk_field, id_map):
+    """
+    Actualiza las claves foráneas en una tabla relacionada con los nuevos valores de PK.
+    :param df: DataFrame de la tabla relacionada.
+    :param fk_field: El nombre del campo FK en la tabla relacionada.
+    :param id_map: Diccionario de mapeo de IDs originales a nuevos.
+    :return: DataFrame actualizado con las nuevas claves foráneas.
+    """
     if fk_field not in df.columns:
-        log_message(f"Advertencia: El campo FK '{fk_field}' no se encuentra en la tabla relacionada.")
+        log_message(f"Advertencia: El campo FK '{fk_field}' no se encuentra en la tabla.")
         return df
-    # Reemplazar valores de FK según el mapeo original -> ajustado
+    
+    # Actualizar las claves foráneas utilizando el mapeo de IDs
     df[fk_field] = df[fk_field].map(id_map).fillna(df[fk_field])
+    
     return df
+
+def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map):
+    """
+    Actualiza las tablas relacionadas con el nuevo T_Id de la tabla base.
+    :param conn_dest: Conexión a la base de datos destino.
+    :param tabla_base: Nombre de la tabla base (ej. 'cca_predio').
+    :param pk_field: Nombre del campo PK en la tabla base (ej. 'T_Id').
+    :param relaciones: Diccionario con las relaciones FK.
+    :param id_map: Mapeo de IDs originales a nuevos.
+    """
+    # Procesar las tablas relacionadas
+    for fk_table, fk_field in relaciones.items():
+        try:
+            df_fk = pd.read_sql_query(f"SELECT * FROM {fk_table}", conn_dest)
+            if fk_field not in df_fk.columns:
+                log_message(f"La columna '{fk_field}' no se encuentra en '{fk_table}'. Se omitirá la actualización.")
+                continue
+            
+            # Actualizar el campo FK con el nuevo T_Id
+            df_fk = actualizar_fk_en_relaciones(df_fk, fk_field, id_map)
+
+            # Insertar la tabla relacionada con los cambios
+            df_fk.to_sql(fk_table, conn_dest, if_exists="replace", index=False)
+            log_message(f"Actualizando FK en '{fk_table}' para los registros de '{tabla_base}'.")
+        except Exception as e:
+            log_message(f"Error al actualizar FK en '{fk_table}': {e}")
 
 # Procesamiento de tablas con relaciones, sin relaciones y de dominio
 with sqlite3.connect(output_file) as conn_dest:
@@ -251,61 +297,25 @@ with sqlite3.connect(output_file) as conn_dest:
                 try:
                     df = pd.read_sql_query(f"SELECT * FROM {tabla}", conn_src)
                     if df.empty:
-                        log_message(f"La tabla '{tabla}' está vacía en '{gpkg}'. Se omitirá.")
+                        log_message(f"La tabla '{tabla}' está vacía. Se omitirá.")
                         continue
                 except Exception as e:
-                    log_message(f"Error al leer la tabla '{tabla}' en '{gpkg}': {e}")
+                    log_message(f"Error al leer la tabla '{tabla}': {e}")
                     continue
 
-                # Obtener las columnas base de la tabla en el archivo de destino
+                # Ajustar IDs en la tabla base
+                max_id = obtener_max_id(conn_dest, tabla, pk_field)
+                offset = max_id + 1
+                df_ajustada, id_map = ajustar_ids_unicos(df, pk_field, id_sets[tabla])
+
+                # Actualizar las tablas relacionadas con el nuevo T_Id
+                actualizar_registros(conn_dest, tabla, pk_field, relaciones, id_map)
+
+                # Insertar la tabla base ajustada
                 try:
-                    df_base = pd.read_sql_query(f"SELECT * FROM {tabla} LIMIT 0", conn_dest)
-                    columnas_base = df_base.columns.tolist()
+                    df_ajustada.to_sql(tabla, conn_dest, if_exists="append", index=False)
+                    log_message(f"Insertando registros en '{tabla}' - Total registros: {len(df_ajustada)}")
                 except Exception as e:
-                    log_message(f"Error al obtener columnas base para '{tabla}' en '{output_file}': {e}")
-                    continue
-
-                # Alinear atributos con la estructura del .GPKG base
-                df = alinear_atributos(df, columnas_base)
-
-                # Ajustar IDs si la tabla tiene PK
-                if pk_field:
-                    max_id = obtener_max_id(conn_dest, tabla, pk_field)
-                    offset = max_id + 1
-                    df_ajustada, id_map = ajustar_ids(df, offset, pk_field, id_sets[tabla])
-                    log_message(f"Ajustando IDs para la tabla '{tabla}' desde el archivo '{gpkg}' con offset {offset}.")
-
-                    # Actualizar FKs en las tablas relacionadas
-                    for fk_table, fk_field in relaciones.items():
-                        try:
-                            df_fk = pd.read_sql_query(f"SELECT * FROM {fk_table}", conn_src)
-                            if fk_field not in df_fk.columns:
-                                log_message(f"La columna '{fk_field}' no se encuentra en '{fk_table}' en '{gpkg}'. Se omitirá la actualización de FK.")
-                                continue
-                            df_fk[fk_field] = df_fk[fk_field].map(id_map).fillna(df_fk[fk_field])
-                            df_fk = alinear_atributos(df_fk, columnas_base)
-                            df_fk.to_sql(fk_table, conn_dest, if_exists="append", index=False)
-                            log_message(f"Actualizando FK en '{fk_table}' para la tabla '{tabla}' desde el archivo '{gpkg}'.")
-                        except Exception as e:
-                            log_message(f"Error al actualizar FK en '{fk_table}' relacionado con '{tabla}' en '{gpkg}': {e}")
-                
-                    # Insertar la tabla base ajustada en el archivo de destino
-                    try:
-                        df_ajustada.to_sql(tabla, conn_dest, if_exists="append", index=False)
-                        log_message(f"Insertando registros en '{tabla}' desde '{gpkg}' - Total registros: {len(df_ajustada)}")
-                    except sqlite3.IntegrityError as e:
-                        log_message(f"Error de duplicado en '{tabla}' desde '{gpkg}' - {e}")
-                    except Exception as e:
-                        log_message(f"Error general al insertar en '{tabla}' desde '{gpkg}': {e}")
-                else:
-                    # Para tablas sin PK, insertar directamente
-                    try:
-                        df = alinear_atributos(df, columnas_base)
-                        df.to_sql(tabla, conn_dest, if_exists="append", index=False)
-                        log_message(f"Insertando registros en '{tabla}' desde '{gpkg}' - Total registros: {len(df)}")
-                    except sqlite3.IntegrityError as e:
-                        log_message(f"Error de duplicado en '{tabla}' desde '{gpkg}' - {e}")
-                    except Exception as e:
-                        log_message(f"Error general al insertar en '{tabla}' desde '{gpkg}': {e}")
+                    log_message(f"Error al insertar registros en '{tabla}': {e}")
 
 log_message("Proceso de unión de tablas alfanuméricas completado.")
