@@ -33,7 +33,6 @@ gpkg_files = [
     r"C:\ACC\CONSOLIDACION_MANZANAS\00000017-01_5\captura_campo_20240920.gpkg"
 ]
 
-
 # Archivo de salida y carpeta DCIM
 output_file = r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\captura_campo_20240920.gpkg"
 output_dcim_folder = os.path.join(os.path.dirname(output_file), "DCIM")
@@ -44,57 +43,13 @@ os.makedirs(output_dcim_folder, exist_ok=True)
 # Diccionario para almacenar capas temporales de registros únicos
 combined_layers = {}
 
+# Diccionario para guardar el mapeo de IDs
+fid_mapping = {
+    # Ejemplo de estructura: "nombre_de_capa": {fid_original: fid_nuevo, ...}
+}
+
 # Copiar el archivo base al archivo de salida y comenzar desde este
 shutil.copy(gpkg_files[0], output_file)
-
-# Lista de capas geográficas específicas a procesar
-capas_a_procesar = [
-    "cca_construccion",
-    "cca_unidadconstruccion",
-    "cca_puntocontrol",
-    "cca_puntolevantamiento",
-    "cca_puntolindero",
-    "cca_puntoreferencia"
-]
-
-# Función para agregar columnas y actualizar valores usando SQL
-def modificar_gpkg_con_sql(gpkg_path, capas):
-    try:
-        conn = sqlite3.connect(gpkg_path)
-        cursor = conn.cursor()
-
-        for capa in capas:
-            # Agregar columnas si no existen
-            try:
-                cursor.execute(f"ALTER TABLE {capa} ADD COLUMN T_Id_Cop INTEGER;")
-                cursor.execute(f"ALTER TABLE {capa} ADD COLUMN Ruta TEXT (150);")
-                log_message(f"Columnas T_Id_Cop y Ruta añadidas a la capa '{capa}' en '{gpkg_path}'.")
-            except sqlite3.OperationalError:
-                log_message(f"Las columnas ya existen en la capa '{capa}' de '{gpkg_path}', se omite la creación.")
-
-            # Asignar valores a las columnas
-            ruta = os.path.abspath(gpkg_path)
-            cursor.execute(f"UPDATE {capa} SET T_Id_Cop = T_Id, Ruta = ?;", (ruta,))
-            log_message(f"Valores asignados en la capa '{capa}' de '{gpkg_path}'.")
-
-        conn.commit()
-        conn.close()
-    except Exception as e:
-        log_message(f"Error al modificar '{gpkg_path}': {e}")
-
-# Aplicar las modificaciones a todos los .gpkg
-for i, gpkg in enumerate(gpkg_files):
-    if not os.path.exists(gpkg):
-        log_message(f"El archivo '{gpkg}' no existe. Se omitirá.")
-        continue
-
-    log_message(f"Modificando '{gpkg}' con SQL...")
-    modificar_gpkg_con_sql(gpkg, capas_a_procesar)
-
-log_message("Modificaciones completadas en todos los .gpkg.")
-
-# Diccionario para mapear T_Id a nuevo fid
-id_map_geo = {}
 
 # Función para copiar archivos de una carpeta DCIM sin duplicados
 def copy_dcim_files(dcim_folder, output_dcim_folder):
@@ -174,18 +129,15 @@ for gpkg in gpkg_files[1:]:
                     else:
                         # Procesar capas con geometría
                         gdf = gpd.read_file(gpkg, layer=layer_name)
-
-                        if 'T_Id' in gdf.columns:
-                        # Mapeo y ajuste de IDs
-                            for index, row in gdf.iterrows():
-                                original_id = row['T_Id']
-                                if original_id not in id_map_geo:
-                                    new_fid = len(id_map_geo) + 1  # Generar nuevo fid único
-                                    id_map_geo[original_id] = {"fid": new_fid, "origen": gpkg}
-                                    gdf.at[index, 'T_Id'] = new_fid  # Actualizar T_Id en el DataFrame
-                                    continue
-
                         gdf = ensure_target_crs(gdf, layer_name)
+
+                        # Crear nuevos FID y registrar mapeo
+                        gdf['new_fid'] = range(len(gdf))
+                        fid_mapping[layer_name] = dict(zip(gdf['T_Id'], gdf['new_fid']))
+
+                        # Asignar los nuevos FID al dataframe
+                        gdf['T_Id'] = gdf['new_fid']
+                        gdf = gdf.drop(columns=['new_fid'])
 
                         if layer_name in combined_layers:
                             gdf_existing = combined_layers[layer_name]
@@ -218,15 +170,28 @@ with fiona.Env():
         except Exception as e:
             log_message(f"Error al guardar la capa '{layer_name}': {e}")
 
-# Imprimir el contenido de id_map_geo en el log y en la consola
-log_message("Contenido del diccionario id_map_geo:")
-for original_id, info in id_map_geo.items():
-    log_message(f"T_Id original: {original_id}, Nuevo fid: {info['fid']}, Origen: {info['origen']}")
-
 log_message(f"Proceso de combinación completado. Archivo guardado en: {output_file}")
 
 
 # --- Parte alfanumérica ---
+# Actualizar FK según el mapeo de FID
+def update_foreign_keys(layer_name, fk_column, related_layer_name):
+    # Comprobamos si el related_layer_name existe en el fid_mapping
+    if related_layer_name not in fid_mapping:
+        log_message(f"Advertencia: '{related_layer_name}' no encontrado en fid_mapping. No se puede actualizar FK para '{layer_name}'.")
+        return
+
+    # Obtenemos el mapeo de FIDs para la capa relacionada
+    for original_fid, new_fid in fid_mapping[related_layer_name].items():
+        # Mensaje de registro antes de la actualización
+        log_message(
+            f"Actualizando FK en '{layer_name}' -> '{fk_column}' usando FIDs de '{related_layer_name}': "
+            f"FID original: {original_fid}, FID cambiado: {new_fid}"
+        )
+        # Actualizamos la clave foránea en la capa de destino
+        combined_layers[layer_name].loc[
+            combined_layers[layer_name][fk_column] == original_fid, fk_column
+        ] = new_fid
 
 
 # Configuración de tablas y relaciones PK-FK
@@ -240,7 +205,7 @@ config_tablas = {
     },
 
     "cca_comisiones": {
-        "pk": "fid", 
+        "pk": "T_Id", 
         "relaciones": {
             None
             }
@@ -275,7 +240,7 @@ config_tablas = {
     },
 
     "cca_marcas": {
-        "pk": "fid", 
+        "pk": "T_Id", 
         "relaciones": {
             None
             }
@@ -324,14 +289,14 @@ config_tablas = {
     },
 
     "cca_saldosconservacion": {
-        "pk": "fid", 
+        "pk": "T_Id", 
         "relaciones": {
             None
             }
     },
 
     "col_transformacion": {
-        "pk": "fid", 
+        "pk": "T_Id", 
         "relaciones": {
             None
             }
@@ -375,52 +340,7 @@ config_tablas = {
             "cca_miembros": "interesado"
             }
     },
-"""
-    #GEOGRAFICAS:
-    "cca_construccion": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_construccion_adjunto",
-            "cca_unidadconstruccion": "construccion"
-            }
-    },
 
-    "cca_unidadconstruccion": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_unidadconstruccion_adjunto"
-            }
-    },
-
-        "cca_puntocontrol": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntocontrol_adjunto"
-            }
-    },
-
-        "cca_puntolevantamiento": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntolevantamiento_adjunto"
-            }
-    },
-
-        "cca_puntolindero": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntolindero_adjunto"
-            }
-    },
-
-        "cca_puntoreferencia": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntoreferencia_adjunto"
-            }
-    },
-
-"""
     "cca_predio": {
         "pk": "T_Id",
         "relaciones": {
@@ -469,6 +389,53 @@ config_tablas = {
     # Añadir más tablas y relaciones según sea necesario
 }
 
+# ACTUALIZAR RELACIONES DE LAS TABLAS GEOGRAFICAS
+relaciones_geograficas = {
+    #GEOGRAFICAS:
+    "cca_construccion": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_construccion_adjunto",
+            "cca_unidadconstruccion": "construccion"
+            }
+    },
+
+    "cca_unidadconstruccion": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_unidadconstruccion_adjunto"
+            }
+    },
+
+        "cca_puntocontrol": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntocontrol_adjunto"
+            }
+    },
+
+        "cca_puntolevantamiento": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntolevantamiento_adjunto"
+            }
+    },
+
+        "cca_puntolindero": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntolindero_adjunto"
+            }
+    },
+
+        "cca_puntoreferencia": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntoreferencia_adjunto"
+            }
+    },
+}
+
 # CONFIGURACION ATRIBUTOS PROBLEMATICOS
 atributos_mapping = {
     ("cca_usuario", "municipio_codigo"): "departamento_municipio_codigo",  # ejemplo de conflicto en tabla_origen_1  
@@ -479,12 +446,15 @@ atributos_mapping = {
 # Conjunto de IDs para verificar duplicados
 id_sets = {table: set() for table in config_tablas}
 
-# Función para obtener el máximo ID en una tabla
-def obtener_max_id(conn, table, pk_field):
+def obtener_max_id(conn, tabla, pk_field):
+    """
+    Obtiene el ID máximo de una tabla en una base de datos SQLite.
+    Si la tabla está vacía, devuelve 0.
+    """
     cursor = conn.cursor()
-    cursor.execute(f"SELECT MAX({pk_field}) FROM {table}")
+    cursor.execute(f"SELECT MAX({pk_field}) FROM {tabla}")
     max_id = cursor.fetchone()[0]
-    return max_id if max_id else 0
+    return max_id if max_id is not None else 0
 
 # Función para verificar y ajustar IDs en la tabla base
 def ajustar_ids_unicos(df, pk_field, id_set):
@@ -621,7 +591,11 @@ with sqlite3.connect(output_file) as conn_dest:
 
                 # Ajustar IDs en la tabla base
                 max_id = obtener_max_id(conn_dest, tabla, pk_field)
-                offset = max_id + 1
+                offset = int(max_id) + 1
+                if df.empty:
+                    log_message(f"La tabla '{tabla}' está vacía. Se omitirá.")
+                    continue
+
                 df_ajustada, id_map = ajustar_ids_unicos(df, pk_field, id_sets[tabla])
 
                 # Actualizar las tablas relacionadas con el nuevo T_Id
@@ -633,5 +607,16 @@ with sqlite3.connect(output_file) as conn_dest:
                     log_message(f"Insertando registros en '{tabla}' - Total registros: {len(df_ajustada)}")
                 except Exception as e:
                     log_message(f"Error al insertar registros en '{tabla}': {e}")
+
+        with sqlite3.connect(gpkg) as conn_src:
+        # Ejecutamos las actualizaciones de FK
+            for capa, info in relaciones_geograficas.items():
+                for relacion_capa, fk in info["relaciones"].items():
+                    update_foreign_keys(relacion_capa, fk, capa)
+        
+    # Imprimir el contenido de fid_mapping al final del script para verificación
+    log_message("Contenido de fid_mapping:")
+    for key, value in fid_mapping.items():
+        log_message(f"{key}: {value}")
 
 log_message("Proceso de unión de tablas alfanuméricas completado.")
