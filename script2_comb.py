@@ -47,6 +47,29 @@ combined_layers = {}
 # Copiar el archivo base al archivo de salida y comenzar desde este
 shutil.copy(gpkg_files[0], output_file)
 
+#AGREGAR CAMPO PROBLEMATICO
+# Función para agregar columna a una tabla específica si no existe
+def agregar_columna_si_no_existe(gpkg_p, tabla, columna, tipo_dato):
+    try:
+        conn = sqlite3.connect(gpkg_p)
+        cursor = conn.cursor()
+
+        # Verificar si la columna ya existe
+        cursor.execute(f"PRAGMA table_info({tabla});")
+        columnas = [info[1] for info in cursor.fetchall()]
+        if columna not in columnas:
+            cursor.execute(f"ALTER TABLE {tabla} ADD COLUMN {columna} {tipo_dato};")
+            log_message(f"Columna '{columna}' añadida a la tabla '{tabla}' en '{gpkg_p}'.")
+        else:
+            log_message(f"La columna '{columna}' ya existe en la tabla '{tabla}' en '{gpkg_p}', se omite la creación.")
+
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        log_message(f"Error al agregar columna en '{gpkg_p}': {e}")
+gpkg_p = "C:\ACC\CONSOLIDACION_MANZANAS\gpkg_base\modelo_captura_20241029.gpkg"
+agregar_columna_si_no_existe(gpkg_p, 'cca_usuario', 'municipio_codigo', 'TEXT(100)')
+
 # Lista de capas geográficas específicas a procesar
 capas_a_procesar = [
     "cca_construccion",
@@ -95,6 +118,25 @@ log_message("Modificaciones completadas en todos los .gpkg.")
 
 # Diccionario para mapear T_Id a nuevo fid
 id_map_geo = {}
+
+# Función para eliminar columnas de paso al final del proceso
+def eliminar_columnas_de_paso(gpkg_path, capas):
+    try:
+        conn = sqlite3.connect(gpkg_path)
+        cursor = conn.cursor()
+
+        for capa in capas:
+            try:
+                cursor.execute(f"ALTER TABLE {capa} DROP COLUMN T_Id_Cop;")
+                cursor.execute(f"ALTER TABLE {capa} DROP COLUMN Ruta;")
+                log_message(f"Columnas T_Id_Cop y Ruta eliminadas de la capa '{capa}' en '{gpkg_path}'.")
+            except sqlite3.OperationalError:
+                log_message(f"No se pueden eliminar columnas de la capa '{capa}' en '{gpkg_path}'.")
+
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        log_message(f"Error al eliminar columnas en '{gpkg_path}': {e}")
 
 # Función para copiar archivos de una carpeta DCIM sin duplicados
 def copy_dcim_files(dcim_folder, output_dcim_folder):
@@ -681,6 +723,9 @@ with sqlite3.connect(output_file) as conn_dest:
 
                         except Exception as e:
                             log_message(f"Error al actualizar la relación '{fk_field}' en '{related_table}': {e}")
+        
+        eliminar_columnas_de_paso(gpkg, capas_a_procesar)
+
                     
 
 log_message("Proceso de unión de tablas alfanuméricas completado.")
