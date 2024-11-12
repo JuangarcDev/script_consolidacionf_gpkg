@@ -166,12 +166,213 @@ log_message(f"Proceso de combinación completado. Archivo guardado en: {output_f
 # Configuración de tablas y relaciones PK-FK
 config_tablas = {
 
+    "cca_adjunto": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_comisiones": {
+        "pk": "fid", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_estructuraamenazariesgovulnerabilidad": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_estructuranovedadfmi": {
+        "pk": "T_Id", 
+        "relaciones": {
+           None
+            }
+    },
+
+    "cca_estructuranovedadnumeropredial": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_fuenteadministrativa_derecho": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_marcas": {
+        "pk": "fid", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_miembros": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_ofertasmercadoinmobiliario": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_omisiones": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_predio_copropiedad": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_predio_informalidad": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_restriccion": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_saldosconservacion": {
+        "pk": "fid", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "col_transformacion": {
+        "pk": "fid", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "extreferenciaregistralsistemaantiguo": {
+        "pk": "T_Id", 
+        "relaciones": {
+            None
+            }
+    },
+
+    "cca_derecho": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_fuenteadministrativa_derecho": "derecho"
+            }
+    },
+
+        "cca_agrupacioninteresados": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_derecho": "agrupacion_interesados",
+            "cca_miembros": "agrupacion"
+            }
+    },
+
+        "cca_fuenteadministrativa": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_fuenteadministrativa_adjunto",
+            "cca_fuenteadministrativa_derecho": "fuente_administrativa"
+            }
+    },
+
+        "cca_interesado": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_interesado_adjunto",
+            "cca_derecho": "interesado",
+            "cca_miembros": "interesado"
+            }
+    },
+"""
+    #GEOGRAFICAS:
+    "cca_construccion": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_construccion_adjunto",
+            "cca_unidadconstruccion": "construccion"
+            }
+    },
+
+    "cca_unidadconstruccion": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_unidadconstruccion_adjunto"
+            }
+    },
+
+        "cca_puntocontrol": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntocontrol_adjunto"
+            }
+    },
+
+        "cca_puntolevantamiento": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntolevantamiento_adjunto"
+            }
+    },
+
+        "cca_puntolindero": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntolindero_adjunto"
+            }
+    },
+
+        "cca_puntoreferencia": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntoreferencia_adjunto"
+            }
+    },
+
+"""
     "cca_predio": {
         "pk": "T_Id",
         "relaciones": {
             "cca_terreno": "predio",
             "cca_derecho": "predio",
-            "cca_construccion": "predio"
+            "cca_construccion": "predio",
+            "cca_adjunto": "cca_predio_adjunto",
+            "cca_estructuraamenazariesgovulnerabilidad": "cca_predio_amenazariesgovulnerabilidad",
+            "cca_estructuranovedadfmi": "cca_predio_novedad_fmi",
+            "cca_estructuranovedadnumeropredial": "cca_predio_novedad_numeros_prediales",
+            "cca_ofertasmercadoinmobiliario": "predio",
+            "cca_predio_copropiedad": "unidad_predial",
+            "cca_predio_copropiedad": "matriz",
+            "cca_predio_informalidad": "cca_predio_formal",
+            "cca_predio_informalidad": "cca_predio_informal",
+            "cca_restriccion": "predio",
+            "extdireccion": "cca_predio_direccion",
+            "extreferenciaregistralsistemaantiguo": "cc_predio_referencia_registral_sistema_antiguo"
         }
     },
 
@@ -181,8 +382,32 @@ config_tablas = {
             "cca_predio": "usuario"
             }
     },
+
+        "cca_caracteristicasunidadconstruccion": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_unidadconstruccion": "caracteristicasunidadconstruccion"
+            }
+    },
+
+
+        "cca_calificacionconvencional": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_caracteristicasunidadconstruccion": "calificacionconvencional"
+            }
+    },
+
+#HASTA ACA VOY
     #"cca_terreno": {"pk": "T_Id", "relaciones": {""}}
     # Añadir más tablas y relaciones según sea necesario
+}
+
+# CONFIGURACION ATRIBUTOS PROBLEMATICOS
+atributos_mapping = {
+    ("cca_usuario", "municipio_codigo"): "departamento_municipio_codigo",  # ejemplo de conflicto en tabla_origen_1  
+    # ("tabla_origen_2", "nombre_cliente"): "cliente_nombre",  # ejemplo de conflicto en tabla_origen_2
+    # Añadir más campos que se muevan entre los archivos
 }
 
 # Conjunto de IDs para verificar duplicados
@@ -207,8 +432,14 @@ def ajustar_ids_unicos(df, pk_field, id_set):
     id_map = {}  # Mapeo de IDs originales a IDs ajustados
     for index, row in df.iterrows():
         original_id = row[pk_field]
+
+        # Si el campo PK es 'fid', saltar inserciones y solo actualizar relaciones
+        if pk_field == 'fid':
+            # Saltar la inserción y solo mapear las relaciones
+            id_map[original_id] = original_id
+            continue
+
         new_id = original_id
-        
         # Verificar que el nuevo ID no esté duplicado en las tablas relacionadas
         while new_id in id_set:
             new_id += 1  # Incrementar el nuevo ID si ya existe en el conjunto
@@ -219,19 +450,32 @@ def ajustar_ids_unicos(df, pk_field, id_set):
     
     return df, id_map
 
-def alinear_atributos(df, columnas_base):
+def alinear_atributos(df, tabla_origen, columnas_base, atributos_mapping):
     """
-    Alinea las columnas del DataFrame con la estructura base.
+    Alinea las columnas del DataFrame con la estructura base,
+    usando el mapeo para adaptar los nombres de los atributos si es necesario.
     :param df: DataFrame de la tabla a alinear.
+    :param tabla_origen: El nombre de la tabla de origen, usado para identificar los conflictos.
     :param columnas_base: Lista de columnas en la tabla base.
+    :param atributos_mapping: Diccionario de mapeo de nombres de campos problemáticos.
     :return: DataFrame alineado.
     """
+    # Filtrar solo los atributos que son específicos para la tabla de origen
+    mapping_especifico = {campo_origen: campo_destino for (tabla, campo_origen), campo_destino in atributos_mapping.items() if tabla == tabla_origen}
+
+    # Renombrar las columnas según el mapeo
+    df.rename(columns=mapping_especifico, inplace=True)
+    
+    # Agregar columnas faltantes con valores NULL
     for columna in columnas_base:
         if columna not in df.columns:
             df[columna] = None  # Agregar columna faltante con valores NULL
+
     # Ignorar columnas adicionales que no están en la base
     df = df[[col for col in columnas_base if col in df.columns]]
+    
     return df
+
 
 def actualizar_fk_en_relaciones(df, fk_field, id_map):
     """
@@ -240,7 +484,8 @@ def actualizar_fk_en_relaciones(df, fk_field, id_map):
     :param fk_field: El nombre del campo FK en la tabla relacionada.
     :param id_map: Diccionario de mapeo de IDs originales a nuevos.
     :return: DataFrame actualizado con las nuevas claves foráneas.
-    """
+    """ 
+         
     if fk_field not in df.columns:
         log_message(f"Advertencia: El campo FK '{fk_field}' no se encuentra en la tabla.")
         return df
@@ -259,22 +504,27 @@ def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map):
     :param relaciones: Diccionario con las relaciones FK.
     :param id_map: Mapeo de IDs originales a nuevos.
     """
-    # Procesar las tablas relacionadas
-    for fk_table, fk_field in relaciones.items():
-        try:
-            df_fk = pd.read_sql_query(f"SELECT * FROM {fk_table}", conn_dest)
-            if fk_field not in df_fk.columns:
-                log_message(f"La columna '{fk_field}' no se encuentra en '{fk_table}'. Se omitirá la actualización.")
-                continue
-            
-            # Actualizar el campo FK con el nuevo T_Id
-            df_fk = actualizar_fk_en_relaciones(df_fk, fk_field, id_map)
+    if not relaciones or relaciones == {None}:
+        log_message(f"'{tabla_base}' no tiene relaciones. Se insertarán los registros sin actualizar claves foráneas.")
+              
+    else:
 
-            # Insertar la tabla relacionada con los cambios
-            df_fk.to_sql(fk_table, conn_dest, if_exists="replace", index=False)
-            log_message(f"Actualizando FK en '{fk_table}' para los registros de '{tabla_base}'.")
-        except Exception as e:
-            log_message(f"Error al actualizar FK en '{fk_table}': {e}")
+        # Procesar las tablas relacionadas
+        for fk_table, fk_field in relaciones.items():
+            try:
+                df_fk = pd.read_sql_query(f"SELECT * FROM {fk_table}", conn_dest)
+                if fk_field not in df_fk.columns:
+                    log_message(f"La columna '{fk_field}' no se encuentra en '{fk_table}'. Se omitirá la actualización.")
+                    continue
+                
+                # Actualizar el campo FK con el nuevo T_Id
+                df_fk = actualizar_fk_en_relaciones(df_fk, fk_field, id_map)
+
+                # Insertar la tabla relacionada con los cambios
+                df_fk.to_sql(fk_table, conn_dest, if_exists="replace", index=False)
+                log_message(f"Actualizando FK en '{fk_table}' para los registros de '{tabla_base}'.")
+            except Exception as e:
+                log_message(f"Error al actualizar FK en '{fk_table}': {e}")
 
 # Procesamiento de tablas con relaciones, sin relaciones y de dominio
 with sqlite3.connect(output_file) as conn_dest:
