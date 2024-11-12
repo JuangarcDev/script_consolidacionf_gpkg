@@ -375,52 +375,7 @@ config_tablas = {
             "cca_miembros": "interesado"
             }
     },
-"""
-    #GEOGRAFICAS:
-    "cca_construccion": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_construccion_adjunto",
-            "cca_unidadconstruccion": "construccion"
-            }
-    },
 
-    "cca_unidadconstruccion": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_unidadconstruccion_adjunto"
-            }
-    },
-
-        "cca_puntocontrol": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntocontrol_adjunto"
-            }
-    },
-
-        "cca_puntolevantamiento": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntolevantamiento_adjunto"
-            }
-    },
-
-        "cca_puntolindero": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntolindero_adjunto"
-            }
-    },
-
-        "cca_puntoreferencia": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntoreferencia_adjunto"
-            }
-    },
-
-"""
     "cca_predio": {
         "pk": "T_Id",
         "relaciones": {
@@ -464,9 +419,53 @@ config_tablas = {
             }
     },
 
-#HASTA ACA VOY
-    #"cca_terreno": {"pk": "T_Id", "relaciones": {""}}
-    # Añadir más tablas y relaciones según sea necesario
+}
+
+config_geom = {
+    #GEOGRAFICAS:
+
+    "cca_unidadconstruccion": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_unidadconstruccion_adjunto"
+            }
+    },
+
+    "cca_construccion": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_construccion_adjunto",
+            "cca_unidadconstruccion": "construccion"
+            }
+    },
+
+        "cca_puntocontrol": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntocontrol_adjunto"
+            }
+    },
+
+        "cca_puntolevantamiento": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntolevantamiento_adjunto"
+            }
+    },
+
+        "cca_puntolindero": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntolindero_adjunto"
+            }
+    },
+
+        "cca_puntoreferencia": {
+        "pk": "fid", 
+        "relaciones": {
+            "cca_adjunto": "cca_puntoreferencia_adjunto"
+            }
+    },
 }
 
 # CONFIGURACION ATRIBUTOS PROBLEMATICOS
@@ -621,7 +620,7 @@ with sqlite3.connect(output_file) as conn_dest:
 
                 # Ajustar IDs en la tabla base
                 max_id = obtener_max_id(conn_dest, tabla, pk_field)
-                offset = max_id + 1
+                offset = int(max_id) + 1
                 df_ajustada, id_map = ajustar_ids_unicos(df, pk_field, id_sets[tabla])
 
                 # Actualizar las tablas relacionadas con el nuevo T_Id
@@ -633,5 +632,55 @@ with sqlite3.connect(output_file) as conn_dest:
                     log_message(f"Insertando registros en '{tabla}' - Total registros: {len(df_ajustada)}")
                 except Exception as e:
                     log_message(f"Error al insertar registros en '{tabla}': {e}")
+        
+            # Procesamiento de relaciones geográficas después de las tablas base
+            for tabla_geom, geom_info in config_geom.items():
+                pk_field = geom_info["pk"]
+                relaciones = geom_info.get("relaciones", {})
+
+                # Actualizar las relaciones si existen
+                if relaciones:
+                    for related_table, fk_field in relaciones.items():
+                        log_message(f"Actualizando relaciones geográficas para la tabla '{related_table}' en base a '{tabla_geom}'")
+
+                        # Consulta para seleccionar los registros que serán actualizados
+                        select_query = f"""
+                            SELECT rt.rowid AS rt_rowid, rt.{fk_field} AS old_fk_value, bt.{pk_field} AS new_fk_value
+                            FROM {related_table} AS rt
+                            JOIN {tabla_geom} AS bt
+                            ON rt.{fk_field} = bt.T_Id_Cop
+                            WHERE bt.Ruta = '{gpkg}'
+                            AND rt.{fk_field} IS NOT NULL
+                        """
+
+                        try:
+                            # Obtener los registros que serán actualizados y mostrar sus cambios
+                            rows_to_update = conn_dest.execute(select_query).fetchall()
+                            
+                            # Mostrar en consola los cambios específicos
+                            if rows_to_update:
+                                log_message(f"Se encontraron {len(rows_to_update)} registros en '{related_table}' para actualizar el campo '{fk_field}'")
+                                for row in rows_to_update:
+                                    rt_rowid, old_fk_value, new_fk_value = row
+                                    log_message(f"Registro ID {rt_rowid} en '{related_table}': valor actual '{old_fk_value}', nuevo valor '{new_fk_value}'")
+                                
+                                # Ejecutar la actualización de los registros seleccionados usando subconsulta
+                                for row in rows_to_update:
+                                    rt_rowid, _, new_fk_value = row
+                                    update_query = f"""
+                                        UPDATE {related_table} 
+                                        SET {fk_field} = ?
+                                        WHERE rowid = ?
+                                    """
+                                    conn_dest.execute(update_query, (new_fk_value, rt_rowid))
+                                
+                                conn_dest.commit()
+                                log_message(f"Actualización completada en '{related_table}' para la relación '{fk_field}' basada en '{tabla_geom}'")
+                            else:
+                                log_message(f"No se encontraron registros para actualizar en '{related_table}' para la relación '{fk_field}' basada en '{tabla_geom}'")
+
+                        except Exception as e:
+                            log_message(f"Error al actualizar la relación '{fk_field}' en '{related_table}': {e}")
+                    
 
 log_message("Proceso de unión de tablas alfanuméricas completado.")
