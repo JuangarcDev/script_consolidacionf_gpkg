@@ -888,6 +888,24 @@ def convert_and_migrate_data(conn, table_name, column_types):
     for i, row in enumerate(new_rows[:10]):
         log_message(f"Registro nuevo {i + 1}: {row}")
 
+# Función para eliminar tablas '_old' después de la migración
+def delete_old_tables(conn):
+    cursor = conn.cursor()
+    # Obtener el nombre de todas las tablas que terminan con '_old'
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name LIKE '%_old';")
+    old_tables = cursor.fetchall()
+    
+    if not old_tables:
+        log_message("No se encontraron tablas '_old' para eliminar.")
+        return
+    
+    for (old_table,) in old_tables:
+        try:
+            execute_query(conn, f"DROP TABLE IF EXISTS {old_table};")
+            log_message(f"Tabla '{old_table}' eliminada con éxito.")
+        except sqlite3.Error as e:
+            log_message(f"Error al eliminar la tabla '{old_table}': {e}")
+
 # Función principal para realizar la migración completa
 def migrate_tables(conn, old_structure, new_structure):
     log_tables(conn)  # Verificar y listar tablas existentes antes de la migración
@@ -904,6 +922,9 @@ def migrate_tables(conn, old_structure, new_structure):
         convert_and_migrate_data(conn, table_name, column_types)
         
         log_message(f"Tabla {table_name} migrada exitosamente.\n")
+
+    # Llamar a la función para eliminar tablas '_old' al finalizar la migración
+    delete_old_tables(conn)
 
 # Ejecutar el script de migración
 with sqlite3.connect(db_path) as conn:
