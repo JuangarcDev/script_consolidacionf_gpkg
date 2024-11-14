@@ -1,134 +1,13 @@
 """
 # TABLAS ALFANUMERICAS
-
-
-CREATE TABLE "cca_adjunto" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Seq"	INTEGER,
-	"archivo"	TEXT(255),
-	"observaciones"	TEXT(255),
-	"procedencia"	TEXT(255),
-	"tipo_archivo"	INTEGER,
-	"relacion_soporte"	INTEGER,
-	"dependencia_ucons"	INTEGER,
-	"ruta_modificada"	TEXT(150),
-	"cca_construccion_adjunto"	INTEGER,
-	"cca_fuenteadminstrtiva_adjunto"	INTEGER,
-	"cca_interesado_adjunto"	INTEGER,
-	"cca_unidadconstruccion_adjunto"	INTEGER,
-	"cca_predio_adjunto"	INTEGER,
-	"cca_puntocontrol_adjunto"	INTEGER,
-	"cca_puntolevantamiento_adjunto"	INTEGER,
-	"cca_puntolindero_adjunto"	INTEGER,
-	"cca_puntoreferencia_adjunto"	INTEGER,
-	CONSTRAINT "cca_adjunto_cca_puntolindero_adjunto_fkey" FOREIGN KEY("cca_puntolindero_adjunto") REFERENCES "cca_puntolindero" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_tipo_archivo_fkey" FOREIGN KEY("tipo_archivo") REFERENCES "cca_adjunto_tipo_archivo" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_puntoreferencia_adjnto_fkey" FOREIGN KEY("cca_puntoreferencia_adjunto") REFERENCES "cca_puntoreferencia" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_relacion_soporte_fkey" FOREIGN KEY("relacion_soporte") REFERENCES "cca_adjunto_relacion_soporte" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_dependencia_ucons_fkey" FOREIGN KEY("dependencia_ucons") REFERENCES "cca_adjunto_dependencia_ucons" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_interesado_adjunto_fkey" FOREIGN KEY("cca_interesado_adjunto") REFERENCES "cca_interesado" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_fuenteadminstrtv_djnto_fkey" FOREIGN KEY("cca_fuenteadminstrtiva_adjunto") REFERENCES "cca_fuenteadministrativa" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_construccion_adjunto_fkey" FOREIGN KEY("cca_construccion_adjunto") REFERENCES "cca_construccion" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_unidadconstruccn_djnto_fkey" FOREIGN KEY("cca_unidadconstruccion_adjunto") REFERENCES "cca_unidadconstruccion" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_puntolevantamint_djnto_fkey" FOREIGN KEY("cca_puntolevantamiento_adjunto") REFERENCES "cca_puntolevantamiento" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_predio_adjunto_fkey" FOREIGN KEY("cca_predio_adjunto") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_adjunto_cca_puntocontrol_adjunto_fkey" FOREIGN KEY("cca_puntocontrol_adjunto") REFERENCES "cca_puntocontrol" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_comisiones" (
+#ESTA NO
+#ESTA NO, ESTA IGUAL EN AMBAS FUENTES DE DATOS.
+CREATE TABLE "cca_agrupacioninteresados" (
 	"T_Id"	INTEGER NOT NULL,
 	"T_Ili_Tid"	TEXT(200),
-	"numero_predial"	TEXT(30) NOT NULL,
-	"numero_predial_anterior"	TEXT(20),
-	"area"	DOUBLE CHECK("area" BETWEEN 0.0 AND 1.0E8),
-	"geometria"	MULTIPOLYGON,
-	"observaciones"	TEXT(255),
-	"identificado"	BOOLEAN,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_estructuraamenazariesgovulnerabilidad" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Seq"	INTEGER,
-	"tipo_amenaza_riesgo_vulnerabilidad"	INTEGER NOT NULL,
-	"observacion"	TEXT(255),
-	"cca_predio_amenazariesgovulnerabilidad"	INTEGER,
-	CONSTRAINT "cca_estrctrmnzrsgvlnrbldad_tipo_amenaza_rsg_vlnrbldad_fkey" FOREIGN KEY("tipo_amenaza_riesgo_vulnerabilidad") REFERENCES "cca_amenazariesgovulnerabilidadtipo" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_estrctrmnzrsgvlnrbldad_cca_predio_mnzrsgvlnrbldad_fkey" FOREIGN KEY("cca_predio_amenazariesgovulnerabilidad") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_estructuranovedadfmi" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Seq"	INTEGER,
-	"codigo_orip"	TEXT(4) NOT NULL,
-	"numero_fmi"	TEXT(80) NOT NULL,
-	"tipo_novedadfmi"	INTEGER,
-	"cca_predio_novedad_fmi"	INTEGER,
-	PRIMARY KEY("T_Id"),
-	CONSTRAINT "cca_estructuranovedadfmi_cca_predio_novedad_fmi_fkey" FOREIGN KEY("cca_predio_novedad_fmi") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_estructuranovedadfmi_tipo_novedadfmi_fkey" FOREIGN KEY("tipo_novedadfmi") REFERENCES "cca_estructuranovedadfmi_tipo_novedadfmi" DEFERRABLE INITIALLY DEFERRED
-);
-
-CREATE TABLE "cca_estructuranovedadnumeropredial" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Seq"	INTEGER,
-	"numero_predial"	TEXT(30) NOT NULL,
-	"tipo_novedad"	INTEGER NOT NULL,
-	"cca_predio_novedad_numeros_prediales"	INTEGER,
-	PRIMARY KEY("T_Id"),
-	CONSTRAINT "cca_estructurnvddnmrprdial_tipo_novedad_fkey" FOREIGN KEY("tipo_novedad") REFERENCES "cca_estructuranovedadnumeropredial_tipo_novedad" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_fkey" FOREIGN KEY("cca_predio_novedad_numeros_prediales") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED
-);
-
-CREATE TABLE "cca_fuenteadministrativa_derecho" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"derecho"	INTEGER NOT NULL,
-	"fuente_administrativa"	INTEGER NOT NULL,
-	CONSTRAINT "cca_fuenteadminstrtv_drcho_derecho_fkey" FOREIGN KEY("derecho") REFERENCES "cca_derecho" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_fuenteadminstrtv_drcho_fuente_administrativa_fkey" FOREIGN KEY("fuente_administrativa") REFERENCES "cca_fuenteadministrativa" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_marcas" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"numero_predial"	TEXT(30) NOT NULL,
-	"codigo_orip"	TEXT(3),
-	"matricula_inmobiliaria"	TEXT(20),
-	"tipo"	INTEGER,
-	"observacion"	TEXT(250),
-	"localizacion"	POINT,
-	CONSTRAINT "cca_marcas_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_marcatipo" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_miembros" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"interesado"	INTEGER NOT NULL,
-	"agrupacion"	INTEGER NOT NULL,
-	"participacion"	DOUBLE CHECK("participacion" BETWEEN 0.0 AND 1.0),
-	CONSTRAINT "cca_miembros_interesado_fkey" FOREIGN KEY("interesado") REFERENCES "cca_interesado" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_miembros_agrupacion_fkey" FOREIGN KEY("agrupacion") REFERENCES "cca_agrupacioninteresados" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_ofertasmercadoinmobiliario" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"tipo_oferta"	INTEGER NOT NULL,
-	"valor_pedido"	DOUBLE NOT NULL CHECK("valor_pedido" BETWEEN 0.0 AND 9.99999999999999E14),
-	"valor_negociado"	DOUBLE NOT NULL CHECK("valor_negociado" BETWEEN 0.0 AND 9.99999999999999E14),
-	"fecha_captura_oferta"	DATE NOT NULL,
-	"tiempo_oferta_mercado"	INTEGER CHECK("tiempo_oferta_mercado" BETWEEN 0 AND 1000),
-	"nombre_oferente"	TEXT(255) NOT NULL,
-	"numero_contacto_oferente"	TEXT(20) NOT NULL,
-	"predio"	INTEGER,
-	CONSTRAINT "cca_ofertasmercadoinmblrio_tipo_oferta_fkey" FOREIGN KEY("tipo_oferta") REFERENCES "cca_ofertatipo" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_ofertasmercadoinmblrio_predio_fkey" FOREIGN KEY("predio") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	"tipo"	INTEGER NOT NULL,
+	"nombre"	TEXT(40),
+	CONSTRAINT "cca_agrupacioninteresados_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_grupointeresadotipo" DEFERRABLE INITIALLY DEFERRED,
 	PRIMARY KEY("T_Id")
 );
 
@@ -154,80 +33,6 @@ CREATE TABLE "cca_omisiones" (
 	PRIMARY KEY("T_Id")
 );
 
-CREATE TABLE "cca_predio_copropiedad" (
-	"T_Id"	INTEGER NOT NULL,
-	"unidad_predial"	INTEGER NOT NULL,
-	"matriz"	INTEGER NOT NULL,
-	"coeficiente"	DOUBLE CHECK("coeficiente" BETWEEN 0.0 AND 1.0),
-	CONSTRAINT "cca_predio_copropiedad_unidad_predial_key" UNIQUE("unidad_predial"),
-	CONSTRAINT "cca_predio_copropiedad_matriz_fkey" FOREIGN KEY("matriz") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_predio_copropiedad_unidad_predial_fkey" FOREIGN KEY("unidad_predial") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_predio_informalidad" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"cca_predio_formal"	INTEGER NOT NULL,
-	"cca_predio_informal"	INTEGER NOT NULL,
-	CONSTRAINT "cca_predio_informalidad_cca_predio_informal_fkey" FOREIGN KEY("cca_predio_informal") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_predio_informalidad_cca_predio_formal_fkey" FOREIGN KEY("cca_predio_formal") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_restriccion" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"tipo"	INTEGER NOT NULL,
-	"descripcion"	TEXT(255),
-	"predio"	INTEGER NOT NULL,
-	CONSTRAINT "cca_restriccion_predio_fkey" FOREIGN KEY("predio") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_restriccion_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_restricciontipo" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_saldosconservacion" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"numero_predial"	TEXT(30) NOT NULL,
-	"codigo_orip"	TEXT(3),
-	"matricula_inmobiliaria"	TEXT(20),
-	"tipo"	INTEGER,
-	"observacion"	TEXT(255),
-	"localizacion"	POINT,
-	CONSTRAINT "cca_saldosconservacion_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_saldotipo" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_derecho" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"tipo"	INTEGER NOT NULL,
-	"cuota_participacion"	DOUBLE CHECK("cuota_participacion" BETWEEN 0.0 AND 100.0),
-	"fraccion_derecho"	DOUBLE CHECK("fraccion_derecho" BETWEEN 0.0 AND 100.0),
-	"fecha_inicio_tenencia"	DATE,
-	"origen_derecho"	INTEGER,
-	"observacion"	TEXT(250),
-	"agrupacion_interesados"	INTEGER,
-	"interesado"	INTEGER,
-	"predio"	INTEGER NOT NULL,
-	CONSTRAINT "cca_derecho_agrupacion_interesados_fkey" FOREIGN KEY("agrupacion_interesados") REFERENCES "cca_agrupacioninteresados" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_derecho_origen_derecho_fkey" FOREIGN KEY("origen_derecho") REFERENCES "cca_origenderechotipo" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_derecho_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_derechotipo" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_derecho_interesado_fkey" FOREIGN KEY("interesado") REFERENCES "cca_interesado" DEFERRABLE INITIALLY DEFERRED,
-	CONSTRAINT "cca_derecho_predio_fkey" FOREIGN KEY("predio") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
-CREATE TABLE "cca_agrupacioninteresados" (
-	"T_Id"	INTEGER NOT NULL,
-	"T_Ili_Tid"	TEXT(200),
-	"tipo"	INTEGER NOT NULL,
-	"nombre"	TEXT(40),
-	CONSTRAINT "cca_agrupacioninteresados_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_grupointeresadotipo" DEFERRABLE INITIALLY DEFERRED,
-	PRIMARY KEY("T_Id")
-);
-
 CREATE TABLE "cca_fuenteadministrativa" (
 	"T_Id"	INTEGER NOT NULL,
 	"T_Ili_Tid"	TEXT(200),
@@ -240,6 +45,11 @@ CREATE TABLE "cca_fuenteadministrativa" (
 	PRIMARY KEY("T_Id")
 );
 
+
+
+
+
+#ESTA TAMPOCO
 CREATE TABLE "cca_interesado" (
 	"T_Id"	INTEGER NOT NULL,
 	"T_Ili_Tid"	TEXT(200),
@@ -267,6 +77,17 @@ CREATE TABLE "cca_interesado" (
 	CONSTRAINT "cca_interesado_grupo_etnico_fkey" FOREIGN KEY("grupo_etnico") REFERENCES "cca_grupoetnicotipo" DEFERRABLE INITIALLY DEFERRED,
 	CONSTRAINT "cca_interesado_estado_civil_fkey" FOREIGN KEY("estado_civil") REFERENCES "cca_estadociviltipo" DEFERRABLE INITIALLY DEFERRED,
 	CONSTRAINT "cca_interesado_autoriza_notificacin_crreo_fkey" FOREIGN KEY("autoriza_notificacion_correo") REFERENCES "cca_booleanotipo" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_miembros" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"interesado"	INTEGER NOT NULL,
+	"agrupacion"	INTEGER NOT NULL,
+	"participacion"	DOUBLE CHECK("participacion" BETWEEN 0.0 AND 1.0),
+	CONSTRAINT "cca_miembros_interesado_fkey" FOREIGN KEY("interesado") REFERENCES "cca_interesado" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_miembros_agrupacion_fkey" FOREIGN KEY("agrupacion") REFERENCES "cca_agrupacioninteresados" DEFERRABLE INITIALLY DEFERRED,
 	PRIMARY KEY("T_Id")
 );
 
@@ -338,6 +159,119 @@ CREATE TABLE "cca_predio" (
 	CONSTRAINT "cca_predio_estado_folio_fkey" FOREIGN KEY("estado_folio") REFERENCES "cca_estadofoliotipo" DEFERRABLE INITIALLY DEFERRED,
 	PRIMARY KEY("T_Id")
 );
+
+CREATE TABLE "cca_ofertasmercadoinmobiliario" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"tipo_oferta"	INTEGER NOT NULL,
+	"valor_pedido"	DOUBLE NOT NULL CHECK("valor_pedido" BETWEEN 0.0 AND 9.99999999999999E14),
+	"valor_negociado"	DOUBLE NOT NULL CHECK("valor_negociado" BETWEEN 0.0 AND 9.99999999999999E14),
+	"fecha_captura_oferta"	DATE NOT NULL,
+	"tiempo_oferta_mercado"	INTEGER CHECK("tiempo_oferta_mercado" BETWEEN 0 AND 1000),
+	"nombre_oferente"	TEXT(255) NOT NULL,
+	"numero_contacto_oferente"	TEXT(20) NOT NULL,
+	"predio"	INTEGER,
+	CONSTRAINT "cca_ofertasmercadoinmblrio_tipo_oferta_fkey" FOREIGN KEY("tipo_oferta") REFERENCES "cca_ofertatipo" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_ofertasmercadoinmblrio_predio_fkey" FOREIGN KEY("predio") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_predio_copropiedad" (
+	"T_Id"	INTEGER NOT NULL,
+	"unidad_predial"	INTEGER NOT NULL,
+	"matriz"	INTEGER NOT NULL,
+	"coeficiente"	DOUBLE CHECK("coeficiente" BETWEEN 0.0 AND 1.0),
+	CONSTRAINT "cca_predio_copropiedad_unidad_predial_key" UNIQUE("unidad_predial"),
+	CONSTRAINT "cca_predio_copropiedad_matriz_fkey" FOREIGN KEY("matriz") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_predio_copropiedad_unidad_predial_fkey" FOREIGN KEY("unidad_predial") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_predio_informalidad" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"cca_predio_formal"	INTEGER NOT NULL,
+	"cca_predio_informal"	INTEGER NOT NULL,
+	CONSTRAINT "cca_predio_informalidad_cca_predio_informal_fkey" FOREIGN KEY("cca_predio_informal") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_predio_informalidad_cca_predio_formal_fkey" FOREIGN KEY("cca_predio_formal") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_restriccion" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"tipo"	INTEGER NOT NULL,
+	"descripcion"	TEXT(255),
+	"predio"	INTEGER NOT NULL,
+	CONSTRAINT "cca_restriccion_predio_fkey" FOREIGN KEY("predio") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_restriccion_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_restricciontipo" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_derecho" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"tipo"	INTEGER NOT NULL,
+	"cuota_participacion"	DOUBLE CHECK("cuota_participacion" BETWEEN 0.0 AND 100.0),
+	"fraccion_derecho"	DOUBLE CHECK("fraccion_derecho" BETWEEN 0.0 AND 100.0),
+	"fecha_inicio_tenencia"	DATE,
+	"origen_derecho"	INTEGER,
+	"observacion"	TEXT(250),
+	"agrupacion_interesados"	INTEGER,
+	"interesado"	INTEGER,
+	"predio"	INTEGER NOT NULL,
+	CONSTRAINT "cca_derecho_agrupacion_interesados_fkey" FOREIGN KEY("agrupacion_interesados") REFERENCES "cca_agrupacioninteresados" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_derecho_origen_derecho_fkey" FOREIGN KEY("origen_derecho") REFERENCES "cca_origenderechotipo" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_derecho_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_derechotipo" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_derecho_interesado_fkey" FOREIGN KEY("interesado") REFERENCES "cca_interesado" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_derecho_predio_fkey" FOREIGN KEY("predio") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_fuenteadministrativa_derecho" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"derecho"	INTEGER NOT NULL,
+	"fuente_administrativa"	INTEGER NOT NULL,
+	CONSTRAINT "cca_fuenteadminstrtv_drcho_derecho_fkey" FOREIGN KEY("derecho") REFERENCES "cca_derecho" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_fuenteadminstrtv_drcho_fuente_administrativa_fkey" FOREIGN KEY("fuente_administrativa") REFERENCES "cca_fuenteadministrativa" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_estructuraamenazariesgovulnerabilidad" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Seq"	INTEGER,
+	"tipo_amenaza_riesgo_vulnerabilidad"	INTEGER NOT NULL,
+	"observacion"	TEXT(255),
+	"cca_predio_amenazariesgovulnerabilidad"	INTEGER,
+	CONSTRAINT "cca_estrctrmnzrsgvlnrbldad_tipo_amenaza_rsg_vlnrbldad_fkey" FOREIGN KEY("tipo_amenaza_riesgo_vulnerabilidad") REFERENCES "cca_amenazariesgovulnerabilidadtipo" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_estrctrmnzrsgvlnrbldad_cca_predio_mnzrsgvlnrbldad_fkey" FOREIGN KEY("cca_predio_amenazariesgovulnerabilidad") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_estructuranovedadfmi" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Seq"	INTEGER,
+	"codigo_orip"	TEXT(4) NOT NULL,
+	"numero_fmi"	TEXT(80) NOT NULL,
+	"tipo_novedadfmi"	INTEGER,
+	"cca_predio_novedad_fmi"	INTEGER,
+	PRIMARY KEY("T_Id"),
+	CONSTRAINT "cca_estructuranovedadfmi_cca_predio_novedad_fmi_fkey" FOREIGN KEY("cca_predio_novedad_fmi") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_estructuranovedadfmi_tipo_novedadfmi_fkey" FOREIGN KEY("tipo_novedadfmi") REFERENCES "cca_estructuranovedadfmi_tipo_novedadfmi" DEFERRABLE INITIALLY DEFERRED
+);
+
+CREATE TABLE "cca_estructuranovedadnumeropredial" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Seq"	INTEGER,
+	"numero_predial"	TEXT(30) NOT NULL,
+	"tipo_novedad"	INTEGER NOT NULL,
+	"cca_predio_novedad_numeros_prediales"	INTEGER,
+	PRIMARY KEY("T_Id"),
+	CONSTRAINT "cca_estructurnvddnmrprdial_tipo_novedad_fkey" FOREIGN KEY("tipo_novedad") REFERENCES "cca_estructuranovedadnumeropredial_tipo_novedad" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_fkey" FOREIGN KEY("cca_predio_novedad_numeros_prediales") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED
+);
+
 
 CREATE TABLE "cca_usuario" (
 	"T_Id"	INTEGER NOT NULL,
@@ -439,8 +373,68 @@ CREATE TABLE "cca_calificacionconvencional" (
 	PRIMARY KEY("T_Id")
 );
 
+CREATE TABLE "cca_adjunto" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Seq"	INTEGER,
+	"archivo"	TEXT(255),
+	"observaciones"	TEXT(255),
+	"procedencia"	TEXT(255),
+	"tipo_archivo"	INTEGER,
+	"relacion_soporte"	INTEGER,
+	"dependencia_ucons"	INTEGER,
+	"ruta_modificada"	TEXT(150),
+	"cca_construccion_adjunto"	INTEGER,
+	"cca_fuenteadminstrtiva_adjunto"	INTEGER,
+	"cca_interesado_adjunto"	INTEGER,
+	"cca_unidadconstruccion_adjunto"	INTEGER,
+	"cca_predio_adjunto"	INTEGER,
+	"cca_puntocontrol_adjunto"	INTEGER,
+	"cca_puntolevantamiento_adjunto"	INTEGER,
+	"cca_puntolindero_adjunto"	INTEGER,
+	"cca_puntoreferencia_adjunto"	INTEGER,
+	CONSTRAINT "cca_adjunto_cca_puntolindero_adjunto_fkey" FOREIGN KEY("cca_puntolindero_adjunto") REFERENCES "cca_puntolindero" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_tipo_archivo_fkey" FOREIGN KEY("tipo_archivo") REFERENCES "cca_adjunto_tipo_archivo" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_puntoreferencia_adjnto_fkey" FOREIGN KEY("cca_puntoreferencia_adjunto") REFERENCES "cca_puntoreferencia" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_relacion_soporte_fkey" FOREIGN KEY("relacion_soporte") REFERENCES "cca_adjunto_relacion_soporte" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_dependencia_ucons_fkey" FOREIGN KEY("dependencia_ucons") REFERENCES "cca_adjunto_dependencia_ucons" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_interesado_adjunto_fkey" FOREIGN KEY("cca_interesado_adjunto") REFERENCES "cca_interesado" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_fuenteadminstrtv_djnto_fkey" FOREIGN KEY("cca_fuenteadminstrtiva_adjunto") REFERENCES "cca_fuenteadministrativa" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_construccion_adjunto_fkey" FOREIGN KEY("cca_construccion_adjunto") REFERENCES "cca_construccion" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_unidadconstruccn_djnto_fkey" FOREIGN KEY("cca_unidadconstruccion_adjunto") REFERENCES "cca_unidadconstruccion" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_puntolevantamint_djnto_fkey" FOREIGN KEY("cca_puntolevantamiento_adjunto") REFERENCES "cca_puntolevantamiento" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_predio_adjunto_fkey" FOREIGN KEY("cca_predio_adjunto") REFERENCES "cca_predio" DEFERRABLE INITIALLY DEFERRED,
+	CONSTRAINT "cca_adjunto_cca_puntocontrol_adjunto_fkey" FOREIGN KEY("cca_puntocontrol_adjunto") REFERENCES "cca_puntocontrol" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
 
 # CAPAS GEOGRAFICAS
+
+CREATE TABLE "cca_saldosconservacion" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"numero_predial"	TEXT(30) NOT NULL,
+	"codigo_orip"	TEXT(3),
+	"matricula_inmobiliaria"	TEXT(20),
+	"tipo"	INTEGER,
+	"observacion"	TEXT(255),
+	"localizacion"	POINT,
+	CONSTRAINT "cca_saldosconservacion_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_saldotipo" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
+
+CREATE TABLE "cca_marcas" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"numero_predial"	TEXT(30) NOT NULL,
+	"codigo_orip"	TEXT(3),
+	"matricula_inmobiliaria"	TEXT(20),
+	"tipo"	INTEGER,
+	"observacion"	TEXT(250),
+	"localizacion"	POINT,
+	CONSTRAINT "cca_marcas_tipo_fkey" FOREIGN KEY("tipo") REFERENCES "cca_marcatipo" DEFERRABLE INITIALLY DEFERRED,
+	PRIMARY KEY("T_Id")
+);
 
 CREATE TABLE "cca_unidadconstruccion" (
 	"fid"	INTEGER NOT NULL,
@@ -547,5 +541,17 @@ CREATE TABLE "cca_puntoreferencia" (
 	"T_Id_Cop"	INTEGER,
 	"Ruta"	TEXT,
 	PRIMARY KEY("fid" AUTOINCREMENT)
+);
+
+CREATE TABLE "cca_comisiones" (
+	"T_Id"	INTEGER NOT NULL,
+	"T_Ili_Tid"	TEXT(200),
+	"numero_predial"	TEXT(30) NOT NULL,
+	"numero_predial_anterior"	TEXT(20),
+	"area"	DOUBLE CHECK("area" BETWEEN 0.0 AND 1.0E8),
+	"geometria"	MULTIPOLYGON,
+	"observaciones"	TEXT(255),
+	"identificado"	BOOLEAN,
+	PRIMARY KEY("T_Id")
 );
 """
