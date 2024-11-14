@@ -15,12 +15,12 @@ log_file = r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\log_union_proceso.txt"
 
 # Función para registrar mensajes en el archivo de log
 def log_message(message):
-    with open(log_file, "a") as log:
+    with open(log_file, "a", encoding="utf-8") as log:
         log.write(message + "\n")
     print(message)
 
 # Inicializar el archivo de log
-with open(log_file, "w") as log:
+with open(log_file, "w", encoding="utf-8") as log:
     log.write("Registro de ejecución del script de unión de GPKG\n\n")
 
 # Lista de archivos .gpkg a combinar
@@ -31,6 +31,26 @@ gpkg_files = [
     r"C:\ACC\CONSOLIDACION_MANZANAS\MN_00000003_20241009_FINAL_3\MN_00000003_20241009_FINAL\captura_campo_20241008.gpkg",
     r"C:\ACC\CONSOLIDACION_MANZANAS\MANZANA 8_4\MANZANA 8\MN_00000008_20240923\MN_00000008_20240923\captura_campo_20240920.gpkg",
     r"C:\ACC\CONSOLIDACION_MANZANAS\00000017-01_5\captura_campo_20240920.gpkg"
+"""    #OTRAS RUTAS
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0003\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0005\MN_00000005_20241011_OK\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0007\MN_00000007_20241015_31\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0008\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0009\MN_00000009_20240923-vf\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0010\MN_00000010_20241105\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0011\MN_00000011_NITOLA\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0012\MN_00000012_20240926\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0014\MN_00000014_20241025\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0015_1\MN_00000015_20241010\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0015_2\MN_00000015_20241105\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0016\MN_00000016_20240923\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0017\00000017-01\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0018\MN_00000018_20240923\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0022\MN_00000022_20240926\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0023\Captura actualizada\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241112_CONSOLIDACION\0025\captura_campo_20240920.gpkg"
+"""
+
 ]
 
 
@@ -393,7 +413,7 @@ config_tablas = {
             }
     },
 
-        "cca_agrupacioninteresados": {
+    "cca_agrupacioninteresados": {
         "pk": "T_Id", 
         "relaciones": {
             "cca_derecho": "agrupacion_interesados",
@@ -401,7 +421,7 @@ config_tablas = {
             }
     },
 
-        "cca_fuenteadministrativa": {
+    "cca_fuenteadministrativa": {
         "pk": "T_Id", 
         "relaciones": {
             "cca_adjunto": "cca_fuenteadministrativa_adjunto",
@@ -409,7 +429,7 @@ config_tablas = {
             }
     },
 
-        "cca_interesado": {
+    "cca_interesado": {
         "pk": "T_Id", 
         "relaciones": {
             "cca_adjunto": "cca_interesado_adjunto",
@@ -446,7 +466,7 @@ config_tablas = {
             }
     },
 
-        "cca_caracteristicasunidadconstruccion": {
+    "cca_caracteristicasunidadconstruccion": {
         "pk": "T_Id", 
         "relaciones": {
             "cca_unidadconstruccion": "caracteristicasunidadconstruccion"
@@ -454,7 +474,7 @@ config_tablas = {
     },
 
 
-        "cca_calificacionconvencional": {
+    "cca_calificacionconvencional": {
         "pk": "T_Id", 
         "relaciones": {
             "cca_caracteristicasunidadconstruccion": "calificacionconvencional"
@@ -481,28 +501,28 @@ config_geom = {
             }
     },
 
-        "cca_puntocontrol": {
+    "cca_puntocontrol": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntocontrol_adjunto"
             }
     },
 
-        "cca_puntolevantamiento": {
+    "cca_puntolevantamiento": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntolevantamiento_adjunto"
             }
     },
 
-        "cca_puntolindero": {
+    "cca_puntolindero": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntolindero_adjunto"
             }
     },
 
-        "cca_puntoreferencia": {
+    "cca_puntoreferencia": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntoreferencia_adjunto"
