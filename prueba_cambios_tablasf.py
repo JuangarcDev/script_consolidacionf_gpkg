@@ -25,10 +25,10 @@ def log_tables(conn):
 modelo_union = {
 
     "cca_agrupacioninteresados" : """CREATE TABLE cca_agrupacioninteresados (
-  T_Id INTEGER NOT NULL PRIMARY KEY
-  ,T_Ili_Tid TEXT(200) NULL
-  ,tipo INTEGER NOT NULL CONSTRAINT cca_agrupacioninteresados_tipo_fkey REFERENCES cca_grupointeresadotipo DEFERRABLE INITIALLY DEFERRED
-  ,nombre TEXT(40) NULL
+    T_Id INTEGER NOT NULL PRIMARY KEY,
+    T_Ili_Tid TEXT(200) NULL,
+    tipo INTEGER NOT NULL CONSTRAINT cca_agrupacioninteresados_tipo_fkey REFERENCES cca_grupointeresadotipo DEFERRABLE INITIALLY DEFERRED,
+    nombre TEXT(40) NULL
 	);""",
 
     "cca_omisiones" : """CREATE TABLE cca_omisiones (
@@ -642,6 +642,11 @@ def extract_column_types(create_table_sql):
     log_message("Iniciando extracción de columnas y tipos de datos...")
 
     for line in lines:
+        # Ignorar las líneas que contienen "CREATE TABLE" y otras que no sean columnas
+        if "CREATE TABLE" in line.upper() or ");" in line:
+            log_message(f"Saltando línea: {line.strip()}")
+            continue
+
         # Registrar la línea que se está procesando
         log_message(f"Procesando línea: {line.strip()}")
 
@@ -693,11 +698,11 @@ def convert_and_migrate_data(conn, table_name, column_types):
 
     # Imprimir las columnas nuevas y sus tipos de datos
     log_message(f"Estructura de la nueva tabla (ideal):")
-    new_columns = []
+    new_c = []
     for col in new_columns_info:
         col_name = col[1]  # Nombre de la columna
         col_type = col[2]  # Tipo de dato de la columna
-        new_columns.append(col_name)
+        new_c.append(col_name)
         log_message(f"Columna: {col_name}, Tipo de dato: {col_type}")
 
     # Obtener los datos de la tabla antigua
@@ -713,10 +718,9 @@ def convert_and_migrate_data(conn, table_name, column_types):
     for i, row in enumerate(rows[:10]):
         log_message(f"Registro antiguo {i + 1}: {row}")
     
-    # Aquí puedes agregar cualquier lógica de migración que necesites
     # Obtener las columnas de la nueva tabla
-    # new_columns = list(column_types.keys())
-
+    new_columns = list(column_types.keys())
+    
     # Insertar cada registro en la nueva tabla con conversiones automáticas
     for row in rows:
         converted_row = []
@@ -726,28 +730,31 @@ def convert_and_migrate_data(conn, table_name, column_types):
             # Verificación de valor None antes de convertir
             if value is None:
                 converted_row.append(None)
-            elif data_type == "INTEGER":
+            elif "INTEGER" in data_type:
                 try:
                     converted_row.append(int(float(value)))
                 except ValueError:
                     log_message(f"Advertencia: valor '{value}' no es convertible a entero en columna {column}.")
                     converted_row.append(None)
-            elif data_type == "REAL":
-                converted_row.append(float(value) if value is not None else None)
-            elif data_type == "DOUBLE":
+            elif "REAL" in data_type:
+                try:
+                    converted_row.append(float(value) if value is not None else None)
+                except ValueError:
+                    log_message(f"Advertencia: valor '{value}' no es convertible a FLOAT en columna {column}.")
+                    converted_row.append(None)
+            elif "DOUBLE" in data_type:
                 try:
                     converted_row.append(float(value))  # Convertimos DOUBLE a float en Python
                 except ValueError:
                     log_message(f"Advertencia: valor '{value}' no es convertible a DOUBLE en columna {column}.")
                     converted_row.append(None)
-            elif data_type == "DATE":
+            elif "DATE" in data_type:
                 try:
-                    # Asumimos que la fecha se almacena como TEXT en el formato 'YYYY-MM-DD' o similar
                     converted_row.append(str(value))  # Mantiene el valor como cadena
                 except ValueError:
                     log_message(f"Advertencia: valor '{value}' no es convertible a DATE en columna {column}.")
                     converted_row.append(None)
-            elif data_type == "BOOLEAN":
+            elif "BOOLEAN" in data_type:
                 # Tratamos "1" o "true" como True, y "0" o "false" como False
                 if isinstance(value, str):
                     if value.lower() in ("1", "true"):
@@ -761,13 +768,13 @@ def convert_and_migrate_data(conn, table_name, column_types):
                     converted_row.append(1 if value else 0)
                 else:
                     converted_row.append(None)
-            elif data_type == "TEXT":
+            elif "TEXT" in data_type:
                 converted_row.append(str(value) if value is not None else None)
             else:
                 converted_row.append(None)  # Si el tipo de datos no coincide, se asigna None por defecto
         
-        # IMPRIMIR VALORES DE LA CONSULTA CON DATOS DE DEPURACION
-        log_message(f"Se están insertando los registros: {converted_row}")
+        # Agregar log para depurar la conversión
+        log_message(f"Registro convertido: {converted_row}")
 
         placeholders = ', '.join(['?' for _ in new_columns])
         query = f"INSERT INTO {table_name} ({', '.join(new_columns)}) VALUES ({placeholders})"
@@ -779,7 +786,7 @@ def convert_and_migrate_data(conn, table_name, column_types):
         try:
             cursor.execute(query, converted_row)
         except sqlite3.OperationalError as e:
-            log_message(f"Error al ejecutar la consulta DESDE CONVERT_AND_MIGRATE_DATA: {e}")
+            log_message(f"Error al ejecutar la consulta: {e}")
             log_message(f"Consulta: {query}")
             log_message(f"Valores: {converted_row}")
     
@@ -793,7 +800,6 @@ def convert_and_migrate_data(conn, table_name, column_types):
     # Mostrar los primeros 10 registros migrados a la nueva tabla
     for i, row in enumerate(new_rows[:10]):
         log_message(f"Registro nuevo {i + 1}: {row}")
-
 
 # Función para eliminar tablas '_old' después de la migración
 def delete_old_tables(conn):
@@ -815,7 +821,7 @@ def delete_old_tables(conn):
 
 # Función principal para realizar la migración completa
 def migrate_tables(conn, old_structure, new_structure):
-    log_message("Inicio de la migración de tablas.")
+    log_message("Inicio de la migración de tablas desde MIGRATE TABLES.")
     log_tables(conn)  # Verificar y listar tablas existentes antes de la migración
     
     for table_name, new_schema in new_structure.items():
@@ -842,7 +848,7 @@ def migrate_database():
         
         # Iniciar el archivo de log en modo de escritura con UTF-8
         with codecs.open(log_path, "w", encoding="utf-8") as f:
-            f.write("Inicio de la migración de tablas\n")
+            f.write("Inicio de la migración de tablas DESDE MIGRATE DATABASE\n")
         
         migrate_tables(conn, modelo_union, modelo_ideal)
 
