@@ -596,18 +596,167 @@ modelo_ideal = {
     relacion_soporte INTEGER NULL CONSTRAINT cca_adjunto_relacion_soporte_fkey REFERENCES cca_adjunto_relacion_soporte DEFERRABLE INITIALLY DEFERRED,
     dependencia_ucons INTEGER NULL CONSTRAINT cca_adjunto_dependencia_ucons_fkey REFERENCES cca_adjunto_dependencia_ucons DEFERRABLE INITIALLY DEFERRED,
     ruta_modificada TEXT(150) NULL,
-    cca_construccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_construccion_adjunto_fkey REFERENCES cca_construccion DEFERRABLE INITIALLY DEFERRED,
+    cca_construccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_construccion_adjunto_fkey REFERENCES cca_construccion(fid) DEFERRABLE INITIALLY DEFERRED,
     cca_fuenteadminstrtiva_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_fuenteadminstrtv_djnto_fkey REFERENCES cca_fuenteadministrativa DEFERRABLE INITIALLY DEFERRED,
     cca_interesado_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_interesado_adjunto_fkey REFERENCES cca_interesado DEFERRABLE INITIALLY DEFERRED,
-    cca_unidadconstruccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_unidadconstruccn_djnto_fkey REFERENCES cca_unidadconstruccion DEFERRABLE INITIALLY DEFERRED,
+    cca_unidadconstruccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_unidadconstruccn_djnto_fkey REFERENCES cca_unidadconstruccion(fid) DEFERRABLE INITIALLY DEFERRED,
     cca_predio_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_predio_adjunto_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
-    cca_puntocontrol_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntocontrol_adjunto_fkey REFERENCES cca_puntocontrol DEFERRABLE INITIALLY DEFERRED,
-    cca_puntolevantamiento_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolevantamint_djnto_fkey REFERENCES cca_puntolevantamiento DEFERRABLE INITIALLY DEFERRED,
-    cca_puntolindero_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolindero_adjunto_fkey REFERENCES cca_puntolindero DEFERRABLE INITIALLY DEFERRED,
-    cca_puntoreferencia_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntoreferencia_adjnto_fkey REFERENCES cca_puntoreferencia DEFERRABLE INITIALLY DEFERRED
-	);"""
+    cca_puntocontrol_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntocontrol_adjunto_fkey REFERENCES cca_puntocontrol(fid) DEFERRABLE INITIALLY DEFERRED,
+    cca_puntolevantamiento_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolevantamint_djnto_fkey REFERENCES cca_puntolevantamiento(fid) DEFERRABLE INITIALLY DEFERRED,
+    cca_puntolindero_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolindero_adjunto_fkey REFERENCES cca_puntolindero(fid) DEFERRABLE INITIALLY DEFERRED,
+    cca_puntoreferencia_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntoreferencia_adjnto_fkey REFERENCES cca_puntoreferencia(fid) DEFERRABLE INITIALLY DEFERRED
+	);""",
 
+    "extreferenciaregistralsistemaantiguo": """CREATE TABLE extreferenciaregistralsistemaantiguo (
+    T_Id INTEGER NOT NULL PRIMARY KEY,
+    T_Seq INTEGER NULL,
+    tipo_referencia INTEGER NOT NULL CONSTRAINT extreferencrgstrlsstmntguo_tipo_referencia_fkey REFERENCES extreferenciaregistralsistemaantiguo_tipo_referencia(T_Id) DEFERRABLE INITIALLY DEFERRED,
+    oficina TEXT(50) NULL,
+    libro TEXT(1) NULL,
+    tomo TEXT(2) NULL,
+    pagina TEXT(4) NULL,
+    numero TEXT(4) NULL,
+    dia TEXT(2) NULL,
+    mes TEXT(2) NULL,
+    anio TEXT(2) NULL,
+    matricula TEXT(20) NOT NULL,
+    cca_predio_referencia_registral_sistema_antiguo INTEGER NULL CONSTRAINT extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_fkey REFERENCES cca_predio(T_Id) DEFERRABLE INITIALLY DEFERRED
+); 
+    """
+}
 
+# Diccionario de índices a verificar y crear
+indices_to_create = {
+    # Índices para agrupación de interesados:
+    "cca_agrupacioninteresados_tipo_idx": "CREATE INDEX cca_agrupacioninteresados_tipo_idx ON cca_agrupacioninteresados (tipo);",
+
+    # Índices para cca_omisiones
+    "cca_omisiones_clase_suelo_idx": "CREATE INDEX cca_omisiones_clase_suelo_idx ON cca_omisiones (clase_suelo);",
+    "cca_omisiones_condicion_predio_idx": "CREATE INDEX cca_omisiones_condicion_predio_idx ON cca_omisiones (condicion_predio);",
+    "cca_omisiones_destinacion_economica_idx": "CREATE INDEX cca_omisiones_destinacion_economica_idx ON cca_omisiones (destinacion_economica);",
+
+    # Índices para cca_fuenteadministrativa
+    "cca_fuenteadministrativa_tipo_idx": "CREATE INDEX cca_fuenteadministrativa_tipo_idx ON cca_fuenteadministrativa (tipo);",
+
+    # Índices para cca_interesado
+    "cca_interesado_tipo_idx": "CREATE INDEX cca_interesado_tipo_idx ON cca_interesado (tipo);",
+    "cca_interesado_tipo_documento_idx": "CREATE INDEX cca_interesado_tipo_documento_idx ON cca_interesado (tipo_documento);",
+    "cca_interesado_sexo_idx": "CREATE INDEX cca_interesado_sexo_idx ON cca_interesado (sexo);",
+    "cca_interesado_grupo_etnico_idx": "CREATE INDEX cca_interesado_grupo_etnico_idx ON cca_interesado (grupo_etnico);",
+    "cca_interesado_autoriza_notificacin_crreo_idx": "CREATE INDEX cca_interesado_autoriza_notificacion_correo_idx ON cca_interesado (autoriza_notificacion_correo);",
+    "cca_interesado_estado_civil_idx": "CREATE INDEX cca_interesado_estado_civil_idx ON cca_interesado (estado_civil);",
+
+    # Índices para cca_miembros
+    "cca_miembros_interesado_idx": "CREATE INDEX cca_miembros_interesado_idx ON cca_miembros (interesado);",
+    "cca_miembros_agrupacion_idx": "CREATE INDEX cca_miembros_agrupacion_idx ON cca_miembros (agrupacion);",
+
+    # Índices para cca_predio
+    "cca_predio_clase_suelo_registro_idx": "CREATE INDEX cca_predio_clase_suelo_registro_idx ON cca_predio (clase_suelo_registro);",
+    "cca_predio_categoria_suelo_idx": "CREATE INDEX cca_predio_categoria_suelo_idx ON cca_predio (categoria_suelo);",
+    "cca_predio_tiene_fmi_idx": "CREATE INDEX cca_predio_tiene_fmi_idx ON cca_predio (tiene_fmi);",
+    "cca_predio_estado_folio_idx": "CREATE INDEX cca_predio_estado_folio_idx ON cca_predio (estado_folio);",
+    "cca_predio_tiene_area_registral_idx": "CREATE INDEX cca_predio_tiene_area_registral_idx ON cca_predio (tiene_area_registral);",
+    "cca_predio_condicion_predio_idx": "CREATE INDEX cca_predio_condicion_predio_idx ON cca_predio (condicion_predio);",
+    "cca_predio_destinacion_economica_idx": "CREATE INDEX cca_predio_destinacion_economica_idx ON cca_predio (destinacion_economica);",
+    "cca_predio_predio_tipo_idx": "CREATE INDEX cca_predio_predio_tipo_idx ON cca_predio (predio_tipo);",
+    "cca_predio_resultado_visita_idx": "CREATE INDEX cca_predio_resultado_visita_idx ON cca_predio (resultado_visita);",
+    "cca_predio_suscribe_acta_colindancia_idx": "CREATE INDEX cca_predio_suscribe_acta_colindancia_idx ON cca_predio (suscribe_acta_colindancia);",
+    "cca_predio_tipo_documento_quien_tndio_idx": "CREATE INDEX cca_predio_tipo_documento_quien_tndio_idx ON cca_predio (tipo_documento_quien_atendio);",
+    "cca_predio_estrato_idx": "CREATE INDEX cca_predio_estrato_idx ON cca_predio (estrato);",
+    "cca_predio_usuario_idx": "CREATE INDEX cca_predio_usuario_idx ON cca_predio (usuario);",
+
+    # Índices para cca_ofertasmercadoinmobiliario
+    "cca_ofertasmercadoinmblrio_tipo_oferta_idx": "CREATE INDEX cca_ofertasmercadoinmblrio_tipo_oferta_idx ON cca_ofertasmercadoinmobiliario (tipo_oferta);",
+    "cca_ofertasmercadoinmblrio_predio_idx": "CREATE INDEX cca_ofertasmercadoinmblrio_predio_idx ON cca_ofertasmercadoinmobiliario (predio);",
+
+    # Índices para cca_predio_copropiedad
+    "cca_predio_copropiedad_unidad_predial_idx": "CREATE INDEX cca_predio_copropiedad_unidad_predial_idx ON cca_predio_copropiedad (unidad_predial);",
+    "cca_predio_copropiedad_matriz_idx": "CREATE INDEX cca_predio_copropiedad_matriz_idx ON cca_predio_copropiedad (matriz);",
+
+    # Índices para cca_predio_informalidad
+    "cca_predio_informalidad_cca_predio_formal_idx": "CREATE INDEX cca_predio_informalidad_cca_predio_formal_idx ON cca_predio_informalidad (cca_predio_formal);",
+    "cca_predio_informalidad_cca_predio_informal_idx": "CREATE INDEX cca_predio_informalidad_cca_predio_informal_idx ON cca_predio_informalidad (cca_predio_informal);",
+    
+    # Índices para restriccion
+    "cca_restriccion_tipo_idx": "CREATE INDEX cca_restriccion_tipo_idx ON cca_restriccion ( tipo );",
+    "cca_restriccion_predio_idx": "CREATE INDEX cca_restriccion_predio_idx ON cca_restriccion ( predio );",
+    
+    # Índices para cca_derecho
+    "cca_derecho_tipo_idx": "CREATE INDEX cca_derecho_tipo_idx ON cca_derecho (tipo);",
+    "cca_derecho_origen_derecho_idx": "CREATE INDEX cca_derecho_origen_derecho_idx ON cca_derecho (origen_derecho);",
+    "cca_derecho_agrupacion_interesados_idx": "CREATE INDEX cca_derecho_agrupacion_interesados_idx ON cca_derecho (agrupacion_interesados);",
+    "cca_derecho_interesado_idx": "CREATE INDEX cca_derecho_interesado_idx ON cca_derecho (interesado);",
+    "cca_derecho_predio_idx": "CREATE INDEX cca_derecho_predio_idx ON cca_derecho (predio);",
+
+    # Índices para cca_fuenteadministrativa_derecho
+    "cca_fuenteadminstrtv_drcho_derecho_idx": "CREATE INDEX cca_fuenteadminstrtv_drcho_derecho_idx ON cca_fuenteadministrativa_derecho (derecho);",
+    "cca_fuenteadminstrtv_drcho_fuente_administrativa_idx": "CREATE INDEX cca_fuenteadminstrtv_drcho_fuente_administrativa_idx ON cca_fuenteadministrativa_derecho (fuente_administrativa);",
+
+    # Índices para cca_estructuraamenazariesgovulnerabilidad
+    "cca_estrctrmnzrsgvlnrbldad_tipo_amenaza_rsg_vlnrbldad_idx": "CREATE INDEX cca_estrctrmnzrsgvlnrbldad_tipo_amenaza_rsg_vlnrbldad_idx ON cca_estructuraamenazariesgovulnerabilidad (tipo_amenaza_riesgo_vulnerabilidad);",
+    "cca_estrctrmnzrsgvlnrbldad_cca_predio_mnzrsgvlnrbldad_idx": "CREATE INDEX cca_estrctrmnzrsgvlnrbldad_cca_predio_mnzrsgvlnrbldad_idx ON cca_estructuraamenazariesgovulnerabilidad (cca_predio_amenazariesgovulnerabilidad);",
+
+    # Índices para cca_estructuranovedadfmi
+    "cca_estructuranovedadfmi_tipo_novedadfmi_idx": "CREATE INDEX cca_estructuranovedadfmi_tipo_novedadfmi_idx ON cca_estructuranovedadfmi (tipo_novedadfmi);",
+    "cca_estructuranovedadfmi_cca_predio_novedad_fmi_idx": "CREATE INDEX cca_estructuranovedadfmi_cca_predio_novedad_fmi_idx ON cca_estructuranovedadfmi (cca_predio_novedad_fmi);",
+
+    # Índices para cca_estructuranovedadnumeropredial
+    "cca_estructurnvddnmrprdial_tipo_novedad_idx": "CREATE INDEX cca_estructurnvddnmrprdial_tipo_novedad_idx ON cca_estructuranovedadnumeropredial (tipo_novedad);",
+    "cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_idx": "CREATE INDEX cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_idx ON cca_estructuranovedadnumeropredial (cca_predio_novedad_numeros_prediales);",
+
+    # Índices para cca_usuario
+    "cca_usuario_tipo_documento_idx": "CREATE INDEX cca_usuario_tipo_documento_idx ON cca_usuario (tipo_documento);",
+    "cca_usuario_estado_idx": "CREATE INDEX cca_usuario_estado_idx ON cca_usuario (estado);",
+    "cca_usuario_rol_idx": "CREATE INDEX cca_usuario_rol_idx ON cca_usuario (rol);",
+
+    # Índices para cca_caracteristicasunidadconstruccion
+    "cca_crctrstcsnddcnstrccion_tipo_dominio_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_tipo_dominio_idx ON cca_caracteristicasunidadconstruccion (tipo_dominio);",
+    "cca_crctrstcsnddcnstrccion_tipo_construccion_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_tipo_construccion_idx ON cca_caracteristicasunidadconstruccion (tipo_construccion);",
+    "cca_crctrstcsnddcnstrccion_tipo_unidad_construccion_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_tipo_unidad_construccion_idx ON cca_caracteristicasunidadconstruccion (tipo_unidad_construccion);",
+    "cca_crctrstcsnddcnstrccion_tipo_planta_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_tipo_planta_idx ON cca_caracteristicasunidadconstruccion (tipo_planta);",
+    "cca_crctrstcsnddcnstrccion_uso_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_uso_idx ON cca_caracteristicasunidadconstruccion (uso);",
+    "cca_crctrstcsnddcnstrccion_tipo_anexo_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_tipo_anexo_idx ON cca_caracteristicasunidadconstruccion (tipo_anexo);",
+    "cca_crctrstcsnddcnstrccion_tipo_tipologia_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_tipo_tipologia_idx ON cca_caracteristicasunidadconstruccion (tipo_tipologia);",
+    "cca_crctrstcsnddcnstrccion_calificacion_convencional_idx": "CREATE INDEX cca_crctrstcsnddcnstrccion_calificacion_convencional_idx ON cca_caracteristicasunidadconstruccion (calificacion_convencional);",
+
+    # Índices para cca_calificacionconvencional
+    "cca_calificacionconvencnal_tipo_calificar_idx": "CREATE INDEX cca_calificacionconvencnal_tipo_calificar_idx ON cca_calificacionconvencional (tipo_calificar);",
+    "cca_calificacionconvencnal_clase_calificacion_idx": "CREATE INDEX cca_calificacionconvencnal_clase_calificacion_idx ON cca_calificacionconvencional (clase_calificacion);",
+    "cca_calificacionconvencnal_armazon_idx": "CREATE INDEX cca_calificacionconvencnal_armazon_idx ON cca_calificacionconvencional (armazon);",
+    "cca_calificacionconvencnal_muros_idx": "CREATE INDEX cca_calificacionconvencnal_muros_idx ON cca_calificacionconvencional (muros);",
+    "cca_calificacionconvencnal_cubierta_idx": "CREATE INDEX cca_calificacionconvencnal_cubierta_idx ON cca_calificacionconvencional (cubierta);",
+    "cca_calificacionconvencnal_conservacion_estructura_idx": "CREATE INDEX cca_calificacionconvencnal_conservacion_estructura_idx ON cca_calificacionconvencional (conservacion_estructura);",
+    "cca_calificacionconvencnal_fachada_idx": "CREATE INDEX cca_calificacionconvencnal_fachada_idx ON cca_calificacionconvencional (fachada);",
+    "cca_calificacionconvencnal_cubrimiento_muros_idx": "CREATE INDEX cca_calificacionconvencnal_cubrimiento_muros_idx ON cca_calificacionconvencional (cubrimiento_muros);",
+    "cca_calificacionconvencnal_piso_idx": "CREATE INDEX cca_calificacionconvencnal_piso_idx ON cca_calificacionconvencional (piso);",
+    "cca_calificacionconvencnal_conservacion_acabados_idx": "CREATE INDEX cca_calificacionconvencnal_conservacion_acabados_idx ON cca_calificacionconvencional (conservacion_acabados);",
+    "cca_calificacionconvencnal_tamanio_banio_idx": "CREATE INDEX cca_calificacionconvencnal_tamanio_banio_idx ON cca_calificacionconvencional (tamanio_banio);",
+    "cca_calificacionconvencnal_enchape_banio_idx": "CREATE INDEX cca_calificacionconvencnal_enchape_banio_idx ON cca_calificacionconvencional (enchape_banio);",
+    "cca_calificacionconvencnal_mobiliario_banio_idx": "CREATE INDEX cca_calificacionconvencnal_mobiliario_banio_idx ON cca_calificacionconvencional (mobiliario_banio);",
+    "cca_calificacionconvencnal_conservacion_banio_idx": "CREATE INDEX cca_calificacionconvencnal_conservacion_banio_idx ON cca_calificacionconvencional (conservacion_banio);",
+    "cca_calificacionconvencnal_tamanio_cocina_idx": "CREATE INDEX cca_calificacionconvencnal_tamanio_cocina_idx ON cca_calificacionconvencional (tamanio_cocina);",
+    "cca_calificacionconvencnal_enchape_cocina_idx": "CREATE INDEX cca_calificacionconvencnal_enchape_cocina_idx ON cca_calificacionconvencional (enchape_cocina);",
+    "cca_calificacionconvencnal_mobiliario_cocina_idx": "CREATE INDEX cca_calificacionconvencnal_mobiliario_cocina_idx ON cca_calificacionconvencional (mobiliario_cocina);",
+    "cca_calificacionconvencnal_conservacion_cocina_idx": "CREATE INDEX cca_calificacionconvencnal_conservacion_cocina_idx ON cca_calificacionconvencional (conservacion_cocina);",
+    "cca_calificacionconvencnal_cerchas_idx": "CREATE INDEX cca_calificacionconvencnal_cerchas_idx ON cca_calificacionconvencional (cerchas);",
+
+    # Índices para cca_adjunto
+    "cca_adjunto_tipo_archivo_idx": "CREATE INDEX cca_adjunto_tipo_archivo_idx ON cca_adjunto (tipo_archivo);",
+    "cca_adjunto_relacion_soporte_idx": "CREATE INDEX cca_adjunto_relacion_soporte_idx ON cca_adjunto (relacion_soporte);",
+    "cca_adjunto_dependencia_ucons_idx": "CREATE INDEX cca_adjunto_dependencia_ucons_idx ON cca_adjunto (dependencia_ucons);",
+    "cca_adjunto_cca_construccion_adjunto_idx": "CREATE INDEX cca_adjunto_cca_construccion_adjunto_idx ON cca_adjunto (cca_construccion_adjunto);",
+    "cca_adjunto_cca_fuenteadminstrtv_djnto_idx": "CREATE INDEX cca_adjunto_cca_fuenteadminstrtv_djnto_idx ON cca_adjunto (cca_fuenteadminstrtiva_adjunto);",
+    "cca_adjunto_cca_interesado_adjunto_idx": "CREATE INDEX cca_adjunto_cca_interesado_adjunto_idx ON cca_adjunto (cca_interesado_adjunto);",
+    "cca_adjunto_cca_unidadconstruccn_djnto_idx": "CREATE INDEX cca_adjunto_cca_unidadconstruccn_djnto_idx ON cca_adjunto (cca_unidadconstruccion_adjunto);",
+    "cca_adjunto_cca_predio_adjunto_idx": "CREATE INDEX cca_adjunto_cca_predio_adjunto_idx ON cca_adjunto (cca_predio_adjunto);",
+    "cca_adjunto_cca_puntocontrol_adjunto_idx": "CREATE INDEX cca_adjunto_cca_puntocontrol_adjunto_idx ON cca_adjunto (cca_puntocontrol_adjunto);",
+    "cca_adjunto_cca_puntolevantamint_djnto_idx": "CREATE INDEX cca_adjunto_cca_puntolevantamint_djnto_idx ON cca_adjunto (cca_puntolevantamiento_adjunto);",
+    "cca_adjunto_cca_puntolindero_adjunto_idx": "CREATE INDEX cca_adjunto_cca_puntolindero_adjunto_idx ON cca_adjunto (cca_puntolindero_adjunto);",
+    "cca_adjunto_cca_puntoreferencia_adjnto_idx": "CREATE INDEX cca_adjunto_cca_puntoreferencia_adjnto_idx ON cca_adjunto (cca_puntoreferencia_adjunto);",
+
+    # Índices para extreferenciaregistralsistemaantiguo
+    "extreferencrgstrlsstmntguo_tipo_referencia_idx": "CREATE INDEX extreferencrgstrlsstmntguo_tipo_referencia_idx ON extreferenciaregistralsistemaantiguo ( tipo_referencia );",
+    "extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_idx": "CREATE INDEX extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_idx ON extreferenciaregistralsistemaantiguo ( cca_predio_referencia_registral_sistema_antiguo );"
 }
 
 # Función para ejecutar una consulta SQL
@@ -622,9 +771,10 @@ def execute_query(conn, query):
 def enable_foreign_keys(conn):
     try:
         conn.execute("PRAGMA foreign_keys = ON;")
+        conn.execute("PRAGMA foreign_key_check;")
         log_message("Claves foráneas habilitadas.")
     except sqlite3.Error as e:
-        log_message(f"Error al habilitar claves foráneas: {e}")
+        log_message(f"Error al habilitar claves foráneas y checkeo de las mismas: {e}")
 
 def check_records(conn, table_name):
     cursor = conn.cursor()
@@ -673,7 +823,33 @@ def create_new_table(conn, table_name, new_structure):
     except sqlite3.Error as e:
         log_message(f"Error al renombrar o crear la tabla {table_name}: {e}")
 
+# Verificar y crear índices en la base de datos
+def verify_and_create_indices(conn, indices):
+    """
+    Verifica si los índices existen en la base de datos y los crea si no existen.
 
+    :param conn: Conexión a la base de datos SQLite.
+    :param indices: Diccionario con el nombre del índice como clave y el SQL de creación como valor.
+    """
+    cursor = conn.cursor()
+    
+    # Obtener índices existentes
+    cursor.execute("SELECT name FROM sqlite_master WHERE type='index';")
+    existing_indices = set(index[0] for index in cursor.fetchall())
+
+    log_message("Verificando índices existentes...")
+    for index_name, create_sql in indices.items():
+        if index_name in existing_indices:
+            log_message(f"Índice existente: {index_name}")
+        else:
+            log_message(f"Creando índice: {index_name}")
+            try:
+                cursor.execute(create_sql)
+                log_message(f"Índice creado exitosamente: {index_name}")
+            except sqlite3.Error as e:
+                log_message(f"Error al crear el índice {index_name}: {e}")
+
+    conn.commit()
 
 # Función para convertir y migrar los datos automáticamente
 def convert_and_migrate_data(conn, table_name, column_types):
@@ -843,17 +1019,31 @@ def migrate_tables(conn, old_structure, new_structure):
 
 # Ejecutar el script de migración
 def migrate_database():
-    with sqlite3.connect(db_path) as conn:
-        enable_foreign_keys(conn)
-        
-        # Iniciar el archivo de log en modo de escritura con UTF-8
-        with codecs.open(log_path, "w", encoding="utf-8") as f:
-            f.write("Inicio de la migración de tablas DESDE MIGRATE DATABASE\n")
-        
-        migrate_tables(conn, modelo_union, modelo_ideal)
+    try:
+        with sqlite3.connect(db_path) as conn:
 
-    log_message("Migración completada.")
-    print("Migración completada.")
+            
+            # Iniciar el archivo de log en modo de escritura con UTF-8
+            with codecs.open(log_path, "w", encoding="utf-8") as f:
+                f.write("Inicio de la migración de tablas DESDE MIGRATE DATABASE\n")
+            
+            migrate_tables(conn, modelo_union, modelo_ideal)
+
+            # Habilita las llaves foraneas
+            enable_foreign_keys(conn)
+
+
+            verify_and_create_indices(conn, indices_to_create)  # Verifica y crea índices
+
+        log_message("Migración completada.")
+        print("Migración completada.")
+
+    except sqlite3.Error as e:
+        log_message(f"Error al conectarse a la base de datos: {e}")
+    finally:
+        if conn:
+            conn.close()
+
 
 # Llamar a la función principal de migración
 if __name__ == "__main__":
