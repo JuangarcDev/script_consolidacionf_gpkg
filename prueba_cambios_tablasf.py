@@ -4,7 +4,7 @@ import os
 import codecs
 
 # Ruta al archivo GeoPackage
-db_path = r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\captura_campo_20240920.gpkg"
+db_path = r"/home/daniel/Descargas/PASO_PROYECTO_COMPILACION_GPKG/COP_gpkg_combinado/gpkg_combinado/captura_campo_20240920.gpkg"
 log_path = os.path.join(os.path.dirname(db_path), "migracion_log.txt")
 
 # Función para escribir mensajes en el archivo de log
@@ -238,7 +238,7 @@ modelo_union = {
   	nombre TEXT(150) NOT NULL,
   	contrasena TEXT(20) NULL,
   	rol INTEGER NOT NULL CONSTRAINT cca_usuario_rol_fkey REFERENCES cca_roltipo DEFERRABLE INITIALLY DEFERRED,
-  	"municipio_codigo" TEXT(20)
+  	"municipio_codigo" TEXT(20) NULL
 	);""",
 
     "cca_caracteristicasunidadconstruccion" : """CREATE TABLE cca_caracteristicasunidadconstruccion (
@@ -318,6 +318,7 @@ modelo_union = {
 modelo_ideal = {
     "cca_agrupacioninteresados" : """CREATE TABLE cca_agrupacioninteresados (
   	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_agrupacioninteresados_tipo_fkey REFERENCES cca_grupointeresadotipo DEFERRABLE INITIALLY DEFERRED,
     nombre TEXT(40) NULL
@@ -325,6 +326,7 @@ modelo_ideal = {
 
     "cca_omisiones" : """CREATE TABLE cca_omisiones (
   	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     numero_predial TEXT(30) NOT NULL,
     numero_predial_anterior TEXT(20) NULL,
@@ -343,6 +345,7 @@ modelo_ideal = {
 
     "cca_fuenteadministrativa" : """CREATE TABLE cca_fuenteadministrativa (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_fuenteadministrativa_tipo_fkey REFERENCES cca_fuenteadministrativatipo DEFERRABLE INITIALLY DEFERRED,
     numero_fuente TEXT(150) NULL,
@@ -353,6 +356,7 @@ modelo_ideal = {
 
     "cca_interesado" : """CREATE TABLE cca_interesado (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_interesado_tipo_fkey REFERENCES cca_interesadotipo DEFERRABLE INITIALLY DEFERRED,
     tipo_documento INTEGER NOT NULL CONSTRAINT cca_interesado_tipo_documento_fkey REFERENCES cca_interesadodocumentotipo DEFERRABLE INITIALLY DEFERRED,
@@ -376,6 +380,7 @@ modelo_ideal = {
 
     "cca_miembros" : """CREATE TABLE cca_miembros (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     interesado INTEGER NOT NULL CONSTRAINT cca_miembros_interesado_fkey REFERENCES cca_interesado DEFERRABLE INITIALLY DEFERRED,
     agrupacion INTEGER NOT NULL CONSTRAINT cca_miembros_agrupacion_fkey REFERENCES cca_agrupacioninteresados DEFERRABLE INITIALLY DEFERRED,
@@ -384,6 +389,7 @@ modelo_ideal = {
 
     "cca_predio" : """CREATE TABLE cca_predio (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     id_operacion TEXT(30) NOT NULL,
     departamento_municipio TEXT(5) NOT NULL,
@@ -439,6 +445,7 @@ modelo_ideal = {
 
     "cca_ofertasmercadoinmobiliario" : """CREATE TABLE cca_ofertasmercadoinmobiliario (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo_oferta INTEGER NOT NULL CONSTRAINT cca_ofertasmercadoinmblrio_tipo_oferta_fkey REFERENCES cca_ofertatipo DEFERRABLE INITIALLY DEFERRED,
     valor_pedido DOUBLE NOT NULL CONSTRAINT cca_ofertasmercadonmblrio_valor_pedido_check CHECK( valor_pedido BETWEEN 0.0 AND 9.99999999999999E14),
@@ -452,6 +459,7 @@ modelo_ideal = {
 
     "cca_predio_copropiedad" : """CREATE TABLE cca_predio_copropiedad (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     unidad_predial INTEGER NOT NULL CONSTRAINT cca_predio_copropiedad_unidad_predial_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     matriz INTEGER NOT NULL CONSTRAINT cca_predio_copropiedad_matriz_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     coeficiente DOUBLE NULL CONSTRAINT cca_predio_copropiedad_coeficiente_check CHECK( coeficiente BETWEEN 0.0 AND 1.0),
@@ -460,6 +468,7 @@ modelo_ideal = {
 
     "cca_predio_informalidad" : """CREATE TABLE cca_predio_informalidad (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     cca_predio_formal INTEGER NOT NULL CONSTRAINT cca_predio_informalidad_cca_predio_formal_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     cca_predio_informal INTEGER NOT NULL CONSTRAINT cca_predio_informalidad_cca_predio_informal_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
@@ -467,6 +476,7 @@ modelo_ideal = {
 
     "cca_restriccion" : """CREATE TABLE cca_restriccion (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_restriccion_tipo_fkey REFERENCES cca_restricciontipo DEFERRABLE INITIALLY DEFERRED,
     descripcion TEXT(255) NULL,
@@ -475,6 +485,7 @@ modelo_ideal = {
 
     "cca_derecho" : """CREATE TABLE cca_derecho (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_derecho_tipo_fkey REFERENCES cca_derechotipo DEFERRABLE INITIALLY DEFERRED,
     cuota_participacion DOUBLE NULL CONSTRAINT cca_derecho_cuota_participacion_check CHECK( cuota_participacion BETWEEN 0.0 AND 100.0),
@@ -489,6 +500,7 @@ modelo_ideal = {
 
     "cca_fuenteadministrativa_derecho" : """CREATE TABLE cca_fuenteadministrativa_derecho (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     derecho INTEGER NOT NULL CONSTRAINT cca_fuenteadminstrtv_drcho_derecho_fkey REFERENCES cca_derecho DEFERRABLE INITIALLY DEFERRED,
     fuente_administrativa INTEGER NOT NULL CONSTRAINT cca_fuenteadminstrtv_drcho_fuente_administrativa_fkey REFERENCES cca_fuenteadministrativa DEFERRABLE INITIALLY DEFERRED
@@ -496,6 +508,7 @@ modelo_ideal = {
 
     "cca_estructuraamenazariesgovulnerabilidad" : """CREATE TABLE cca_estructuraamenazariesgovulnerabilidad (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Seq INTEGER NULL,
     tipo_amenaza_riesgo_vulnerabilidad INTEGER NOT NULL CONSTRAINT cca_estrctrmnzrsgvlnrbldad_tipo_amenaza_rsg_vlnrbldad_fkey REFERENCES cca_amenazariesgovulnerabilidadtipo DEFERRABLE INITIALLY DEFERRED,
     observacion TEXT(255) NULL,
@@ -504,6 +517,7 @@ modelo_ideal = {
 
     "cca_estructuranovedadfmi" : """CREATE TABLE cca_estructuranovedadfmi (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Seq INTEGER NULL,
     codigo_orip TEXT(4) NOT NULL,
     numero_fmi TEXT(80) NOT NULL,
@@ -513,6 +527,7 @@ modelo_ideal = {
 
     "cca_estructuranovedadnumeropredial" : """CREATE TABLE cca_estructuranovedadnumeropredial (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Seq INTEGER NULL,
     numero_predial TEXT(30) NOT NULL,
     tipo_novedad INTEGER NOT NULL CONSTRAINT cca_estructurnvddnmrprdial_tipo_novedad_fkey REFERENCES cca_estructuranovedadnumeropredial_tipo_novedad DEFERRABLE INITIALLY DEFERRED,
@@ -521,6 +536,7 @@ modelo_ideal = {
 
     "cca_usuario" : """CREATE TABLE cca_usuario (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     id TEXT(20) NULL,
     tipo_documento INTEGER NOT NULL CONSTRAINT cca_usuario_tipo_documento_fkey REFERENCES cca_interesadodocumentotipo DEFERRABLE INITIALLY DEFERRED,
@@ -531,33 +547,12 @@ modelo_ideal = {
     nombre TEXT(150) NOT NULL,
     contrasena TEXT(20) NULL,
     rol INTEGER NOT NULL CONSTRAINT cca_usuario_rol_fkey REFERENCES cca_roltipo DEFERRABLE INITIALLY DEFERRED,
-    "municipio_codigo" TEXT(20)
-	);""",
-
-    "cca_caracteristicasunidadconstruccion" : """CREATE TABLE cca_caracteristicasunidadconstruccion (
-	T_Id INTEGER NOT NULL PRIMARY KEY,
-    T_Ili_Tid TEXT(200) NULL,
-    identificador TEXT(5) NOT NULL,
-    tipo_dominio INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_dominio_fkey REFERENCES cca_dominioconstrucciontipo DEFERRABLE INITIALLY DEFERRED,
-    tipo_construccion INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_construccion_fkey REFERENCES cca_construcciontipo DEFERRABLE INITIALLY DEFERRED,
-    tipo_unidad_construccion INTEGER NOT NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_unidad_construccion_fkey REFERENCES cca_unidadconstrucciontipo DEFERRABLE INITIALLY DEFERRED,
-    tipo_planta INTEGER NOT NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
-    total_habitaciones INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_habitaciones_check CHECK( total_habitaciones BETWEEN 0 AND 999999),
-    total_banios INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_banios_check CHECK( total_banios BETWEEN 0 AND 999999),
-    total_locales INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_locales_check CHECK( total_locales BETWEEN 0 AND 999999),
-    total_plantas INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_plantas_check CHECK( total_plantas BETWEEN 0 AND 150),
-    uso INTEGER NOT NULL CONSTRAINT cca_crctrstcsnddcnstrccion_uso_fkey REFERENCES cca_usouconstipo DEFERRABLE INITIALLY DEFERRED,
-    anio_construccion INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_anio_construccion_check CHECK( anio_construccion BETWEEN 1550 AND 2500),
-    area_construida DOUBLE NOT NULL CONSTRAINT cca_crctrstcnddcnstrccion_area_construida_check CHECK( area_construida BETWEEN 0.0 AND 9.99999999999999E13),
-    area_privada_construida DOUBLE NULL CONSTRAINT cca_crctrstcnddcnstrccion_area_privada_construida_check CHECK( area_privada_construida BETWEEN 0.0 AND 9.99999999999999E13),
-    tipo_anexo INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_anexo_fkey REFERENCES cca_anexotipo DEFERRABLE INITIALLY DEFERRED,
-    tipo_tipologia INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_tipologia_fkey REFERENCES cca_tipologiatipo DEFERRABLE INITIALLY DEFERRED,
-    observaciones TEXT(250) NULL,
-    calificacion_convencional INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_calificacion_convencional_fkey REFERENCES cca_calificacionconvencional DEFERRABLE INITIALLY DEFERRED
+    "municipio_codigo" TEXT(20) NULL
 	);""",
 
     "cca_calificacionconvencional" : """CREATE TABLE cca_calificacionconvencional (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo_calificar INTEGER NOT NULL CONSTRAINT cca_calificacionconvencnal_tipo_calificar_fkey REFERENCES cca_calificartipo DEFERRABLE INITIALLY DEFERRED,
     total_calificacion INTEGER NOT NULL CONSTRAINT cca_calificacionconvncnal_total_calificacion_check CHECK( total_calificacion BETWEEN 0 AND 999999999),
@@ -586,8 +581,169 @@ modelo_ideal = {
     subtotal_cerchas INTEGER NULL CONSTRAINT cca_calificacionconvncnal_subtotal_cerchas_check CHECK( subtotal_cerchas BETWEEN 0 AND 9999999)
 	);""",
 
+    "cca_caracteristicasunidadconstruccion" : """CREATE TABLE cca_caracteristicasunidadconstruccion (
+	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
+    T_Ili_Tid TEXT(200) NULL,
+    identificador TEXT(5) NOT NULL,
+    tipo_dominio INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_dominio_fkey REFERENCES cca_dominioconstrucciontipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_construccion INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_construccion_fkey REFERENCES cca_construcciontipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_unidad_construccion INTEGER NOT NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_unidad_construccion_fkey REFERENCES cca_unidadconstrucciontipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_planta INTEGER NOT NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
+    total_habitaciones INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_habitaciones_check CHECK( total_habitaciones BETWEEN 0 AND 999999),
+    total_banios INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_banios_check CHECK( total_banios BETWEEN 0 AND 999999),
+    total_locales INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_locales_check CHECK( total_locales BETWEEN 0 AND 999999),
+    total_plantas INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_total_plantas_check CHECK( total_plantas BETWEEN 0 AND 150),
+    uso INTEGER NOT NULL CONSTRAINT cca_crctrstcsnddcnstrccion_uso_fkey REFERENCES cca_usouconstipo DEFERRABLE INITIALLY DEFERRED,
+    anio_construccion INTEGER NULL CONSTRAINT cca_crctrstcnddcnstrccion_anio_construccion_check CHECK( anio_construccion BETWEEN 1550 AND 2500),
+    area_construida DOUBLE NOT NULL CONSTRAINT cca_crctrstcnddcnstrccion_area_construida_check CHECK( area_construida BETWEEN 0.0 AND 9.99999999999999E13),
+    area_privada_construida DOUBLE NULL CONSTRAINT cca_crctrstcnddcnstrccion_area_privada_construida_check CHECK( area_privada_construida BETWEEN 0.0 AND 9.99999999999999E13),
+    tipo_anexo INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_anexo_fkey REFERENCES cca_anexotipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_tipologia INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_tipologia_fkey REFERENCES cca_tipologiatipo DEFERRABLE INITIALLY DEFERRED,
+    observaciones TEXT(250) NULL,
+    calificacion_convencional INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_calificacion_convencional_fkey REFERENCES cca_calificacionconvencional DEFERRABLE INITIALLY DEFERRED
+	);""",
+
+    #   ---     PARTE GEOGRAFICA    ---
+    "cca_puntolevantamiento": """CREATE TABLE cca_puntolevantamiento (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom POINT NOT NULL, 
+    T_Ili_Tid TEXT(200) NULL,
+    id_punto_levantamiento TEXT(255) NOT NULL,
+    puntotipo INTEGER NOT NULL CONSTRAINT cca_puntolevantamiento_puntotipo_fkey REFERENCES cca_puntotipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_punto_levantamiento INTEGER NOT NULL CONSTRAINT cca_puntolevantamiento_tipo_punto_levantamiento_fkey REFERENCES cca_puntolevtipo DEFERRABLE INITIALLY DEFERRED,
+    fotoidentificacion INTEGER NULL CONSTRAINT cca_puntolevantamiento_fotoidentificacion_fkey REFERENCES cca_fotoidentificaciontipo DEFERRABLE INITIALLY DEFERRED,
+    exactitud_horizontal DOUBLE NULL CONSTRAINT cca_puntolevantamiento_exactitud_horizontal_check CHECK( exactitud_horizontal BETWEEN 0.0 AND 10.0),
+    exactitud_vertical DOUBLE NULL CONSTRAINT cca_puntolevantamiento_exactitud_vertical_check CHECK( exactitud_vertical BETWEEN 0.0 AND 10.0),
+    posicion_interpolacion INTEGER NULL CONSTRAINT cca_puntolevantamiento_posicion_interpolacion_fkey REFERENCES col_interpolaciontipo DEFERRABLE INITIALLY DEFERRED,
+    metodo_produccion INTEGER NULL CONSTRAINT cca_puntolevantamiento_metodo_produccion_fkey REFERENCES col_metodoproducciontipo DEFERRABLE INITIALLY DEFERRED,
+    observacion TEXT(255) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    "cca_puntocontrol": """CREATE TABLE cca_puntocontrol (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom POINT NOT NULL, 
+    T_Ili_Tid TEXT(200) NULL,
+    id_punto_control TEXT(255) NOT NULL,
+    puntotipo INTEGER NOT NULL CONSTRAINT cca_puntocontrol_puntotipo_fkey REFERENCES cca_puntotipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_punto_control TEXT(20) NULL,
+    exactitud_horizontal DOUBLE NULL CONSTRAINT cca_puntocontrol_exactitud_horizontal_check CHECK( exactitud_horizontal BETWEEN 0.0 AND 10.0),
+    exactitud_vertical DOUBLE NULL CONSTRAINT cca_puntocontrol_exactitud_vertical_check CHECK( exactitud_vertical BETWEEN 0.0 AND 10.0),
+    posicion_interpolacion INTEGER NULL CONSTRAINT cca_puntocontrol_posicion_interpolacion_fkey REFERENCES col_interpolaciontipo DEFERRABLE INITIALLY DEFERRED,
+    metodo_produccion INTEGER NULL CONSTRAINT cca_puntocontrol_metodo_produccion_fkey REFERENCES col_metodoproducciontipo DEFERRABLE INITIALLY DEFERRED,
+    observacion TEXT(255) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    "cca_puntolindero": """CREATE TABLE cca_puntolindero (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom POINT NOT NULL, 
+    T_Ili_Tid TEXT(200) NULL,
+    id_punto_lindero TEXT(255) NOT NULL,
+    puntotipo INTEGER NULL CONSTRAINT cca_puntolindero_puntotipo_fkey REFERENCES cca_puntotipo DEFERRABLE INITIALLY DEFERRED,
+    acuerdo INTEGER NOT NULL CONSTRAINT cca_puntolindero_acuerdo_fkey REFERENCES cca_acuerdotipo DEFERRABLE INITIALLY DEFERRED,
+    fotoidentificacion INTEGER NULL CONSTRAINT cca_puntolindero_fotoidentificacion_fkey REFERENCES cca_fotoidentificaciontipo DEFERRABLE INITIALLY DEFERRED,
+    exactitud_horizontal DOUBLE NULL CONSTRAINT cca_puntolindero_exactitud_horizontal_check CHECK( exactitud_horizontal BETWEEN 0.0 AND 10.0),
+    exactitud_vertical DOUBLE NULL CONSTRAINT cca_puntolindero_exactitud_vertical_check CHECK( exactitud_vertical BETWEEN 0.0 AND 10.0),
+    posicion_interpolacion INTEGER NULL CONSTRAINT cca_puntolindero_posicion_interpolacion_fkey REFERENCES col_interpolaciontipo DEFERRABLE INITIALLY DEFERRED,
+    metodo_produccion INTEGER NULL CONSTRAINT cca_puntolindero_metodo_produccion_fkey REFERENCES col_metodoproducciontipo DEFERRABLE INITIALLY DEFERRED,
+    observacion TEXT(255) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    "cca_puntoreferencia": """CREATE TABLE cca_puntoreferencia (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom POINT NOT NULL, 
+    T_Ili_Tid TEXT(200) NULL,
+    tipo_punto_referencia INTEGER NULL CONSTRAINT cca_puntoreferencia_tipo_punto_referencia_fkey REFERENCES cca_puntoreferenciatipo DEFERRABLE INITIALLY DEFERRED,
+    cual TEXT(150) NULL,
+    posicion_interpolacion INTEGER NULL CONSTRAINT cca_puntoreferencia_posicion_interpolacion_fkey REFERENCES col_interpolaciontipo DEFERRABLE INITIALLY DEFERRED,
+    metodo_produccion INTEGER NULL CONSTRAINT cca_puntoreferencia_metodo_produccion_fkey REFERENCES col_metodoproducciontipo DEFERRABLE INITIALLY DEFERRED,
+    observacion TEXT(255) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    "cca_construccion": """CREATE TABLE cca_construccion (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom MULTIPOLYGON NOT NULL, 
+    T_Ili_Tid TEXT(200) NULL,
+    identificador TEXT(20) NOT NULL,
+    tipo_construccion INTEGER NULL CONSTRAINT cca_construccion_tipo_construccion_fkey REFERENCES cca_construcciontipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_dominio INTEGER NULL CONSTRAINT cca_construccion_tipo_dominio_fkey REFERENCES cca_dominioconstrucciontipo DEFERRABLE INITIALLY DEFERRED,
+    numero_pisos INTEGER NOT NULL CONSTRAINT cca_construccion_numero_pisos_check CHECK( numero_pisos BETWEEN 0 AND 300),
+    numero_sotanos INTEGER NULL CONSTRAINT cca_construccion_numero_sotanos_check CHECK( numero_sotanos BETWEEN 0 AND 99),
+    numero_mezanines INTEGER NULL CONSTRAINT cca_construccion_numero_mezanines_check CHECK( numero_mezanines BETWEEN 0 AND 99),
+    numero_semisotanos INTEGER NULL CONSTRAINT cca_construccion_numero_semisotanos_check CHECK( numero_semisotanos BETWEEN 0 AND 99),
+    area_construccion_alfanumerica DOUBLE NULL CONSTRAINT cca_construccion_area_construccin_lfnmrica_check CHECK( area_construccion_alfanumerica BETWEEN 0.0 AND 9.99999999999999E13),
+    area_construccion_digital DOUBLE NOT NULL CONSTRAINT cca_construccion_area_construccion_digital_check CHECK( area_construccion_digital BETWEEN 0.0 AND 9.99999999999999E13),
+    anio_construccion INTEGER NULL CONSTRAINT cca_construccion_anio_construccion_check CHECK( anio_construccion BETWEEN 1550 AND 2500),
+    valor_referencia_construccion DOUBLE NULL CONSTRAINT cca_construccion_valor_referenc_cnstrccion_check CHECK( valor_referencia_construccion BETWEEN 0.0 AND 9.99999999999999E14),
+    etiqueta TEXT(250) NULL,
+    altura DOUBLE NULL CONSTRAINT cca_construccion_altura_check CHECK( altura BETWEEN 0.0 AND 10000.0),
+    observaciones TEXT(250) NULL,
+    predio INTEGER NOT NULL CONSTRAINT cca_construccion_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    "cca_terreno": """CREATE TABLE cca_terreno (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom MULTIPOLYGON NULL, 
+    T_Ili_Tid TEXT(200) NULL,
+    servidumbre_transito BOOLEAN NULL,
+    area_terreno DOUBLE NULL CONSTRAINT cca_terreno_area_terreno_check CHECK( area_terreno BETWEEN 0.0 AND 9.999999999999998E13),
+    etiqueta TEXT(250) NULL,
+    predio INTEGER NOT NULL CONSTRAINT cca_terreno_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    "extdireccion": """CREATE TABLE extdireccion (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom MULTIPOLYGON NULL,
+    T_Seq INTEGER NULL,
+    tipo_direccion INTEGER NOT NULL CONSTRAINT extdireccion_tipo_direccion_fkey REFERENCES extdireccion_tipo_direccion DEFERRABLE INITIALLY DEFERRED,
+    es_direccion_principal BOOLEAN NULL,
+    codigo_postal TEXT(255) NULL,
+    clase_via_principal INTEGER NULL CONSTRAINT extdireccion_clase_via_principal_fkey REFERENCES extdireccion_clase_via_principal DEFERRABLE INITIALLY DEFERRED,
+    valor_via_principal TEXT(100) NULL,
+    letra_via_principal TEXT(20) NULL,
+    sector_ciudad INTEGER NULL CONSTRAINT extdireccion_sector_ciudad_fkey REFERENCES extdireccion_sector_ciudad DEFERRABLE INITIALLY DEFERRED,
+    valor_via_generadora TEXT(100) NULL,
+    letra_via_generadora TEXT(20) NULL,
+    numero_predio TEXT(20) NULL,
+    sector_predio INTEGER NULL CONSTRAINT extdireccion_sector_predio_fkey REFERENCES extdireccion_sector_predio DEFERRABLE INITIALLY DEFERRED,
+    complemento TEXT(255) NULL,
+    nombre_predio TEXT(255) NULL,
+    cca_predio_direccion INTEGER NULL CONSTRAINT extdireccion_cca_predio_direccion_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+);""",
+
+    "cca_unidadconstruccion": """CREATE TABLE cca_unidadconstruccion (
+    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    geom MULTIPOLYGON NOT NULL, 
+    T_Ili_Tid TEXT(200) NULL,tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
+    planta_ubicacion INTEGER NOT NULL CONSTRAINT cca_unidadconstruccion_planta_ubicacion_check CHECK( planta_ubicacion BETWEEN 0 AND 500),
+    area_construida DOUBLE NOT NULL CONSTRAINT cca_unidadconstruccion_area_construida_check CHECK( area_construida BETWEEN 0.0 AND 9.99999999999999E13),
+    altura DOUBLE NULL CONSTRAINT cca_unidadconstruccion_altura_check CHECK( altura BETWEEN 0.0 AND 1000.0),
+    observaciones TEXT(255) NULL,
+    caracteristicasunidadconstruccion INTEGER NOT NULL CONSTRAINT cca_unidadconstruccion_caracteristcsnddcnstrccion_fkey REFERENCES cca_caracteristicasunidadconstruccion DEFERRABLE INITIALLY DEFERRED,
+    construccion INTEGER NOT NULL CONSTRAINT cca_unidadconstruccion_construccion_fkey REFERENCES cca_construccion DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+);""",
+
+    #   --- FIN PARTE GEOGRÁFICA
+
+
+
     "cca_adjunto": """CREATE TABLE cca_adjunto (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Seq INTEGER NULL,
     archivo TEXT(255) NULL,
     observaciones TEXT(255) NULL,
@@ -596,19 +752,20 @@ modelo_ideal = {
     relacion_soporte INTEGER NULL CONSTRAINT cca_adjunto_relacion_soporte_fkey REFERENCES cca_adjunto_relacion_soporte DEFERRABLE INITIALLY DEFERRED,
     dependencia_ucons INTEGER NULL CONSTRAINT cca_adjunto_dependencia_ucons_fkey REFERENCES cca_adjunto_dependencia_ucons DEFERRABLE INITIALLY DEFERRED,
     ruta_modificada TEXT(150) NULL,
-    cca_construccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_construccion_adjunto_fkey REFERENCES cca_construccion(fid) DEFERRABLE INITIALLY DEFERRED,
+    cca_construccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_construccion_adjunto_fkey REFERENCES cca_construccion DEFERRABLE INITIALLY DEFERRED,
     cca_fuenteadminstrtiva_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_fuenteadminstrtv_djnto_fkey REFERENCES cca_fuenteadministrativa DEFERRABLE INITIALLY DEFERRED,
     cca_interesado_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_interesado_adjunto_fkey REFERENCES cca_interesado DEFERRABLE INITIALLY DEFERRED,
-    cca_unidadconstruccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_unidadconstruccn_djnto_fkey REFERENCES cca_unidadconstruccion(fid) DEFERRABLE INITIALLY DEFERRED,
+    cca_unidadconstruccion_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_unidadconstruccn_djnto_fkey REFERENCES cca_unidadconstruccion DEFERRABLE INITIALLY DEFERRED,
     cca_predio_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_predio_adjunto_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
-    cca_puntocontrol_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntocontrol_adjunto_fkey REFERENCES cca_puntocontrol(fid) DEFERRABLE INITIALLY DEFERRED,
-    cca_puntolevantamiento_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolevantamint_djnto_fkey REFERENCES cca_puntolevantamiento(fid) DEFERRABLE INITIALLY DEFERRED,
-    cca_puntolindero_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolindero_adjunto_fkey REFERENCES cca_puntolindero(fid) DEFERRABLE INITIALLY DEFERRED,
-    cca_puntoreferencia_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntoreferencia_adjnto_fkey REFERENCES cca_puntoreferencia(fid) DEFERRABLE INITIALLY DEFERRED
+    cca_puntocontrol_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntocontrol_adjunto_fkey REFERENCES cca_puntocontrol DEFERRABLE INITIALLY DEFERRED,
+    cca_puntolevantamiento_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolevantamint_djnto_fkey REFERENCES cca_puntolevantamiento DEFERRABLE INITIALLY DEFERRED,
+    cca_puntolindero_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolindero_adjunto_fkey REFERENCES cca_puntolindero DEFERRABLE INITIALLY DEFERRED,
+    cca_puntoreferencia_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntoreferencia_adjnto_fkey REFERENCES cca_puntoreferencia DEFERRABLE INITIALLY DEFERRED
 	);""",
 
     "extreferenciaregistralsistemaantiguo": """CREATE TABLE extreferenciaregistralsistemaantiguo (
     T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
     T_Seq INTEGER NULL,
     tipo_referencia INTEGER NOT NULL CONSTRAINT extreferencrgstrlsstmntguo_tipo_referencia_fkey REFERENCES extreferenciaregistralsistemaantiguo_tipo_referencia(T_Id) DEFERRABLE INITIALLY DEFERRED,
     oficina TEXT(50) NULL,
@@ -621,8 +778,7 @@ modelo_ideal = {
     anio TEXT(2) NULL,
     matricula TEXT(20) NOT NULL,
     cca_predio_referencia_registral_sistema_antiguo INTEGER NULL CONSTRAINT extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_fkey REFERENCES cca_predio(T_Id) DEFERRABLE INITIALLY DEFERRED
-); 
-    """
+); """
 }
 
 # Diccionario de índices a verificar y crear
@@ -756,7 +912,52 @@ indices_to_create = {
 
     # Índices para extreferenciaregistralsistemaantiguo
     "extreferencrgstrlsstmntguo_tipo_referencia_idx": "CREATE INDEX extreferencrgstrlsstmntguo_tipo_referencia_idx ON extreferenciaregistralsistemaantiguo ( tipo_referencia );",
-    "extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_idx": "CREATE INDEX extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_idx ON extreferenciaregistralsistemaantiguo ( cca_predio_referencia_registral_sistema_antiguo );"
+    "extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_idx": "CREATE INDEX extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_idx ON extreferenciaregistralsistemaantiguo ( cca_predio_referencia_registral_sistema_antiguo );",
+
+    #GEOGRAFICO
+    # Índices para cca_puntolevantamiento
+    "cca_puntolevantamiento_puntotipo_idx": "CREATE INDEX cca_puntolevantamiento_puntotipo_idx ON cca_puntolevantamiento (puntotipo);",
+    "cca_puntolevantamiento_tipo_punto_levantamiento_idx": "CREATE INDEX cca_puntolevantamiento_tipo_punto_levantamiento_idx ON cca_puntolevantamiento (tipo_punto_levantamiento);",
+    "cca_puntolevantamiento_fotoidentificacion_idx": "CREATE INDEX cca_puntolevantamiento_fotoidentificacion_idx ON cca_puntolevantamiento (fotoidentificacion);",
+    "cca_puntolevantamiento_posicion_interpolacion_idx": "CREATE INDEX cca_puntolevantamiento_posicion_interpolacion_idx ON cca_puntolevantamiento (posicion_interpolacion);",
+    "cca_puntolevantamiento_metodo_produccion_idx": "CREATE INDEX cca_puntolevantamiento_metodo_produccion_idx ON cca_puntolevantamiento (metodo_produccion);",
+
+    # Índices para cca_puntocontrol
+    "cca_puntocontrol_puntotipo_idx": "CREATE INDEX cca_puntocontrol_puntotipo_idx ON cca_puntocontrol (puntotipo);",
+    "cca_puntocontrol_posicion_interpolacion_idx": "CREATE INDEX cca_puntocontrol_posicion_interpolacion_idx ON cca_puntocontrol (posicion_interpolacion);",
+    "cca_puntocontrol_metodo_produccion_idx": "CREATE INDEX cca_puntocontrol_metodo_produccion_idx ON cca_puntocontrol (metodo_produccion);",
+
+    # Índices para cca_puntolindero
+    "cca_puntolindero_puntotipo_idx": "CREATE INDEX cca_puntolindero_puntotipo_idx ON cca_puntolindero (puntotipo);",
+    "cca_puntolindero_acuerdo_idx": "CREATE INDEX cca_puntolindero_acuerdo_idx ON cca_puntolindero (acuerdo);",
+    "cca_puntolindero_fotoidentificacion_idx": "CREATE INDEX cca_puntolindero_fotoidentificacion_idx ON cca_puntolindero (fotoidentificacion);",
+    "cca_puntolindero_posicion_interpolacion_idx": "CREATE INDEX cca_puntolindero_posicion_interpolacion_idx ON cca_puntolindero (posicion_interpolacion);",
+    "cca_puntolindero_metodo_produccion_idx": "CREATE INDEX cca_puntolindero_metodo_produccion_idx ON cca_puntolindero (metodo_produccion);",
+
+    # Índices para cca_puntoreferencia
+    "cca_puntoreferencia_tipo_punto_referencia_idx": "CREATE INDEX cca_puntoreferencia_tipo_punto_referencia_idx ON cca_puntoreferencia (tipo_punto_referencia);",
+    "cca_puntoreferencia_posicion_interpolacion_idx": "CREATE INDEX cca_puntoreferencia_posicion_interpolacion_idx ON cca_puntoreferencia (posicion_interpolacion);",
+    "cca_puntoreferencia_metodo_produccion_idx": "CREATE INDEX cca_puntoreferencia_metodo_produccion_idx ON cca_puntoreferencia (metodo_produccion);",
+
+    # Índices para cca_construccion
+    "cca_construccion_tipo_construccion_idx": "CREATE INDEX cca_construccion_tipo_construccion_idx ON cca_construccion (tipo_construccion);",
+    "cca_construccion_tipo_dominio_idx": "CREATE INDEX cca_construccion_tipo_dominio_idx ON cca_construccion (tipo_dominio);",
+    "cca_construccion_predio_idx": "CREATE INDEX cca_construccion_predio_idx ON cca_construccion (predio);",
+
+    # Índices para cca_terreno
+    "cca_terreno_predio_idx": "CREATE INDEX cca_terreno_predio_idx ON cca_terreno (predio);",
+
+    # Índices para extdireccion
+    "extdireccion_tipo_direccion_idx": "CREATE INDEX extdireccion_tipo_direccion_idx ON extdireccion (tipo_direccion);",
+    "extdireccion_clase_via_principal_idx": "CREATE INDEX extdireccion_clase_via_principal_idx ON extdireccion (clase_via_principal);",
+    "extdireccion_sector_ciudad_idx": "CREATE INDEX extdireccion_sector_ciudad_idx ON extdireccion (sector_ciudad);",
+    "extdireccion_sector_predio_idx": "CREATE INDEX extdireccion_sector_predio_idx ON extdireccion (sector_predio);",
+    "extdireccion_cca_predio_direccion_idx": "CREATE INDEX extdireccion_cca_predio_direccion_idx ON extdireccion (cca_predio_direccion);",
+
+    # Índices para cca_unidadconstruccion
+    "cca_unidadconstruccion_tipo_planta_idx": "CREATE INDEX cca_unidadconstruccion_tipo_planta_idx ON cca_unidadconstruccion (tipo_planta);",
+    "cca_unidadconstruccion_caracteristcsnddcnstrccion_idx": "CREATE INDEX cca_unidadconstruccion_caracteristcsnddcnstrccion_idx ON cca_unidadconstruccion (caracteristicasunidadconstruccion);",
+    "cca_unidadconstruccion_construccion_idx": "CREATE INDEX cca_unidadconstruccion_construccion_idx ON cca_unidadconstruccion (construccion);"
 }
 
 # Función para ejecutar una consulta SQL
@@ -858,28 +1059,21 @@ def convert_and_migrate_data(conn, table_name, column_types):
     # Obtener las columnas y tipos de datos de la tabla antigua
     cursor.execute(f"PRAGMA table_info({table_name}_old);")
     old_columns_info = cursor.fetchall()
+    old_columns = {col[1]: idx for idx, col in enumerate(old_columns_info)}
 
-    # Imprimir las columnas antiguas y sus tipos de datos
     log_message(f"Estructura de la tabla {table_name}_old:")
-    old_columns = []
     for col in old_columns_info:
-        col_name = col[1]  # Nombre de la columna
-        col_type = col[2]  # Tipo de dato de la columna
-        old_columns.append(col_name)
-        log_message(f"Columna: {col_name}, Tipo de dato: {col_type}")
+        log_message(f"Columna: {col[1]}, Tipo de dato: {col[2]}")
 
-    # Obtener las columnas y tipos de datos de la nueva tabla utilizando PRAGMA
+    # Obtener las columnas y tipos de datos de la nueva tabla
     cursor.execute(f"PRAGMA table_info({table_name});")
     new_columns_info = cursor.fetchall()
+    new_columns = [col[1] for col in new_columns_info]  # Nombres de columnas nuevas
 
-    # Imprimir las columnas nuevas y sus tipos de datos
+    # Log de la estructura de la nueva tabla
     log_message(f"Estructura de la nueva tabla (ideal):")
-    new_c = []
     for col in new_columns_info:
-        col_name = col[1]  # Nombre de la columna
-        col_type = col[2]  # Tipo de dato de la columna
-        new_c.append(col_name)
-        log_message(f"Columna: {col_name}, Tipo de dato: {col_type}")
+        log_message(f"Columna: {col[1]}, Tipo de dato: {col[2]}")
 
     # Obtener los datos de la tabla antigua
     cursor.execute(f"SELECT * FROM {table_name}_old;")
@@ -893,62 +1087,91 @@ def convert_and_migrate_data(conn, table_name, column_types):
     # Mostrar los primeros 10 registros de la tabla antigua
     for i, row in enumerate(rows[:10]):
         log_message(f"Registro antiguo {i + 1}: {row}")
+
+    # Crear un mapa para identificar columnas antiguas por nombre
+    column_map = {col: idx for idx, col in enumerate(old_columns)}
     
     # Obtener las columnas de la nueva tabla
-    new_columns = list(column_types.keys())
+    #new_columns = list(column_types.keys())
     
     # Insertar cada registro en la nueva tabla con conversiones automáticas
     for row in rows:
         converted_row = []
-        for idx, column in enumerate(new_columns):
-            data_type = column_types[column]
-            value = row[idx] if idx < len(row) else None
-            # Verificación de valor None antes de convertir
-            if value is None:
+        for new_column in new_columns:
+            if new_column not in column_types:
+                log_message(f"Advertencia: La columna '{new_column}' no está definida en column types. Se ignorará")
                 converted_row.append(None)
-            elif "INTEGER" in data_type:
-                try:
-                    converted_row.append(int(float(value)))
-                except ValueError:
-                    log_message(f"Advertencia: valor '{value}' no es convertible a entero en columna {column}.")
+                continue
+
+            if new_column in old_columns:
+                value = row[old_columns[new_column]]
+                data_type = column_types[new_column]
+                # Verificación de valor None antes de convertir
+                if value is None:
                     converted_row.append(None)
-            elif "REAL" in data_type:
-                try:
-                    converted_row.append(float(value) if value is not None else None)
-                except ValueError:
-                    log_message(f"Advertencia: valor '{value}' no es convertible a FLOAT en columna {column}.")
-                    converted_row.append(None)
-            elif "DOUBLE" in data_type:
-                try:
-                    converted_row.append(float(value))  # Convertimos DOUBLE a float en Python
-                except ValueError:
-                    log_message(f"Advertencia: valor '{value}' no es convertible a DOUBLE en columna {column}.")
-                    converted_row.append(None)
-            elif "DATE" in data_type:
-                try:
-                    converted_row.append(str(value))  # Mantiene el valor como cadena
-                except ValueError:
-                    log_message(f"Advertencia: valor '{value}' no es convertible a DATE en columna {column}.")
-                    converted_row.append(None)
-            elif "BOOLEAN" in data_type:
-                # Tratamos "1" o "true" como True, y "0" o "false" como False
-                if isinstance(value, str):
-                    if value.lower() in ("1", "true"):
-                        converted_row.append(1)
-                    elif value.lower() in ("0", "false"):
-                        converted_row.append(0)
+                # MANEJO DE GEOMETRÍAS
+                elif "GEOMETRY" in data_type or "MULTIPOLYGON" in data_type or "POINT" in data_type:
+                    if value is not None:
+                        try:
+                            # Validar y convertir el valor de geometría
+                            cursor.execute("SELECT ST_IsValid(?);", (value,))
+                            is_valid = cursor.fetchone()[0]
+                            if is_valid:
+                                converted_row.append(value)
+                            else:
+                                log_message(f"Advertencia: Geometría inválida en columna '{new_column}', valor: {value}.")
+                                converted_row.append(None)
+                        except sqlite3.OperationalError as e:
+                            log_message(f"Error al validar geometría: {e}")
+                            converted_row.append(None)
                     else:
-                        log_message(f"Advertencia: valor '{value}' no es convertible a BOOLEAN en columna {column}.")
                         converted_row.append(None)
-                elif isinstance(value, (int, float)):
-                    converted_row.append(1 if value else 0)
+                elif "INTEGER" in data_type:
+                    try:
+                        converted_row.append(int(float(value)))
+                    except ValueError:
+                        log_message(f"Advertencia: valor '{value}' no es convertible a entero en columna {new_column}.")
+                        converted_row.append(None)
+                elif "REAL" in data_type:
+                    try:
+                        converted_row.append(float(value) if value is not None else None)
+                    except ValueError:
+                        log_message(f"Advertencia: valor '{value}' no es convertible a FLOAT en columna {new_column}.")
+                        converted_row.append(None)
+                elif "DOUBLE" in data_type:
+                    try:
+                        converted_row.append(float(value))  # Convertimos DOUBLE a float en Python
+                    except ValueError:
+                        log_message(f"Advertencia: valor '{value}' no es convertible a DOUBLE en columna {new_column}.")
+                        converted_row.append(None)
+                elif "DATE" in data_type:
+                    try:
+                        converted_row.append(str(value))  # Mantiene el valor como cadena
+                    except ValueError:
+                        log_message(f"Advertencia: valor '{value}' no es convertible a DATE en columna {new_column}.")
+                        converted_row.append(None)
+                elif "BOOLEAN" in data_type:
+                    # Tratamos "1" o "true" como True, y "0" o "false" como False
+                    if isinstance(value, str):
+                        if value.lower() in ("1", "true"):
+                            converted_row.append(1)
+                        elif value.lower() in ("0", "false"):
+                            converted_row.append(0)
+                        else:
+                            log_message(f"Advertencia: valor '{value}' no es convertible a BOOLEAN en columna {new_column}.")
+                            converted_row.append(None)
+                    elif isinstance(value, (int, float)):
+                        converted_row.append(1 if value else 0)
+                    else:
+                        converted_row.append(None)
+                elif "TEXT" in data_type:
+                    converted_row.append(str(value) if value is not None else None)
                 else:
-                    converted_row.append(None)
-            elif "TEXT" in data_type:
-                converted_row.append(str(value) if value is not None else None)
+                    converted_row.append(None)  # Si el tipo de datos no coincide, se asigna None por defecto
             else:
-                converted_row.append(None)  # Si el tipo de datos no coincide, se asigna None por defecto
-        
+                # Si la columna no existe en la tabla antigua, asignar NULL
+                converted_row.append(None)
+
         # Agregar log para depurar la conversión
         log_message(f"Registro convertido: {converted_row}")
 
@@ -1027,13 +1250,33 @@ def migrate_database():
             with codecs.open(log_path, "w", encoding="utf-8") as f:
                 f.write("Inicio de la migración de tablas DESDE MIGRATE DATABASE\n")
             
+            # Parte Geográfica
+            try:
+                conn.enable_load_extension(True)
+                log_message("Extensiones habilitadas en esta compilacion de SQLite")
+            except sqlite3.OperationalError as e:
+                log_message(f"Error al habilitar extensiones: {e}")
+                raise
+            
+            # Intentar cargar la extensión de SpatiaLite
+            try:
+                conn.execute("SELECT load_extension('mod_spatialite');")
+                log_message("Extensión SpatiaLite cargada")
+
+                # Inicializar metadatos espaciales
+                conn.execute("SELECT InitSpatialMetadata(1);")
+                log_message("Metadatos espaciales inicializados")
+
+            except sqlite3.OperationalError as e:
+                log_message(f"Error al cargar la extensión SpatiaLite: {e}")
+                raise
+
             migrate_tables(conn, modelo_union, modelo_ideal)
+
+            verify_and_create_indices(conn, indices_to_create)  # Verifica y crea índices
 
             # Habilita las llaves foraneas
             enable_foreign_keys(conn)
-
-
-            verify_and_create_indices(conn, indices_to_create)  # Verifica y crea índices
 
         log_message("Migración completada.")
         print("Migración completada.")
