@@ -664,64 +664,74 @@ def alinear_atributos(df, tabla_origen, columnas_base, atributos_mapping):
     return df
 
 
-def actualizar_fk_en_relaciones(df, fk_field, id_map):
+def actualizar_fk_en_relaciones(df, fk_field, id_map, ruta_actual):
     """
-    Actualiza las claves foráneas en una tabla relacionada con los nuevos valores de PK.
+    Actualiza las claves foráneas en una tabla relacionada con los nuevos valores de PK,
+    asegurando que solo se actualicen los registros correspondientes a la ruta actual.
     :param df: DataFrame de la tabla relacionada.
     :param fk_field: El nombre del campo FK en la tabla relacionada.
     :param id_map: Diccionario de mapeo de IDs originales a nuevos.
+    :param ruta_actual: Ruta del archivo .gpkg actual para filtrar los registros.
     :return: DataFrame actualizado con las nuevas claves foráneas.
-    """ 
-    log_message(f"Actualizando claves foráneas en DataFrame con {len(df)} registros.")
-    log_message(f"Campo FK: '{fk_field}', mapeo de IDs: {id_map}.")
-
-         
-    if fk_field not in df.columns:
-        log_message(f"Advertencia: El campo FK '{fk_field}' no se encuentra en la tabla.")
-        return df
+    """
+    log_message(f"Actualizando claves foráneas en DataFrame con {len(df)} registros para la ruta '{ruta_actual}'.")
     
+    if fk_field not in df.columns or 'Ruta' not in df.columns:
+        log_message(f"Advertencia: El campo FK '{fk_field}' o 'Ruta' no se encuentra en la tabla.")
+        return df
+
+    # Filtrar los registros correspondientes a la ruta actual
+    df_ruta_actual = df[df['Ruta'] == ruta_actual]
+    log_message(f"Registros filtrados para la ruta '{ruta_actual}': {len(df_ruta_actual)}.")
+
     # Actualizar las claves foráneas utilizando el mapeo de IDs
-    df[fk_field] = df[fk_field].map(id_map).fillna(df[fk_field])
-    log_message(f"Actualización de claves foráneas completada para el campo '{fk_field}'.")
+    df_ruta_actual[fk_field] = df_ruta_actual[fk_field].map(id_map).fillna(df_ruta_actual[fk_field])
+
+    # Reemplazar los registros actualizados en el DataFrame completo
+    df.update(df_ruta_actual)
+    log_message(f"Actualización de claves foráneas completada para el campo '{fk_field}' y ruta '{ruta_actual}'.")
     return df
 
-def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map):
+def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map, ruta_actual):
     """
-    Actualiza las tablas relacionadas con el nuevo T_Id de la tabla base.
+    Actualiza las tablas relacionadas con el nuevo T_Id de la tabla base,
+    asegurando que solo se modifiquen registros correspondientes al archivo actual.
     :param conn_dest: Conexión a la base de datos destino.
     :param tabla_base: Nombre de la tabla base (ej. 'cca_predio').
     :param pk_field: Nombre del campo PK en la tabla base (ej. 'T_Id').
     :param relaciones: Diccionario con las relaciones FK.
     :param id_map: Mapeo de IDs originales a nuevos.
+    :param ruta_actual: Ruta del archivo .gpkg actual.
     """
     log_message(f"Iniciando actualización de registros en '{tabla_base}'.")
     log_message(f"Campo PK: '{pk_field}', relaciones: {relaciones}, mapeo de IDs: {id_map}.")
 
     if not relaciones or relaciones == {None}:
         log_message(f"'{tabla_base}' no tiene relaciones. Se insertarán los registros sin actualizar claves foráneas.")
+        return
         
-    else:
+    # Procesar las tablas relacionadas
+    for fk_table, fk_field in relaciones.items():
+        log_message(f"Procesando tabla relacionada '{fk_table}', campo FK: '{fk_field}' EN LA RUTA {ruta_actual}.")
+        try:
+            df_fk = pd.read_sql_query(f"SELECT * FROM {fk_table}", conn_dest)
+            log_message(f"Tabla '{fk_table}' cargada con {len(df_fk)} registros.")
 
-        # Procesar las tablas relacionadas
-        for fk_table, fk_field in relaciones.items():
-            log_message(f"Procesando tabla relacionada '{fk_table}', campo FK: '{fk_field}'.")
-            try:
-                df_fk = pd.read_sql_query(f"SELECT * FROM {fk_table}", conn_dest)
-                log_message(f"Tabla '{fk_table}' cargada con {len(df_fk)} registros.")
 
-                
-                if fk_field not in df_fk.columns:
-                    log_message(f"La columna '{fk_field}' no se encuentra en '{fk_table}'. Se omitirá la actualización.")
-                    continue
-                
-                # Actualizar el campo FK con el nuevo T_Id
-                df_fk = actualizar_fk_en_relaciones(df_fk, fk_field, id_map)
+            if fk_field not in df_fk.columns:
+                log_message(f"La columna '{fk_field}' no se encuentra en '{fk_table}'. Se omitirá la actualización.")
+                continue
 
-                # Insertar la tabla relacionada con los cambios
-                df_fk.to_sql(fk_table, conn_dest, if_exists="replace", index=False)
-                log_message(f"Actualizando FK en '{fk_table}' para los registros de '{tabla_base}'.")
-            except Exception as e:
-                log_message(f"Error al actualizar FK en '{fk_table}': {e}")
+            # Actualizar el campo FK solo para los registros correspondientes a la ruta actual
+            df_fk = actualizar_fk_en_relaciones(df_fk, fk_field, id_map, ruta_actual)
+
+            # Insertar la tabla relacionada con los cambios
+            df_fk.to_sql(fk_table, conn_dest, if_exists="replace", index=False)
+            log_message(f"Actualizando FK en '{fk_table}' para los registros de '{tabla_base}'.")
+        except Exception as e:
+            log_message(f"Error al actualizar FK en '{fk_table}': {e}")
+
+
 
 # Procesamiento de tablas con relaciones, sin relaciones y de dominio
 with sqlite3.connect(output_file) as conn_dest:
@@ -743,6 +753,8 @@ with sqlite3.connect(output_file) as conn_dest:
                 # Leer la tabla base del GeoPackage de origen
                 try:
                     df = pd.read_sql_query(f"SELECT * FROM {tabla}", conn_src)
+                    df['Ruta'] = gpkg  # Asegurar que cada registro incluye la ruta actual
+
                     if df.empty:
                         log_message(f"La tabla '{tabla}' está vacía. Se omitirá.")
                         continue
@@ -753,15 +765,15 @@ with sqlite3.connect(output_file) as conn_dest:
                 # Ajustar IDs en la tabla base
                 max_id = obtener_max_id(conn_dest, tabla, pk_field)
                 offset = int(max_id) + 1
-                df_ajustada, id_map = ajustar_ids_unicos(df, pk_field, id_sets[tabla])
+                df, id_map = ajustar_ids_unicos(df, pk_field, id_sets[tabla])
 
                 # Actualizar las tablas relacionadas con el nuevo T_Id
-                actualizar_registros(conn_dest, tabla, pk_field, relaciones, id_map)
+                actualizar_registros(conn_dest, tabla, pk_field, relaciones, id_map, gpkg)
 
                 # Insertar la tabla base ajustada
                 try:
-                    df_ajustada.to_sql(tabla, conn_dest, if_exists="append", index=False)
-                    log_message(f"Insertando registros en '{tabla}' - Total registros: {len(df_ajustada)}")
+                    df.to_sql(tabla, conn_dest, if_exists="append", index=False)
+                    log_message(f"Insertando registros en '{tabla}' - Total registros: {len(df)}")
                 except Exception as e:
                     log_message(f"Error al insertar registros en '{tabla}': {e}")
         
