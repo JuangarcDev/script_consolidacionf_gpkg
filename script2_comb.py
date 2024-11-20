@@ -26,11 +26,11 @@ with open(log_file, "w", encoding="utf-8") as log:
 # Lista de archivos .gpkg a combinar
 gpkg_files = [
     r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_base\modelo_captura_20241029.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\MZ16_FINAL_Correcto_1\MN_00000016_20240923\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\MN_00000009_20240923_2\MN_00000009_20240923-vf\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\MN_00000003_20241009_FINAL_3\MN_00000003_20241009_FINAL\captura_campo_20241008.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\MANZANA 8_4\MANZANA 8\MN_00000008_20240923\MN_00000008_20240923\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\00000017-01_5\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\0016\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\0003\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\0008\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\0017\captura_campo_20240920.gpkg",
     #OTRAS RUTAS
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0001\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0002\captura_campo_20241008.gpkg",
@@ -105,28 +105,64 @@ capas_a_procesar = [
     "cca_puntocontrol",
     "cca_puntolevantamiento",
     "cca_puntolindero",
-    "cca_puntoreferencia"
+    "cca_puntoreferencia",
+    "cca_adjunto",
+    "cca_comisiones",
+    "cca_estructuraamenazariesgovulnerabilidad",
+    "cca_estructuranovedadfmi",
+    "cca_estructuranovedadnumeropredial",
+    "cca_fuenteadministrativa_derecho",
+    "cca_marcas",
+    "cca_miembros",
+    "cca_ofertasmercadoinmobiliario",
+    "cca_omisiones",
+    "cca_predio_copropiedad",
+    "cca_predio_informalidad",
+    "cca_restriccion",
+    "cca_saldosconservacion",
+    "col_transformacion",
+    "extreferenciaregistralsistemaantiguo",
+    "cca_derecho",
+    "cca_agrupacioninteresados",
+    "cca_fuenteadministrativa",
+    "cca_interesado",
+    "cca_predio",
+    "cca_usuario",
+    "cca_caracteristicasunidadconstruccion",
+    "cca_calificacionconvencional"
 ]
 
-# Función para agregar columnas y actualizar valores usando SQL
+# Función para procesar un GeoPackage y añadir columnas si es necesario
 def modificar_gpkg_con_sql(gpkg_path, capas):
     try:
         conn = sqlite3.connect(gpkg_path)
         cursor = conn.cursor()
 
+        # Obtener la lista de tablas en el GeoPackage
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+        tablas_disponibles = [tabla[0] for tabla in cursor.fetchall()]
+
         for capa in capas:
+            # Verificar si la capa existe en las tablas disponibles
+            if capa not in tablas_disponibles:
+                log_message(f"La capa '{capa}' no se encuentra en '{gpkg_path}', se omite.")
+                continue
+
             # Agregar columnas si no existen
             try:
                 cursor.execute(f"ALTER TABLE {capa} ADD COLUMN T_Id_Cop INTEGER;")
                 cursor.execute(f"ALTER TABLE {capa} ADD COLUMN Ruta TEXT (150);")
                 log_message(f"Columnas T_Id_Cop y Ruta añadidas a la capa '{capa}' en '{gpkg_path}'.")
             except sqlite3.OperationalError:
-                log_message(f"Las columnas ya existen en la capa '{capa}' de '{gpkg_path}', se omite la creación.")
+                log_message(f"Las columnas ya existen o hubo un problema al procesar la capa '{capa}' en '{gpkg_path}', se omite.")
 
             # Asignar valores a las columnas
             ruta = os.path.abspath(gpkg_path)
-            cursor.execute(f"UPDATE {capa} SET T_Id_Cop = T_Id, Ruta = ?;", (ruta,))
-            log_message(f"Valores asignados en la capa '{capa}' de '{gpkg_path}'.")
+            try:
+                cursor.execute(f"UPDATE {capa} SET T_Id_Cop = T_Id, Ruta = ?;", (ruta,))
+                log_message(f"Valores asignados en la capa '{capa}' de '{gpkg_path}'.")
+            except sqlite3.OperationalError:
+                log_message(f"No se pudo actualizar los valores en la capa '{capa}' de '{gpkg_path}'.")
 
         conn.commit()
         conn.close()
@@ -786,7 +822,7 @@ with sqlite3.connect(output_file) as conn_dest:
         
         # Limpieza de columnas temporales
         log_message(f"Iniciando limpieza de columnas temporales en capas procesadas: {capas_a_procesar}")
-        eliminar_columnas_de_paso(gpkg, capas_a_procesar)
+        #eliminar_columnas_de_paso(gpkg, capas_a_procesar)
         log_message("Limpieza completada.")
 
 log_message("Proceso de unión de tablas alfanuméricas completado.")
