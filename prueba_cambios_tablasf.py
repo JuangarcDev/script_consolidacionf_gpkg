@@ -321,7 +321,9 @@ modelo_ideal = {
     geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_agrupacioninteresados_tipo_fkey REFERENCES cca_grupointeresadotipo DEFERRABLE INITIALLY DEFERRED,
-    nombre TEXT(40) NULL
+    nombre TEXT(40) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_omisiones" : """CREATE TABLE cca_omisiones (
@@ -340,7 +342,9 @@ modelo_ideal = {
     destinacion_economica INTEGER NULL CONSTRAINT cca_omisiones_destinacion_economica_fkey REFERENCES cca_destinacioneconomicatipo DEFERRABLE INITIALLY DEFERRED,
     observacion TEXT(255) NULL,
     identificado BOOLEAN NULL,
-    propietario TEXT(250) NULL
+    propietario TEXT(250) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_fuenteadministrativa" : """CREATE TABLE cca_fuenteadministrativa (
@@ -351,7 +355,9 @@ modelo_ideal = {
     numero_fuente TEXT(150) NULL,
     fecha_documento_fuente DATE NULL,
     ente_emisor TEXT(255) NULL,
-    observacion TEXT(250) NULL
+    observacion TEXT(250) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_interesado" : """CREATE TABLE cca_interesado (
@@ -375,7 +381,9 @@ modelo_ideal = {
     correo_electronico TEXT(100) NULL,
     autoriza_notificacion_correo INTEGER NULL CONSTRAINT cca_interesado_autoriza_notificacin_crreo_fkey REFERENCES cca_booleanotipo DEFERRABLE INITIALLY DEFERRED,
     estado_civil INTEGER NULL CONSTRAINT cca_interesado_estado_civil_fkey REFERENCES cca_estadociviltipo DEFERRABLE INITIALLY DEFERRED,
-    nombre TEXT(255) NULL
+    nombre TEXT(255) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_miembros" : """CREATE TABLE cca_miembros (
@@ -384,7 +392,9 @@ modelo_ideal = {
     T_Ili_Tid TEXT(200) NULL,
     interesado INTEGER NOT NULL CONSTRAINT cca_miembros_interesado_fkey REFERENCES cca_interesado DEFERRABLE INITIALLY DEFERRED,
     agrupacion INTEGER NOT NULL CONSTRAINT cca_miembros_agrupacion_fkey REFERENCES cca_agrupacioninteresados DEFERRABLE INITIALLY DEFERRED,
-    participacion DOUBLE NULL CONSTRAINT cca_miembros_participacion_check CHECK( participacion BETWEEN 0.0 AND 1.0)
+    participacion DOUBLE NULL CONSTRAINT cca_miembros_participacion_check CHECK( participacion BETWEEN 0.0 AND 1.0),
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_predio" : """CREATE TABLE cca_predio (
@@ -440,7 +450,9 @@ modelo_ideal = {
     despojo_abandono BOOLEAN NULL,
     estrato INTEGER NULL CONSTRAINT cca_predio_estrato_fkey REFERENCES cca_estratotipo DEFERRABLE INITIALLY DEFERRED,
     otro_cual_estrato TEXT(255) NULL,
-    usuario INTEGER NULL CONSTRAINT cca_predio_usuario_fkey REFERENCES cca_usuario DEFERRABLE INITIALLY DEFERRED
+    usuario INTEGER NULL CONSTRAINT cca_predio_usuario_fkey REFERENCES cca_usuario DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_ofertasmercadoinmobiliario" : """CREATE TABLE cca_ofertasmercadoinmobiliario (
@@ -454,7 +466,9 @@ modelo_ideal = {
     tiempo_oferta_mercado INTEGER NULL CONSTRAINT cca_ofertasmercadonmblrio_tiempo_oferta_mercado_check CHECK( tiempo_oferta_mercado BETWEEN 0 AND 1000),
     nombre_oferente TEXT(255) NOT NULL,
     numero_contacto_oferente TEXT(20) NOT NULL,
-    predio INTEGER NULL CONSTRAINT cca_ofertasmercadoinmblrio_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    predio INTEGER NULL CONSTRAINT cca_ofertasmercadoinmblrio_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_predio_copropiedad" : """CREATE TABLE cca_predio_copropiedad (
@@ -463,7 +477,9 @@ modelo_ideal = {
     unidad_predial INTEGER NOT NULL CONSTRAINT cca_predio_copropiedad_unidad_predial_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     matriz INTEGER NOT NULL CONSTRAINT cca_predio_copropiedad_matriz_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     coeficiente DOUBLE NULL CONSTRAINT cca_predio_copropiedad_coeficiente_check CHECK( coeficiente BETWEEN 0.0 AND 1.0),
-    CONSTRAINT cca_predio_copropiedad_unidad_predial_key UNIQUE (unidad_predial)
+    CONSTRAINT cca_predio_copropiedad_unidad_predial_key UNIQUE (unidad_predial),
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_predio_informalidad" : """CREATE TABLE cca_predio_informalidad (
@@ -471,7 +487,9 @@ modelo_ideal = {
     geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     cca_predio_formal INTEGER NOT NULL CONSTRAINT cca_predio_informalidad_cca_predio_formal_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
-    cca_predio_informal INTEGER NOT NULL CONSTRAINT cca_predio_informalidad_cca_predio_informal_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    cca_predio_informal INTEGER NOT NULL CONSTRAINT cca_predio_informalidad_cca_predio_informal_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_restriccion" : """CREATE TABLE cca_restriccion (
@@ -480,7 +498,9 @@ modelo_ideal = {
     T_Ili_Tid TEXT(200) NULL,
     tipo INTEGER NOT NULL CONSTRAINT cca_restriccion_tipo_fkey REFERENCES cca_restricciontipo DEFERRABLE INITIALLY DEFERRED,
     descripcion TEXT(255) NULL,
-    predio INTEGER NOT NULL CONSTRAINT cca_restriccion_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    predio INTEGER NOT NULL CONSTRAINT cca_restriccion_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_derecho" : """CREATE TABLE cca_derecho (
@@ -495,7 +515,9 @@ modelo_ideal = {
     observacion TEXT(250) NULL,
     agrupacion_interesados INTEGER NULL CONSTRAINT cca_derecho_agrupacion_interesados_fkey REFERENCES cca_agrupacioninteresados DEFERRABLE INITIALLY DEFERRED,
     interesado INTEGER NULL CONSTRAINT cca_derecho_interesado_fkey REFERENCES cca_interesado DEFERRABLE INITIALLY DEFERRED,
-    predio INTEGER NOT NULL CONSTRAINT cca_derecho_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    predio INTEGER NOT NULL CONSTRAINT cca_derecho_predio_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_fuenteadministrativa_derecho" : """CREATE TABLE cca_fuenteadministrativa_derecho (
@@ -503,7 +525,9 @@ modelo_ideal = {
     geom GEOMETRY NULL,
     T_Ili_Tid TEXT(200) NULL,
     derecho INTEGER NOT NULL CONSTRAINT cca_fuenteadminstrtv_drcho_derecho_fkey REFERENCES cca_derecho DEFERRABLE INITIALLY DEFERRED,
-    fuente_administrativa INTEGER NOT NULL CONSTRAINT cca_fuenteadminstrtv_drcho_fuente_administrativa_fkey REFERENCES cca_fuenteadministrativa DEFERRABLE INITIALLY DEFERRED
+    fuente_administrativa INTEGER NOT NULL CONSTRAINT cca_fuenteadminstrtv_drcho_fuente_administrativa_fkey REFERENCES cca_fuenteadministrativa DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_estructuraamenazariesgovulnerabilidad" : """CREATE TABLE cca_estructuraamenazariesgovulnerabilidad (
@@ -512,7 +536,9 @@ modelo_ideal = {
     T_Seq INTEGER NULL,
     tipo_amenaza_riesgo_vulnerabilidad INTEGER NOT NULL CONSTRAINT cca_estrctrmnzrsgvlnrbldad_tipo_amenaza_rsg_vlnrbldad_fkey REFERENCES cca_amenazariesgovulnerabilidadtipo DEFERRABLE INITIALLY DEFERRED,
     observacion TEXT(255) NULL,
-    cca_predio_amenazariesgovulnerabilidad INTEGER NULL CONSTRAINT cca_estrctrmnzrsgvlnrbldad_cca_predio_mnzrsgvlnrbldad_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    cca_predio_amenazariesgovulnerabilidad INTEGER NULL CONSTRAINT cca_estrctrmnzrsgvlnrbldad_cca_predio_mnzrsgvlnrbldad_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_estructuranovedadfmi" : """CREATE TABLE cca_estructuranovedadfmi (
@@ -522,7 +548,9 @@ modelo_ideal = {
     codigo_orip TEXT(4) NOT NULL,
     numero_fmi TEXT(80) NOT NULL,
     tipo_novedadfmi INTEGER NULL CONSTRAINT cca_estructuranovedadfmi_tipo_novedadfmi_fkey REFERENCES cca_estructuranovedadfmi_tipo_novedadfmi DEFERRABLE INITIALLY DEFERRED,
-    cca_predio_novedad_fmi INTEGER NULL CONSTRAINT cca_estructuranovedadfmi_cca_predio_novedad_fmi_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    cca_predio_novedad_fmi INTEGER NULL CONSTRAINT cca_estructuranovedadfmi_cca_predio_novedad_fmi_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_estructuranovedadnumeropredial" : """CREATE TABLE cca_estructuranovedadnumeropredial (
@@ -531,7 +559,9 @@ modelo_ideal = {
     T_Seq INTEGER NULL,
     numero_predial TEXT(30) NOT NULL,
     tipo_novedad INTEGER NOT NULL CONSTRAINT cca_estructurnvddnmrprdial_tipo_novedad_fkey REFERENCES cca_estructuranovedadnumeropredial_tipo_novedad DEFERRABLE INITIALLY DEFERRED,
-    cca_predio_novedad_numeros_prediales INTEGER NULL CONSTRAINT cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    cca_predio_novedad_numeros_prediales INTEGER NULL CONSTRAINT cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_usuario" : """CREATE TABLE cca_usuario (
@@ -547,7 +577,9 @@ modelo_ideal = {
     nombre TEXT(150) NOT NULL,
     contrasena TEXT(20) NULL,
     rol INTEGER NOT NULL CONSTRAINT cca_usuario_rol_fkey REFERENCES cca_roltipo DEFERRABLE INITIALLY DEFERRED,
-    "municipio_codigo" TEXT(20) NULL
+    "municipio_codigo" TEXT(20) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_calificacionconvencional" : """CREATE TABLE cca_calificacionconvencional (
@@ -578,7 +610,9 @@ modelo_ideal = {
     conservacion_cocina INTEGER NULL CONSTRAINT cca_calificacionconvencnal_conservacion_cocina_fkey REFERENCES cca_estadoconservaciontipo DEFERRABLE INITIALLY DEFERRED,
     subtotal_cocina INTEGER NULL CONSTRAINT cca_calificacionconvncnal_subtotal_cocina_check CHECK( subtotal_cocina BETWEEN 0 AND 9999999),
     cerchas INTEGER NULL CONSTRAINT cca_calificacionconvencnal_cerchas_fkey REFERENCES cca_cerchastipo DEFERRABLE INITIALLY DEFERRED,
-    subtotal_cerchas INTEGER NULL CONSTRAINT cca_calificacionconvncnal_subtotal_cerchas_check CHECK( subtotal_cerchas BETWEEN 0 AND 9999999)
+    subtotal_cerchas INTEGER NULL CONSTRAINT cca_calificacionconvncnal_subtotal_cerchas_check CHECK( subtotal_cerchas BETWEEN 0 AND 9999999),
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "cca_caracteristicasunidadconstruccion" : """CREATE TABLE cca_caracteristicasunidadconstruccion (
@@ -601,7 +635,9 @@ modelo_ideal = {
     tipo_anexo INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_anexo_fkey REFERENCES cca_anexotipo DEFERRABLE INITIALLY DEFERRED,
     tipo_tipologia INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_tipo_tipologia_fkey REFERENCES cca_tipologiatipo DEFERRABLE INITIALLY DEFERRED,
     observaciones TEXT(250) NULL,
-    calificacion_convencional INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_calificacion_convencional_fkey REFERENCES cca_calificacionconvencional DEFERRABLE INITIALLY DEFERRED
+    calificacion_convencional INTEGER NULL CONSTRAINT cca_crctrstcsnddcnstrccion_calificacion_convencional_fkey REFERENCES cca_calificacionconvencional DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     #   ---     PARTE GEOGRAFICA    ---
@@ -720,7 +756,9 @@ modelo_ideal = {
     sector_predio INTEGER NULL CONSTRAINT extdireccion_sector_predio_fkey REFERENCES extdireccion_sector_predio DEFERRABLE INITIALLY DEFERRED,
     complemento TEXT(255) NULL,
     nombre_predio TEXT(255) NULL,
-    cca_predio_direccion INTEGER NULL CONSTRAINT extdireccion_cca_predio_direccion_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED
+    cca_predio_direccion INTEGER NULL CONSTRAINT extdireccion_cca_predio_direccion_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 );""",
 
     "cca_unidadconstruccion": """CREATE TABLE cca_unidadconstruccion (
@@ -760,7 +798,9 @@ modelo_ideal = {
     cca_puntocontrol_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntocontrol_adjunto_fkey REFERENCES cca_puntocontrol DEFERRABLE INITIALLY DEFERRED,
     cca_puntolevantamiento_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolevantamint_djnto_fkey REFERENCES cca_puntolevantamiento DEFERRABLE INITIALLY DEFERRED,
     cca_puntolindero_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntolindero_adjunto_fkey REFERENCES cca_puntolindero DEFERRABLE INITIALLY DEFERRED,
-    cca_puntoreferencia_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntoreferencia_adjnto_fkey REFERENCES cca_puntoreferencia DEFERRABLE INITIALLY DEFERRED
+    cca_puntoreferencia_adjunto INTEGER NULL CONSTRAINT cca_adjunto_cca_puntoreferencia_adjnto_fkey REFERENCES cca_puntoreferencia DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 	);""",
 
     "extreferenciaregistralsistemaantiguo": """CREATE TABLE extreferenciaregistralsistemaantiguo (
@@ -777,7 +817,9 @@ modelo_ideal = {
     mes TEXT(2) NULL,
     anio TEXT(2) NULL,
     matricula TEXT(20) NOT NULL,
-    cca_predio_referencia_registral_sistema_antiguo INTEGER NULL CONSTRAINT extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_fkey REFERENCES cca_predio(T_Id) DEFERRABLE INITIALLY DEFERRED
+    cca_predio_referencia_registral_sistema_antiguo INTEGER NULL CONSTRAINT extreferencrgstrlsstmntguo_cca_prd_rfrncrl_sstm_ntguo_fkey REFERENCES cca_predio(T_Id) DEFERRABLE INITIALLY DEFERRED,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
 ); """
 }
 

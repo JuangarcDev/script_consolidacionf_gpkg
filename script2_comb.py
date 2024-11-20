@@ -100,8 +100,10 @@ agregar_columna_si_no_existe(gpkg_p, 'cca_usuario', 'municipio_codigo', 'TEXT(10
 
 # Lista de capas geográficas específicas a procesar
 capas_a_procesar = [
+    "cca_terreno",
     "cca_construccion",
     "cca_unidadconstruccion",
+    "cca_unidadconstruccionhistorica",
     "cca_puntocontrol",
     "cca_puntolevantamiento",
     "cca_puntolindero",
@@ -127,9 +129,13 @@ capas_a_procesar = [
     "cca_fuenteadministrativa",
     "cca_interesado",
     "cca_predio",
+    "extdireccion",
     "cca_usuario",
     "cca_caracteristicasunidadconstruccion",
-    "cca_calificacionconvencional"
+    "cca_calificacionconvencional",
+    "cca_areaintervencionespecifica",
+    "cca_areaintervenciongeneral",
+    "cca_construccionhistorica"
 ]
 
 # Función para procesar un GeoPackage y añadir columnas si es necesario
