@@ -17,7 +17,7 @@ log_file = r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\log_union_proceso.txt"
 def log_message(message):
     with open(log_file, "a", encoding="utf-8") as log:
         log.write(message + "\n")
-    print(message)
+    #print(message)
 
 # Inicializar el archivo de log
 with open(log_file, "w", encoding="utf-8") as log:
@@ -26,39 +26,39 @@ with open(log_file, "w", encoding="utf-8") as log:
 # Lista de archivos .gpkg a combinar
 gpkg_files = [
     r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_base\modelo_captura_20241029.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0016\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0003\captura_campo_20241008.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0008\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0017\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0016\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0003\captura_campo_20241008.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0008\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0017\captura_campo_20240920.gpkg",
     #OTRAS RUTAS
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0001\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0002\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0003\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0004\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0005\MN_00000005_20241011_OK\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0006\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0007\MN_00000007_20241015_31\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0002\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0003\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0004\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0005\MN_00000005_20241011_OK\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0006\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0007\MN_00000007_20241015_31\captura_campo_20241008.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0008\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0009\MN_00000009_20240923-vf\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0010\MN_00000010_20241105\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0011\MN_00000011_NITOLA\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0012\MN_00000012_20240926\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0012\MN_00000012_20240926\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0013\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0014\MN_00000014_20241025\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_1\MN_00000015_20241010\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_2\MN_00000015_20241105\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0014\MN_00000014_20241025\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_1\MN_00000015_20241010\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_2\MN_00000015_20241105\captura_campo_20241008.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0016\MN_00000016_20240923\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0017\00000017-01\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0018\MN_00000018_20240923\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0019\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0021\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0022\MN_00000022_20240926\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0019\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0021\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0022\MN_00000022_20240926\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0023\Captura actualizada\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0024\captura_campo_20240920.gpkg",
     #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0025\MN_00000025_20240926\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0026\captura_campo_20241008.gpkg"
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0026\captura_campo_20241008.gpkg"
 ]
 
 
@@ -577,7 +577,7 @@ config_geom = {
         "relaciones": {
             "cca_adjunto": "cca_puntoreferencia_adjunto"
             }
-    },
+    }
 }
 
 # CONFIGURACION ATRIBUTOS PROBLEMATICOS
@@ -602,38 +602,50 @@ def obtener_max_id(conn, table, pk_field):
 # Función para verificar y ajustar IDs en la tabla base
 def ajustar_ids_unicos(df, pk_field, id_set):
     """
-    Ajusta los IDs en la tabla base para que no haya duplicados en las tablas relacionadas.
+    Ajusta los IDs en la tabla base para que no haya duplicados en las tablas relacionadas,
+    intentando limitar las iteraciones para buscar un ID único.
     :param df: DataFrame de la tabla base.
     :param pk_field: El nombre del campo PK en la tabla base.
     :param id_set: Conjunto de IDs ya usados en la base de datos.
     :return: DataFrame con IDs ajustados.
     """
     log_message(f"Ajustando IDs únicos en DataFrame con {len(df)} registros.")
-    log_message(f"Campo PK: '{pk_field}', conjunto de IDs existentes: {id_set}.")
+    log_message(f"Campo PK: '{pk_field}', conjunto de IDs existentes: {len(id_set)} registros en el conjunto.")
+    
     id_map = {}  # Mapeo de IDs originales a IDs ajustados
+    ultimo_id_asignado = max(id_set) if id_set else 0  # Último ID asignado en el conjunto
+
     for index, row in df.iterrows():
         original_id = row[pk_field]
         log_message(f"Registro índice {index}, ID original: {original_id}.")
 
-
-        # Si el campo PK es 'fid', saltar inserciones y solo actualizar relaciones
+        # Si el campo PK es 'fid', mantener el ID original
         if pk_field == 'fid':
-            # Saltar la inserción y solo mapear las relaciones
             log_message(f"El campo PK es 'fid', manteniendo el ID original: {original_id}.")
             id_map[original_id] = original_id
             continue
 
+        # Intentar asignar un nuevo ID único
         new_id = original_id
-        # Verificar que el nuevo ID no esté duplicado en las tablas relacionadas
-        while new_id in id_set:
+        intentos = 0
+        while new_id in id_set and intentos < 10:
             log_message(f"Conflicto de ID encontrado: {new_id}. Incrementando ID.")
-            new_id += 1  # Incrementar el nuevo ID si ya existe en el conjunto
+            new_id += 1
+            intentos += 1
 
+        # Si después de 10 intentos no se encontró un ID único, continuar desde el último ID asignado
+        if new_id in id_set:
+            log_message(f"Conflicto persiste después de 10 intentos. Continuando desde {ultimo_id_asignado + 1}.")
+            new_id = ultimo_id_asignado + 1
+
+        # Asignar el nuevo ID
         df.at[index, pk_field] = new_id
         id_map[original_id] = new_id
         id_set.add(new_id)
+        ultimo_id_asignado = max(ultimo_id_asignado, new_id)
+
         log_message(f"ID ajustado para índice {index}: Original: {original_id}, Nuevo: {new_id}.")
-    
+
     log_message("Ajuste de IDs completado.")
     return df, id_map
 
@@ -737,6 +749,86 @@ def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map, ru
         except Exception as e:
             log_message(f"Error al actualizar FK en '{fk_table}': {e}")
 
+def actualizar_fk_por_ruta(conn_dest, config_geom):
+    """
+    Actualiza las relaciones geográficas por ruta según el diccionario config_geom.
+    """
+    log_message("Iniciando procesamiento de relaciones geográficas por rutas")
+
+    # Iterar sobre cada tabla geográfica en el diccionario config_geom
+    for tabla_geom, geom_info in config_geom.items():
+        pk_field = geom_info["pk"]
+        relaciones = geom_info.get("relaciones", {})
+
+        log_message(f"\n--- Procesando tabla geométrica: {tabla_geom} ---")
+
+        # Obtener las rutas únicas de la capa actual
+        rutas_query = f"SELECT DISTINCT Ruta FROM {tabla_geom}"
+        rutas = [row[0] for row in conn_dest.execute(rutas_query)]
+        log_message(f"Rutas detectadas para la tabla '{tabla_geom}': {', '.join(map(str, rutas))}")
+
+        for ruta_actual in rutas:
+            log_message(f"\n*** Procesando ruta: {ruta_actual} para la tabla '{tabla_geom}' ***")
+
+            # Crear un diccionario de T_Id_Cop a fid por ruta
+            cop_to_fid_por_ruta = generar_diccionario_fid(conn_dest, tabla_geom, pk_field, ruta_actual)
+
+            # Procesar las relaciones asociadas
+            if relaciones:
+                for related_table, fk_field in relaciones.items():
+                    log_message(f"\nProcesando relación con '{related_table}' usando FK '{fk_field}'")
+                    procesar_relacion(conn_dest, related_table, tabla_geom, fk_field, pk_field, ruta_actual, cop_to_fid_por_ruta)
+
+    log_message("\nProcesamiento de relaciones geográficas completado")
+
+
+def generar_diccionario_fid(conn, tabla_geom, pk_field, ruta_actual):
+    """
+    Genera un diccionario {T_Id_Cop: fid} para una tabla y ruta específica.
+    """
+    diccionario = {}
+    query = f"""
+        SELECT T_Id_Cop, {pk_field}
+        FROM {tabla_geom}
+        WHERE Ruta = ?
+    """
+    registros = conn.execute(query, (ruta_actual,)).fetchall()
+    for t_id_cop, fid in registros:
+        diccionario[t_id_cop] = fid
+
+    log_message(f"Diccionario cop_to_fid generado para ruta '{ruta_actual}': {diccionario}")
+    return diccionario
+
+
+def procesar_relacion(conn, related_table, tabla_geom, fk_field, pk_field, ruta_actual, cop_to_fid_por_ruta):
+    """
+    Actualiza las claves foráneas de una tabla relacionada.
+    """
+    # Seleccionar los registros relacionados
+    query = f"""
+        SELECT rt.rowid, rt.{fk_field}, bt.{pk_field}
+        FROM {related_table} AS rt
+        JOIN {tabla_geom} AS bt
+        ON rt.{fk_field} = bt.T_Id_Cop
+        WHERE bt.Ruta = ?
+    """
+    registros = conn.execute(query, (ruta_actual,)).fetchall()
+    log_message(f"Registros seleccionados para actualizar en '{related_table}' (ruta {ruta_actual}): {len(registros)}")
+
+    # Actualizar los registros
+    for rowid, old_fk_value, new_fk_value in registros:
+        log_message(f"Actualizando rowid={rowid} en '{related_table}' de FK vieja={old_fk_value} a nueva={new_fk_value}")
+        update_query = f"""
+            UPDATE {related_table}
+            SET {fk_field} = ?
+            WHERE rowid = ?
+        """
+        conn.execute(update_query, (new_fk_value, rowid))
+
+    conn.commit()
+    log_message(f"*** {len(registros)} registros actualizados en '{related_table}' para la ruta '{ruta_actual}' ***")
+
+
 
 
 # Procesamiento de tablas con relaciones, sin relaciones y de dominio
@@ -783,64 +875,14 @@ with sqlite3.connect(output_file) as conn_dest:
                 except Exception as e:
                     log_message(f"Error al insertar registros en '{tabla}': {e}")
         
-            # Procesamiento de relaciones geográficas después de las tablas base
-            for tabla_geom, geom_info in config_geom.items():
-                pk_field = geom_info["pk"]
-                relaciones = geom_info.get("relaciones", {})
 
-                log_message(f"Procesando la tabla geométrica '{tabla_geom}' con clave primaria '{pk_field}'")
-                log_message(f"Relaciones detectadas: {relaciones if relaciones else 'Ninguna relación'}")
-                
-                # Actualizar las relaciones si existen
-                if relaciones:
-                    for related_table, fk_field in relaciones.items():
-                        log_message(f"Actualizando relaciones geográficas para la tabla '{related_table}' en base a '{tabla_geom}'")
-
-                        # Consulta para seleccionar los registros que serán actualizados
-                        select_query = f"""
-                            SELECT rt.rowid AS rt_rowid, rt.{fk_field} AS old_fk_value, bt.{pk_field} AS new_fk_value
-                            FROM {related_table} AS rt
-                            JOIN {tabla_geom} AS bt
-                            ON rt.{fk_field} = bt.T_Id_Cop
-                            WHERE bt.Ruta = '{gpkg}'
-                            AND rt.{fk_field} IS NOT NULL
-                        """
-                        log_message(f"Consulta SQL preparada para selección: {select_query}")
-
-                        try:
-                            # Obtener los registros que serán actualizados y mostrar sus cambios
-                            rows_to_update = conn_dest.execute(select_query).fetchall()
-                            log_message(f"Consulta ejecutada exitosamente. Registros encontrados: {len(rows_to_update)}")
-            
-                            # Mostrar en consola los cambios específicos
-                            if rows_to_update:
-                                log_message(f"Se encontraron {len(rows_to_update)} registros en '{related_table}' para actualizar el campo '{fk_field}'")
-                                for row in rows_to_update:
-                                    rt_rowid, old_fk_value, new_fk_value = row
-                                    log_message(f"Registro ID {rt_rowid} en '{related_table}': valor actual '{old_fk_value}', nuevo valor '{new_fk_value}'")
-                                
-                                # Ejecutar la actualización de los registros seleccionados usando subconsulta
-                                for row in rows_to_update:
-                                    rt_rowid, _, new_fk_value = row
-                                    update_query = f"""
-                                        UPDATE {related_table} 
-                                        SET {fk_field} = ?
-                                        WHERE rowid = ?
-                                    """
-                                    log_message(f"Ejecutando actualización para registro ID {rt_rowid} con nueva FK '{new_fk_value}' en '{related_table}'")
-                                    conn_dest.execute(update_query, (new_fk_value, rt_rowid))
-                                
-                                conn_dest.commit()
-                                log_message(f"Actualización completada en '{related_table}' para la relación '{fk_field}' basada en '{tabla_geom}'")
-                            else:
-                                log_message(f"No se encontraron registros para actualizar en '{related_table}' para la relación '{fk_field}' basada en '{tabla_geom}'")
-
-                        except Exception as e:
-                            log_message(f"Error al actualizar la relación '{fk_field}' en '{related_table}': {e}")
         
         # Limpieza de columnas temporales
         log_message(f"Iniciando limpieza de columnas temporales en capas procesadas: {capas_a_procesar}")
         #eliminar_columnas_de_paso(gpkg, capas_a_procesar)
         log_message("Limpieza completada.")
+
+    # Procesamiento de relaciones geográficas después de las tablas base            
+    #actualizar_fk_por_ruta(conn_dest, config_geom)    
 
 log_message("Proceso de unión de tablas alfanuméricas completado.")

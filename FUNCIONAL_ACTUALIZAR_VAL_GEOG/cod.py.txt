@@ -25,54 +25,12 @@ except sqlite3.Error as e:
     log_message(f"ERROR: No se pudo conectar al archivo GeoPackage. {e}")
     exit()
 
-# Configuración de las capas y relaciones
-config_geom = {
-    "cca_unidadconstruccion": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_unidadconstruccion_adjunto"
-            }
-    },
+# Inicialización de variables
+capas_geograficas = ["cca_unidadconstruccion"]  # Capas iniciales
+relaciones = {"cca_adjunto": "cca_unidadconstruccion_adjunto"}  # Relación entre tablas
 
-    "cca_construccion": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_construccion_adjunto",
-            "cca_unidadconstruccion": "construccion"
-            }
-    },
-
-    "cca_puntocontrol": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntocontrol_adjunto"
-            }
-    },
-
-    "cca_puntolevantamiento": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntolevantamiento_adjunto"
-            }
-    },
-
-    "cca_puntolindero": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntolindero_adjunto"
-            }
-    },
-
-    "cca_puntoreferencia": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntoreferencia_adjunto"
-            }
-    }
-}
-
-# Iterar sobre cada capa geográfica en la configuración
-for capa, datos in config_geom.items():
+# Paso 0: Iterar sobre las capas geográficas
+for capa in capas_geograficas:
     log_message(f"\n### PROCESANDO CAPA: {capa} ###")
 
     # Paso 1: Seleccionar todos los registros e imprimir (sin geom)
@@ -105,7 +63,7 @@ for capa, datos in config_geom.items():
         try:
             cursor.execute(f"SELECT * FROM {capa} WHERE Ruta = ?", (ruta,))
             registros_ruta = [{col: val for col, val in zip(columnas, row) if col != "geom"} for row in cursor.fetchall()]
-            log_message(f"Total de registros para TABLA {capa} EN la ruta {ruta}: {len(registros_ruta)}")
+            log_message(f"Total de registros para TABLA {capa}  EN la ruta {ruta}: {len(registros_ruta)}")
             for registro in registros_ruta:
                 log_message(str(registro))
         except sqlite3.Error as e:
@@ -114,41 +72,39 @@ for capa, datos in config_geom.items():
 
         # Paso 4: Mapear fid y T_Id_Cop
         mapeo_fid_tid = {
-            registro[datos["pk"]]: (registro["T_Id_Cop"], registro["Ruta"])
-            for registro in registros_ruta if datos["pk"] in registro and "T_Id_Cop" in registro and "Ruta" in registro
-        }
+        registro["fid"]: (registro["T_Id_Cop"], registro["Ruta"])
+        for registro in registros_ruta if "fid" in registro and "T_Id_Cop" in registro and "Ruta" in registro}
 
         for fid, T_Id_Cop in mapeo_fid_tid.items():
             log_message(f"fid {fid} tiene un T_Id_Cop de {T_Id_Cop} en la tabla {capa} en la ruta {ruta}")
 
-        # Paso 5: Procesar las relaciones
-        for tabla_relacion, atributo_union in datos["relaciones"].items():
-            log_message(f"Procesando relación: {tabla_relacion} -> {atributo_union}")
+        # Iterar sobre los registros del mapeo
+        for fid, (T_Id_Cop, ruta_actual) in mapeo_fid_tid.items():
+            log_message(f"Procesando fid: {fid}, T_Id_Cop: {T_Id_Cop}, Ruta: {ruta_actual}")
 
             try:
                 # Seleccionar registros relacionados en la tabla de relación
-                for fid, (T_Id_Cop, ruta_actual) in mapeo_fid_tid.items():
-                    cursor.execute(
-                        f"SELECT * FROM {tabla_relacion} WHERE {atributo_union} = ? AND Ruta = ?",
-                        (T_Id_Cop, ruta_actual),
-                    )
-                    resultados_relacion = cursor.fetchall()
-                    log_message(f"Registros encontrados en {tabla_relacion} para {atributo_union} = {T_Id_Cop} y Ruta = {ruta_actual}: {resultados_relacion}")
+                cursor.execute(
+                    f"SELECT * FROM cca_adjunto WHERE cca_unidadconstruccion_adjunto = ? AND Ruta = ?",
+                    (T_Id_Cop, ruta_actual),
+                )
+                resultados_relacion = cursor.fetchall()
+                log_message(f"Registros encontrados en cca_adjunto para T_Id_Cop {T_Id_Cop} y Ruta {ruta_actual}: {resultados_relacion}")
 
-                    # Actualizar valores en la tabla de relación
-                    for resultado in resultados_relacion:
-                        nuevo_valor = fid  # Asignar fid como el nuevo valor del campo de unión
-                        cursor.execute(
-                            f"UPDATE {tabla_relacion} SET {atributo_union} = ? WHERE {atributo_union} = ? AND Ruta = ?",
-                            (nuevo_valor, T_Id_Cop, ruta_actual),
-                        )
-                        log_message(f"Actualización realizada en {tabla_relacion}: {atributo_union} = {nuevo_valor} para T_Id_Cop {T_Id_Cop} y Ruta {ruta_actual}")
+                # Actualizar valores en la tabla de relación
+                for resultado in resultados_relacion:
+                    nuevo_valor = fid  # Asignar fid como el nuevo valor del campo de unión
+                    cursor.execute(
+                        f"UPDATE cca_adjunto SET cca_unidadconstruccion_adjunto = ? WHERE cca_unidadconstruccion_adjunto = ? AND Ruta = ?",
+                        (nuevo_valor, T_Id_Cop, ruta_actual),
+                    )
+                    log_message(f"Actualización realizada en cca_adjunto: cca_unidadconstruccion_adjunto = {nuevo_valor} para T_Id_Cop {T_Id_Cop} y Ruta {ruta_actual}")
                 
                 # Confirmar los cambios
                 conn.commit()
 
             except sqlite3.Error as e:
-                log_message(f"ERROR al procesar relación con {tabla_relacion}: {e}")
+                log_message(f"ERROR al procesar relación con cca_adjunto: {e}")
                 continue
 
         # Vaciar mapeos para evitar errores
@@ -158,4 +114,3 @@ for capa, datos in config_geom.items():
 # Cerrar la conexión
 conn.close()
 log_message("\nProceso completado. Conexión cerrada.")
-
