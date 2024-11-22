@@ -397,6 +397,24 @@ modelo_ideal = {
     Ruta TEXT NULL
 	);""",
 
+    "cca_usuario" : """CREATE TABLE cca_usuario (
+	T_Id INTEGER NOT NULL PRIMARY KEY,
+    geom GEOMETRY NULL,
+    T_Ili_Tid TEXT(200) NULL,
+    id TEXT(20) NULL,
+    tipo_documento INTEGER NOT NULL CONSTRAINT cca_usuario_tipo_documento_fkey REFERENCES cca_interesadodocumentotipo DEFERRABLE INITIALLY DEFERRED,
+    numero_documento TEXT(20) NOT NULL,
+    coordinador TEXT(255) NULL,
+    estado INTEGER NULL CONSTRAINT cca_usuario_estado_fkey REFERENCES cca_estadotipo DEFERRABLE INITIALLY DEFERRED,
+    departamento_municipio_codigo TEXT(5) NULL,
+    nombre TEXT(150) NOT NULL,
+    contrasena TEXT(20) NULL,
+    rol INTEGER NOT NULL CONSTRAINT cca_usuario_rol_fkey REFERENCES cca_roltipo DEFERRABLE INITIALLY DEFERRED,
+    "municipio_codigo" TEXT(20) NULL,
+    T_Id_Cop INTEGER NULL,
+    Ruta TEXT NULL
+	);""",
+
     "cca_predio" : """CREATE TABLE cca_predio (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
     geom GEOMETRY NULL,
@@ -474,10 +492,9 @@ modelo_ideal = {
     "cca_predio_copropiedad" : """CREATE TABLE cca_predio_copropiedad (
 	T_Id INTEGER NOT NULL PRIMARY KEY,
     geom GEOMETRY NULL,
-    unidad_predial INTEGER NOT NULL CONSTRAINT cca_predio_copropiedad_unidad_predial_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
+    unidad_predial INTEGER NOT NULL UNIQUE CONSTRAINT cca_predio_copropiedad_unidad_predial_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     matriz INTEGER NOT NULL CONSTRAINT cca_predio_copropiedad_matriz_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
     coeficiente DOUBLE NULL CONSTRAINT cca_predio_copropiedad_coeficiente_check CHECK( coeficiente BETWEEN 0.0 AND 1.0),
-    CONSTRAINT cca_predio_copropiedad_unidad_predial_key UNIQUE (unidad_predial),
     T_Id_Cop INTEGER NULL,
     Ruta TEXT NULL
 	);""",
@@ -560,24 +577,6 @@ modelo_ideal = {
     numero_predial TEXT(30) NOT NULL,
     tipo_novedad INTEGER NOT NULL CONSTRAINT cca_estructurnvddnmrprdial_tipo_novedad_fkey REFERENCES cca_estructuranovedadnumeropredial_tipo_novedad DEFERRABLE INITIALLY DEFERRED,
     cca_predio_novedad_numeros_prediales INTEGER NULL CONSTRAINT cca_estructurnvddnmrprdial_cca_predi_nvdd_nmrs_prdles_fkey REFERENCES cca_predio DEFERRABLE INITIALLY DEFERRED,
-    T_Id_Cop INTEGER NULL,
-    Ruta TEXT NULL
-	);""",
-
-    "cca_usuario" : """CREATE TABLE cca_usuario (
-	T_Id INTEGER NOT NULL PRIMARY KEY,
-    geom GEOMETRY NULL,
-    T_Ili_Tid TEXT(200) NULL,
-    id TEXT(20) NULL,
-    tipo_documento INTEGER NOT NULL CONSTRAINT cca_usuario_tipo_documento_fkey REFERENCES cca_interesadodocumentotipo DEFERRABLE INITIALLY DEFERRED,
-    numero_documento TEXT(20) NOT NULL,
-    coordinador TEXT(255) NULL,
-    estado INTEGER NULL CONSTRAINT cca_usuario_estado_fkey REFERENCES cca_estadotipo DEFERRABLE INITIALLY DEFERRED,
-    departamento_municipio_codigo TEXT(5) NULL,
-    nombre TEXT(150) NOT NULL,
-    contrasena TEXT(20) NULL,
-    rol INTEGER NOT NULL CONSTRAINT cca_usuario_rol_fkey REFERENCES cca_roltipo DEFERRABLE INITIALLY DEFERRED,
-    "municipio_codigo" TEXT(20) NULL,
     T_Id_Cop INTEGER NULL,
     Ruta TEXT NULL
 	);""",
@@ -706,7 +705,7 @@ modelo_ideal = {
 
     "cca_construccion": """CREATE TABLE cca_construccion (
     T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    geom MULTIPOLYGON NOT NULL, 
+    geom MULTIPOLYGON NULL, 
     T_Ili_Tid TEXT(200) NULL,
     identificador TEXT(20) NOT NULL,
     tipo_construccion INTEGER NULL CONSTRAINT cca_construccion_tipo_construccion_fkey REFERENCES cca_construcciontipo DEFERRABLE INITIALLY DEFERRED,
@@ -741,7 +740,7 @@ modelo_ideal = {
 
     "extdireccion": """CREATE TABLE extdireccion (
     T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    geom MULTIPOLYGON NULL,
+    geom POINT NULL,
     T_Seq INTEGER NULL,
     tipo_direccion INTEGER NOT NULL CONSTRAINT extdireccion_tipo_direccion_fkey REFERENCES extdireccion_tipo_direccion DEFERRABLE INITIALLY DEFERRED,
     es_direccion_principal BOOLEAN NULL,
@@ -763,8 +762,9 @@ modelo_ideal = {
 
     "cca_unidadconstruccion": """CREATE TABLE cca_unidadconstruccion (
     T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    geom MULTIPOLYGON NOT NULL, 
+    geom MULTIPOLYGON NULL, 
     T_Ili_Tid TEXT(200) NULL,tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
+    tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
     planta_ubicacion INTEGER NOT NULL CONSTRAINT cca_unidadconstruccion_planta_ubicacion_check CHECK( planta_ubicacion BETWEEN 0 AND 500),
     area_construida DOUBLE NOT NULL CONSTRAINT cca_unidadconstruccion_area_construida_check CHECK( area_construida BETWEEN 0.0 AND 9.99999999999999E13),
     altura DOUBLE NULL CONSTRAINT cca_unidadconstruccion_altura_check CHECK( altura BETWEEN 0.0 AND 1000.0),
@@ -1280,7 +1280,7 @@ def migrate_tables(conn, old_structure, new_structure):
         log_message(f"Tabla {table_name} migrada exitosamente.\n")
 
     # Llamar a la función para eliminar tablas '_old' al finalizar la migración
-	#delete_old_tables(conn)
+    delete_old_tables(conn)
 
 # Ejecutar el script de migración
 def migrate_database():
