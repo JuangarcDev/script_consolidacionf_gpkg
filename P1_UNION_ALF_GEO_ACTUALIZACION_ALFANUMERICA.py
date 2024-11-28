@@ -474,7 +474,7 @@ config_tablas = {
     "cca_fuenteadministrativa": {
         "pk": "T_Id", 
         "relaciones": {
-            "cca_adjunto": "cca_fuenteadministrativa_adjunto",
+            "cca_adjunto": "cca_fuenteadminstrtiva_adjunto",
             "cca_fuenteadministrativa_derecho": "fuente_administrativa"
             }
     },
@@ -527,7 +527,7 @@ config_tablas = {
     "cca_calificacionconvencional": {
         "pk": "T_Id", 
         "relaciones": {
-            "cca_caracteristicasunidadconstruccion": "calificacionconvencional"
+            "cca_caracteristicasunidadconstruccion": "calificacion_convencional"
             }
     },
 
