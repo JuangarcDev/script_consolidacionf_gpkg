@@ -505,7 +505,7 @@ config_tablas = {
             "cca_predio_informalidad": "cca_predio_informal",
             "cca_restriccion": "predio",
             "extdireccion": "cca_predio_direccion",
-            "extreferenciaregistralsistemaantiguo": "cc_predio_referencia_registral_sistema_antiguo"
+            "extreferenciaregistralsistemaantiguo": "cca_predio_referencia_registral_sistema_antiguo"
         }
     },
 

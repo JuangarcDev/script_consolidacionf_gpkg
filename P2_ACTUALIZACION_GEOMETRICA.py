@@ -33,6 +33,7 @@ config_geom = {
             "cca_adjunto": "cca_unidadconstruccion_adjunto"
         }
     },
+
     "cca_construccion": {
         "pk": "fid", 
         "relaciones": {
@@ -40,23 +41,101 @@ config_geom = {
             "cca_unidadconstruccion": "construccion"
         }
     },
+
     "cca_puntocontrol": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntocontrol_adjunto"
         }
     },
+
     "cca_puntolevantamiento": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntolevantamiento_adjunto"
         }
     },
+
     "cca_puntolindero": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntolindero_adjunto"
         }
+    },
+
+    "cca_derecho": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_fuenteadministrativa_derecho": "derecho"
+            }
+    },
+
+    "cca_agrupacioninteresados": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_derecho": "agrupacion_interesados",
+            "cca_miembros": "agrupacion"
+            }
+    },
+
+    "cca_fuenteadministrativa": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_fuenteadminstrtiva_adjunto",
+            "cca_fuenteadministrativa_derecho": "fuente_administrativa"
+            }
+    },
+
+    "cca_interesado": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_adjunto": "cca_interesado_adjunto",
+            "cca_derecho": "interesado",
+            "cca_miembros": "interesado"
+            }
+    },
+
+    "cca_predio": {
+        "pk": "T_Id",
+        "relaciones": {
+            "cca_terreno": "predio",
+            "cca_derecho": "predio",
+            "cca_construccion": "predio",
+            "cca_adjunto": "cca_predio_adjunto",
+            "cca_estructuraamenazariesgovulnerabilidad": "cca_predio_amenazariesgovulnerabilidad",
+            "cca_estructuranovedadfmi": "cca_predio_novedad_fmi",
+            "cca_estructuranovedadnumeropredial": "cca_predio_novedad_numeros_prediales",
+            "cca_ofertasmercadoinmobiliario": "predio",
+            "cca_predio_copropiedad": "unidad_predial",
+            "cca_predio_copropiedad": "matriz",
+            "cca_predio_informalidad": "cca_predio_formal",
+            "cca_predio_informalidad": "cca_predio_informal",
+            "cca_restriccion": "predio",
+            "extdireccion": "cca_predio_direccion",
+            "extreferenciaregistralsistemaantiguo": "cca_predio_referencia_registral_sistema_antiguo"
+        }
+    },
+
+    "cca_usuario": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_predio": "usuario"
+            }
+    },
+
+    "cca_caracteristicasunidadconstruccion": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_unidadconstruccion": "caracteristicasunidadconstruccion"
+            }
+    }, 
+
+
+    "cca_calificacionconvencional": {
+        "pk": "T_Id", 
+        "relaciones": {
+            "cca_caracteristicasunidadconstruccion": "calificacion_convencional"
+            }
     }
 }
 
@@ -108,47 +187,55 @@ def update_related_tables(cursor, conn, config_geom):
             for related_table, related_field in relaciones.items():
                 log_message(f"Actualizando {related_table} basado en {table}...")
 
-                # Verificar si hay coincidencias antes del UPDATE
-                match_query = f"""
-                SELECT COUNT(*)
-                FROM {table}
-                INNER JOIN {related_table}
+                # Obtener registros relacionados
+                select_query = f"""
+                SELECT {related_table}.{related_field}, {related_table}.Ruta
+                FROM {related_table}
+                INNER JOIN {table}
                 ON {table}.T_Id_Cop = {related_table}.{related_field}
                 AND {table}.Ruta = {related_table}.Ruta
                 WHERE {related_table}.{related_field} IS NOT NULL
                 """
-                cursor.execute(match_query)
-                matches = cursor.fetchone()[0]
-                
-                if matches == 0:
-                    log_message(f"No se encontraron coincidencias para actualizar {related_table} basado en {table}. Se omite.")
+                cursor.execute(select_query)
+                registros = cursor.fetchall()
+
+                if not registros:
+                    log_message(f"No se encontraron registros para actualizar en {related_table} basado en {table}.")
                     continue
 
-                log_message(f"Se encontraron {matches} registros coincidentes para actualizar en {related_table}.")
+                log_message(f"Se encontraron {len(registros)} registros para actualizar en {related_table}.")
+
 
                 # Realizar el UPDATE con filtro de valores no nulos
                 try:
-                    update_query = f"""
-                    UPDATE {related_table}
-                    SET {related_field} = (
+                    # Procesar cada registro
+                    for registro in registros:
+                        valor_actual = registro[0]
+                        ruta_actual = registro[1]
+
+                        # Obtener el nuevo valor desde la tabla principal
+                        cursor.execute(f"""
                         SELECT {pk_field}
                         FROM {table}
-                        WHERE {table}.T_Id_Cop = {related_table}.{related_field}
-                        AND {table}.Ruta = {related_table}.Ruta
-                    )
-                    WHERE {related_field} IS NOT NULL
-                    AND EXISTS (
-                        SELECT 1
-                        FROM {table}
-                        WHERE {table}.T_Id_Cop = {related_table}.{related_field}
-                        AND {table}.Ruta = {related_table}.Ruta
-                    )
-                    """
-                    cursor.execute(update_query)
-                    conn.commit()
-                    
-                    affected_rows = cursor.rowcount
-                    log_message(f"Actualización completada para {related_table}. Filas afectadas: {affected_rows}.")
+                        WHERE T_Id_Cop = ? AND Ruta = ?;
+                        """, (valor_actual, ruta_actual))
+                        resultado = cursor.fetchone()
+
+                        if resultado:
+                            nuevo_valor = resultado[0]
+
+                            # Actualizar el registro
+                            cursor.execute(f"""
+                            UPDATE {related_table}
+                            SET {related_field} = ?
+                            WHERE {related_field} = ?
+                            AND Ruta = ?;
+                            """, (nuevo_valor, valor_actual, ruta_actual))
+
+                            conn.commit()
+                            log_message(f"Actualizado {related_table}: PARA EL CAMPO: {related_field}, VALOR ANTERIOR: {valor_actual} SE ACTUALIZA A: {nuevo_valor} REGISTRO EN LA Ruta={ruta_actual}")
+                        else:
+                            log_message(f"No se encontró un valor de actualización para {related_field}={valor_actual}, Ruta={ruta_actual}.")
                 
                 except sqlite3.Error as e:
                     log_message(f"ERROR: No se pudo realizar la actualización en {related_table}. {e}")
