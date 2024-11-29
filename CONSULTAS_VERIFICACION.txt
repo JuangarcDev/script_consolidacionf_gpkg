@@ -1,0 +1,273 @@
+CONSULTA
+
+PREDIO -> INTERESADO -> DERECHO -> FUENTE ADMINISTRATIVA -> FUENTE ADMINISTRATIVA DE DERECHO
+
+SELECT 
+    cca_predio.T_Id AS predio_id,
+    cca_predio.numero_predial,
+    cca_predio.matricula_inmobiliaria,
+    cca_predio.area_total_terreno,
+    cca_predio.area_total_construida,
+    cca_predio.T_Id_Cop,
+    cca_predio.Ruta,
+	
+    
+    cca_interesado.T_Id AS interesado_id,
+    cca_interesado.nombre,
+    cca_interesado.documento_identidad,
+    cca_interesado.telefono,
+    cca_interesado.correo_electronico,
+    cca_interesado.T_Id_Cop,
+    cca_interesado.Ruta,
+    
+    cca_derecho.T_Id AS derecho_id,
+    cca_derecho.tipo AS derecho_tipo,
+    cca_derecho.cuota_participacion,
+    cca_derecho.fraccion_derecho,
+    cca_derecho.T_Id_Cop,
+    cca_derecho.Ruta,
+    
+    cca_fuenteadministrativa.T_Id AS fuente_admin_id,
+    cca_fuenteadministrativa.numero_fuente,
+    cca_fuenteadministrativa.fecha_documento_fuente,
+    cca_fuenteadministrativa.ente_emisor,
+    cca_fuenteadministrativa.T_Id_Cop,
+    cca_fuenteadministrativa.Ruta,
+    
+    cca_fuenteadministrativa_derecho.T_Id AS fuente_admin_derecho_id,
+    cca_fuenteadministrativa.T_Id_Cop,
+    cca_fuenteadministrativa.Ruta
+    
+FROM 
+    cca_predio
+JOIN 
+    cca_derecho ON cca_predio.T_Id = cca_derecho.predio
+JOIN 
+    cca_interesado ON cca_derecho.interesado = cca_interesado.T_Id
+JOIN 
+    cca_fuenteadministrativa_derecho ON cca_derecho.T_Id = cca_fuenteadministrativa_derecho.derecho
+JOIN 
+    cca_fuenteadministrativa ON cca_fuenteadministrativa_derecho.fuente_administrativa = cca_fuenteadministrativa.T_Id
+
+WHERE cca_predio.Ruta = 'C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg'
+
+
+PREDIO -> TERRENO -> CCA_CONSTRUCCION -> CCA_UNIDAD_CONSTRUCCION -> CCA_CARACTERISTICA_UNIDAD_CONSTRUCCION -> CARACTERISTICAS_UNIDAD -> CALIFICACION_CONVENCIONAL -> 
+#TID
+
+select 
+    p.numero_predial,
+    p.T_Id as Tid_Predio,
+    p.T_Id_Cop,
+    p.Ruta,
+ 
+    t.T_Id as Tid_terreno,
+    t.area_terreno,
+    t.T_Id_Cop,
+    t.Ruta,
+ 
+    c.T_Id as Tid_construccion,
+    c.identificador as ident_construccion,
+    c.area_construccion_alfanumerica,
+    c.area_construccion_digital,
+    c.T_Id_Cop,
+    c.Ruta,
+
+    ct.iliCode as cons_tipo, 
+    dct.iliCode as cons_dominio,
+    dct.iliCode as ucons_dominio, 
+ 
+
+    uc.T_Id  as Tid_unidad,
+    uc.tipo_planta, uc.area_construida as area_ucos,
+    uc.T_Id_Cop,
+    uc.Ruta,
+    
+    cc.identificador as ident_Carac,
+
+    uct.iliCode as ucons_tipo,  
+    cpt.iliCode as ucons_planta,
+    ant.iliCode as anexo_tipo,
+    us.iliCode as ucons_uso, 
+    cac.T_Id as Tid_Calificacio,
+    cat.iliCode as califica_tipo,  
+    cac.total_calificacion,
+    cac.T_Id_Cop,
+    cac.Ruta
+from cca_predio p
+left join cca_terreno t 
+on p.T_Id = t.predio 
+left join cca_construccion c ON 
+p.T_Id = c.predio 
+left join cca_unidadconstruccion uc on
+c.T_Id = uc.construccion
+left JOIN cca_caracteristicasunidadconstruccion cc 
+on uc.caracteristicasunidadconstruccion = cc.T_Id 
+left join cca_calificacionconvencional cac on
+cc.calificacion_convencional = cac.T_Id 
+left join cca_construcciontipo ct on 
+c.tipo_construccion = ct.T_Id 
+left join cca_dominioconstrucciontipo dct 
+on c.tipo_dominio = dct.T_Id 
+left join cca_unidadconstrucciontipo uct on 
+cc.tipo_unidad_construccion = uct.T_Id 
+left JOIN cca_construccionplantatipo cpt 
+on cc.tipo_planta = cpt.T_Id 
+left join cca_usouconstipo us 
+on cc.uso = us.T_Id 
+left join cca_anexotipo ant 
+on cc.tipo_anexo = ant.T_Id 
+left join cca_calificartipo cat 
+on cac.tipo_calificar = cat.T_Id
+
+#FID
+
+select p.numero_predial, p.T_Id as Tid_Predio, p.T_Id_Cop, p.Ruta, 
+t.fid as Tid_terreno, t.area_terreno, t.T_Id_Cop, t.Ruta,
+c.fid as Tid_construccion, c.identificador as ident_construccion, c.T_Id_Cop, c.Ruta, ct.iliCode as cons_tipo, 
+dct.iliCode as cons_dominio, 
+c.area_construccion_alfanumerica, c.area_construccion_digital,
+uc.T_Id  as Tid_unidad,
+uc.tipo_planta, uc.area_construida as area_ucos, uc.T_Id_Cop, uc.Ruta,
+cc.identificador as ident_Carac,
+dct.iliCode as ucons_dominio, 
+uct.iliCode as ucons_tipo,  
+cpt.iliCode as ucons_planta,
+ant.iliCode as anexo_tipo,
+us.iliCode as ucons_uso, 
+cac.T_Id as Tid_Calificacio,
+cat.iliCode as califica_tipo,  
+cac.total_calificacion,
+cac.T_Id_Cop,
+cac.Ruta
+from cca_predio p
+left join cca_terreno t 
+on p.T_Id = t.predio 
+left join cca_construccion c ON 
+p.T_Id = c.predio 
+left join cca_unidadconstruccion uc on
+c.fid = uc.construccion
+left JOIN cca_caracteristicasunidadconstruccion cc 
+on uc.caracteristicasunidadconstruccion = cc.T_Id 
+left join cca_calificacionconvencional cac on
+cc.calificacion_convencional = cac.T_Id 
+left join cca_construcciontipo ct on 
+c.tipo_construccion = ct.T_Id 
+left join cca_dominioconstrucciontipo dct 
+on c.tipo_dominio = dct.T_Id 
+left join cca_unidadconstrucciontipo uct on 
+cc.tipo_unidad_construccion = uct.T_Id 
+left JOIN cca_construccionplantatipo cpt 
+on cc.tipo_planta = cpt.T_Id 
+left join cca_usouconstipo us 
+on cc.uso = us.T_Id 
+left join cca_anexotipo ant 
+on cc.tipo_anexo = ant.T_Id 
+left join cca_calificartipo cat 
+on cac.tipo_calificar = cat.T_Id
+
+ADJUNTO -> UNIDAD CONSTRU -> CONSTRUCCION -> FUENTE-ADM -> INTERESADO -> PREDIO -> TIPO DE ARCHIVO -> RELACION SOPORTE
+
+TID
+
+SELECT 
+    adj.T_Id AS adjunto_id,
+    adj.archivo AS archivo,
+    adj.observaciones AS adjunto_observaciones,
+    adj.procedencia AS adjunto_procedencia,
+    adj.tipo_archivo AS adjunto_tipo_archivo,
+    adj.T_Id_Cop AS adjunto_T_Id_Cop,
+    adj.Ruta AS adjunto_Ruta,
+
+    cons.T_Id AS construccion_id,
+    cons.identificador AS construccion_identificador,
+    cons.tipo_construccion AS construccion_tipo,
+    cons.area_construccion_digital AS construccion_area,
+    cons.anio_construccion AS construccion_anio,
+    cons.T_Id_Cop AS cons_T_Id_Cop,
+    cons.Ruta AS cons_Ruta,
+
+    ucons.T_Id AS unidad_construccion_id,
+    ucons.area_construida AS unidad_area,
+    ucons.altura AS unidad_altura,
+    ucons.T_Id_Cop AS u_cons_T_Id_Cop,
+    ucons.Ruta AS u_cons_Ruta,
+
+    pred.T_Id AS predio_id,
+    pred.numero_predial AS predio_numero,
+    pred.area_total_terreno AS predio_area_terreno,
+    pred.matricula_inmobiliaria AS predio_matricula,
+    pred.T_Id_Cop AS predio_T_Id_Cop,
+    pred.Ruta AS predio_Ruta,
+
+    fuente.T_Id AS fuente_admin_id,
+    fuente.numero_fuente AS fuente_numero,
+    fuente.ente_emisor AS fuente_emisor,
+    fuente.T_Id_Cop AS fuente_T_Id_Cop,
+    fuente.Ruta AS fuente_Ruta,
+
+    interes.T_Id AS interesado_id,
+    interes.documento_identidad AS interesado_documento,
+    interes.primer_nombre || ' ' || interes.primer_apellido AS interesado_nombre,
+    interes.T_Id_Cop AS interesado_T_Id_Cop,
+    interes.Ruta AS interesado_Ruta
+FROM cca_adjunto adj
+
+LEFT JOIN cca_construccion cons ON adj.cca_construccion_adjunto = cons.T_Id
+LEFT JOIN cca_unidadconstruccion ucons ON adj.cca_unidadconstruccion_adjunto = ucons.T_Id
+LEFT JOIN cca_predio pred ON adj.cca_predio_adjunto = pred.T_Id
+LEFT JOIN cca_fuenteadministrativa fuente ON adj.cca_fuenteadminstrtiva_adjunto = fuente.T_Id
+LEFT JOIN cca_interesado interes ON adj.cca_interesado_adjunto = interes.T_Id;
+
+
+FID
+
+SELECT 
+    adj.T_Id AS adjunto_id,
+    adj.archivo AS archivo,
+    adj.observaciones AS adjunto_observaciones,
+    adj.procedencia AS adjunto_procedencia,
+    adj.tipo_archivo AS adjunto_tipo_archivo,
+    adj.T_Id_Cop AS adjunto_T_Id_Cop,
+    adj.Ruta AS adjunto_Ruta,
+
+    cons.fid AS construccion_id,
+    cons.identificador AS construccion_identificador,
+    cons.tipo_construccion AS construccion_tipo,
+    cons.area_construccion_digital AS construccion_area,
+    cons.anio_construccion AS construccion_anio,
+    cons.T_Id_Cop AS cons_T_Id_Cop,
+    cons.Ruta AS cons_Ruta,
+
+    ucons.fid AS unidad_construccion_id,
+    ucons.area_construida AS unidad_area,
+    ucons.altura AS unidad_altura,
+    ucons.T_Id_Cop AS u_cons_T_Id_Cop,
+    ucons.Ruta AS u_cons_Ruta,
+
+    pred.T_Id AS predio_id,
+    pred.numero_predial AS predio_numero,
+    pred.area_total_terreno AS predio_area_terreno,
+    pred.matricula_inmobiliaria AS predio_matricula,
+    pred.T_Id_Cop AS predio_T_Id_Cop,
+    pred.Ruta AS predio_Ruta,
+
+    fuente.T_Id AS fuente_admin_id,
+    fuente.numero_fuente AS fuente_numero,
+    fuente.ente_emisor AS fuente_emisor,
+    fuente.T_Id_Cop AS fuente_T_Id_Cop,
+    fuente.Ruta AS fuente_Ruta,
+
+    interes.T_Id AS interesado_id,
+    interes.documento_identidad AS interesado_documento,
+    interes.primer_nombre || ' ' || interes.primer_apellido AS interesado_nombre,
+    interes.T_Id_Cop AS interesado_T_Id_Cop,
+    interes.Ruta AS interesado_Ruta
+
+FROM cca_adjunto adj
+LEFT JOIN cca_construccion cons ON adj.cca_construccion_adjunto = cons.fid
+LEFT JOIN cca_unidadconstruccion ucons ON adj.cca_unidadconstruccion_adjunto = ucons.fid
+LEFT JOIN cca_predio pred ON adj.cca_predio_adjunto = pred.T_Id
+LEFT JOIN cca_fuenteadministrativa fuente ON adj.cca_fuenteadminstrtiva_adjunto = fuente.T_Id
+LEFT JOIN cca_interesado interes ON adj.cca_interesado_adjunto = interes.T_Id;
+

@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-# Conexión al archivo GeoPackage
+# Ruta al GeoPackage y al archivo de log
 gpkg_path = r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\captura_campo_20240920.gpkg"
 log_path = r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_combinado\console_log_val_geo.txt"
 
@@ -31,131 +31,149 @@ config_geom = {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_unidadconstruccion_adjunto"
-            }
+        }
     },
-
     "cca_construccion": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_construccion_adjunto",
             "cca_unidadconstruccion": "construccion"
-            }
+        }
     },
-
     "cca_puntocontrol": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntocontrol_adjunto"
-            }
+        }
     },
-
     "cca_puntolevantamiento": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntolevantamiento_adjunto"
-            }
+        }
     },
-
     "cca_puntolindero": {
         "pk": "fid", 
         "relaciones": {
             "cca_adjunto": "cca_puntolindero_adjunto"
-            }
-    },
-
-    "cca_puntoreferencia": {
-        "pk": "fid", 
-        "relaciones": {
-            "cca_adjunto": "cca_puntoreferencia_adjunto"
-            }
+        }
     }
 }
 
-# Iterar sobre cada capa geográfica en la configuración
-for capa, datos in config_geom.items():
-    log_message(f"\n### PROCESANDO CAPA: {capa} ###")
 
-    # Paso 1: Seleccionar todos los registros e imprimir (sin geom)
+# Parte 1: Mapeo de registros
+def map_tables(cursor, config_geom):
+    log_message("=== Inicio del mapeo de tablas ===")
+    for table, details in config_geom.items():
+        log_message(f"   ---MAPEO DE LA TABLA: {table}---   ")
+        pk_field = details["pk"]
+        cursor.execute(f"SELECT COUNT(*) FROM {table}")
+        record_count = cursor.fetchone()[0]
+        if record_count > 0:
+            cursor.execute(f"SELECT {pk_field}, T_Id_Cop, Ruta FROM {table}")
+            rows = cursor.fetchall()
+            for row in rows:
+                log_message(f"({row[0]}) = {{({row[1]}), ({row[2]}), ({table})}}")
+        else:
+            log_message(f"La tabla {table} no tiene registros.")
+    log_message("=== Fin del mapeo de tablas ===")
+
+def update_related_tables(cursor, conn, config_geom):
+    """
+    Actualiza los campos relacionados en las tablas según la configuración especificada.
+    
+    Args:
+        cursor: Cursor activo de la conexión SQLite.
+        conn: Conexión activa a la base de datos SQLite.
+        config_geom (dict): Configuración de las tablas y relaciones.
+    """
+    log_message("=== Inicio de actualizaciones ===")
     try:
-        cursor.execute(f"SELECT * FROM {capa}")
-        columnas = [desc[0] for desc in cursor.description]
-        registros = cursor.fetchall()
-        registros_sin_geom = [{col: val for col, val in zip(columnas, row) if col != "geom"} for row in registros]
-        log_message(f"Total de registros en {capa}: {len(registros_sin_geom)}")
-        for registro in registros_sin_geom:
-            log_message(str(registro))
-    except sqlite3.Error as e:
-        log_message(f"ERROR al seleccionar registros de {capa}: {e}")
-        continue
+        for table, details in config_geom.items():
+            pk_field = details["pk"]
+            relaciones = details["relaciones"]
 
-    # Paso 2: Extraer rutas presentes en el campo "Ruta"
-    try:
-        cursor.execute(f"SELECT DISTINCT Ruta FROM {capa}")
-        rutas = [row[0] for row in cursor.fetchall()]
-        log_message(f"Rutas encontradas en {capa}: {rutas}")
-    except sqlite3.Error as e:
-        log_message(f"ERROR al extraer rutas de {capa}: {e}")
-        continue
-
-    # Iterar sobre cada ruta
-    for ruta in rutas:
-        log_message(f"\n### PROCESANDO RUTA: {ruta} ###")
-
-        # Paso 3: Seleccionar registros de la ruta
-        try:
-            cursor.execute(f"SELECT * FROM {capa} WHERE Ruta = ?", (ruta,))
-            registros_ruta = [{col: val for col, val in zip(columnas, row) if col != "geom"} for row in cursor.fetchall()]
-            log_message(f"Total de registros para TABLA {capa} EN la ruta {ruta}: {len(registros_ruta)}")
-            for registro in registros_ruta:
-                log_message(str(registro))
-        except sqlite3.Error as e:
-            log_message(f"ERROR al seleccionar registros de la ruta {ruta} en {capa}: {e}")
-            continue
-
-        # Paso 4: Mapear fid y T_Id_Cop
-        mapeo_fid_tid = {
-            registro[datos["pk"]]: (registro["T_Id_Cop"], registro["Ruta"])
-            for registro in registros_ruta if datos["pk"] in registro and "T_Id_Cop" in registro and "Ruta" in registro
-        }
-
-        for fid, T_Id_Cop in mapeo_fid_tid.items():
-            log_message(f"fid {fid} tiene un T_Id_Cop de {T_Id_Cop} en la tabla {capa} en la ruta {ruta}")
-
-        # Paso 5: Procesar las relaciones
-        for tabla_relacion, atributo_union in datos["relaciones"].items():
-            log_message(f"Procesando relación: {tabla_relacion} -> {atributo_union}")
-
-            try:
-                # Seleccionar registros relacionados en la tabla de relación
-                for fid, (T_Id_Cop, ruta_actual) in mapeo_fid_tid.items():
-                    cursor.execute(
-                        f"SELECT * FROM {tabla_relacion} WHERE {atributo_union} = ? AND Ruta = ?",
-                        (T_Id_Cop, ruta_actual),
-                    )
-                    resultados_relacion = cursor.fetchall()
-                    log_message(f"Registros encontrados en {tabla_relacion} para {atributo_union} = {T_Id_Cop} y Ruta = {ruta_actual}: {resultados_relacion}")
-
-                    # Actualizar valores en la tabla de relación
-                    for resultado in resultados_relacion:
-                        nuevo_valor = fid  # Asignar fid como el nuevo valor del campo de unión
-                        cursor.execute(
-                            f"UPDATE {tabla_relacion} SET {atributo_union} = ? WHERE {atributo_union} = ? AND Ruta = ?",
-                            (nuevo_valor, T_Id_Cop, ruta_actual),
-                        )
-                        log_message(f"Actualización realizada en {tabla_relacion}: {atributo_union} = {nuevo_valor} para T_Id_Cop {T_Id_Cop} y Ruta {ruta_actual}")
-                
-                # Confirmar los cambios
-                conn.commit()
-
-            except sqlite3.Error as e:
-                log_message(f"ERROR al procesar relación con {tabla_relacion}: {e}")
+            # Si no hay relaciones o es None, omitir esta tabla
+            if not relaciones or not isinstance(relaciones, dict):
+                log_message(f"La tabla '{table}' no tiene relaciones definidas. Se omite la actualización DE SUS LLAVES FORANEAS.")
                 continue
 
-        # Vaciar mapeos para evitar errores
-        mapeo_fid_tid.clear()
-        log_message("Mapeo de fid y T_Id_Cop limpiado.")
+            # Verificar si la tabla principal tiene registros
+            cursor.execute(f"SELECT COUNT(*) FROM {table}")
+            table_count = cursor.fetchone()[0]
+            if table_count == 0:
+                log_message(f"La tabla principal '{table}' no tiene registros. Se omite la actualización.")
+                continue
 
-# Cerrar la conexión
-conn.close()
-log_message("\nProceso completado. Conexión cerrada.")
+            for related_table, related_field in relaciones.items():
+                log_message(f"Actualizando {related_table} basado en {table}...")
 
+                # Verificar si hay coincidencias antes del UPDATE
+                match_query = f"""
+                SELECT COUNT(*)
+                FROM {table}
+                INNER JOIN {related_table}
+                ON {table}.T_Id_Cop = {related_table}.{related_field}
+                AND {table}.Ruta = {related_table}.Ruta
+                WHERE {related_table}.{related_field} IS NOT NULL
+                """
+                cursor.execute(match_query)
+                matches = cursor.fetchone()[0]
+                
+                if matches == 0:
+                    log_message(f"No se encontraron coincidencias para actualizar {related_table} basado en {table}. Se omite.")
+                    continue
+
+                log_message(f"Se encontraron {matches} registros coincidentes para actualizar en {related_table}.")
+
+                # Realizar el UPDATE con filtro de valores no nulos
+                try:
+                    update_query = f"""
+                    UPDATE {related_table}
+                    SET {related_field} = (
+                        SELECT {pk_field}
+                        FROM {table}
+                        WHERE {table}.T_Id_Cop = {related_table}.{related_field}
+                        AND {table}.Ruta = {related_table}.Ruta
+                    )
+                    WHERE {related_field} IS NOT NULL
+                    AND EXISTS (
+                        SELECT 1
+                        FROM {table}
+                        WHERE {table}.T_Id_Cop = {related_table}.{related_field}
+                        AND {table}.Ruta = {related_table}.Ruta
+                    )
+                    """
+                    cursor.execute(update_query)
+                    conn.commit()
+                    
+                    affected_rows = cursor.rowcount
+                    log_message(f"Actualización completada para {related_table}. Filas afectadas: {affected_rows}.")
+                
+                except sqlite3.Error as e:
+                    log_message(f"ERROR: No se pudo realizar la actualización en {related_table}. {e}")
+                
+                # Registrar datos modificados
+                log_message(f"Datos modificados de {related_table}:")
+                cursor.execute(f"SELECT * FROM {related_table} LIMIT 10")  # Mostrar solo 10 filas como muestra
+                modified_data = cursor.fetchall()
+                for row in modified_data:
+                    log_message(str(row))
+
+        log_message("SE ACTUALIZARON TODAS LAS TABLAS Y SUS LLAVES FORANEAS CON EXITO")
+
+    except Exception as e:
+        log_message(f"ERROR: Ocurrió un error durante el proceso de actualización. {e}")
+    finally:
+        log_message("=== Fin de actualizaciones ===")
+
+
+# Ejecución principal
+if __name__ == "__main__":
+    #PARTE GEOGRAFICA
+    log_message("##### INICIANDO ACTUALIZACION DE LLAVES FORANEAS EN LAS TABLAS#######")
+    map_tables(cursor, config_geom)
+    update_related_tables(cursor, conn, config_geom)
+    cursor.close()
+    conn.close()
+    log_message("Proceso finalizado.")
