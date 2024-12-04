@@ -139,6 +139,134 @@ config_geom = {
     }
 }
 
+def verificar_maximos(cursor, config_geom):
+    """
+    Verifica el valor máximo de los atributos de las tablas y relaciones definidas en config_geom,
+    imprime los resultados y calcula la milésima superior.
+
+    Args:
+        cursor: Cursor activo de la conexión SQLite.
+        config_geom (dict): Configuración de las tablas y relaciones.
+    """
+    log_message("=== Inicio de verificación de máximos ===")
+    maximos_por_tabla = {}
+    max_total = 0
+
+    try:
+        # Iterar por cada tabla en la configuración
+        for tabla, detalles in config_geom.items():
+            log_message(f"Procesando tabla: {tabla}")
+            pk_field = detalles["pk"]
+
+            # Obtener el valor máximo del campo principal
+            try:
+                cursor.execute(f"SELECT MAX({pk_field}) FROM {tabla}")
+                max_pk = cursor.fetchone()[0] or 0
+                log_message(f"Máximo valor en {tabla}.{pk_field}: {max_pk}")
+                maximos_por_tabla[tabla] = {"max_pk": max_pk}
+                max_total = max(max_total, max_pk)
+            except sqlite3.Error as e:
+                log_message(f"ERROR al procesar {tabla}: {e}")
+                continue
+
+            # Verificar las relaciones
+            max_relaciones = {}
+            relaciones = detalles.get("relaciones", {})
+            for tabla_rel, campo_rel in relaciones.items():
+                try:
+                    cursor.execute(f"SELECT MAX({campo_rel}) FROM {tabla_rel}")
+                    max_rel = cursor.fetchone()[0] or 0
+                    log_message(f"Máximo valor en relación {tabla_rel}.{campo_rel}: {max_rel}")
+                    max_relaciones[tabla_rel] = max_rel
+                    print(f"max_total: {max_total} (type: {type(max_total)})")
+                    print(f"max_rel: {max_rel} (type: {type(max_rel)})")
+                    max_total = max(int(float(max_total)), int(float(max_rel)))
+                except sqlite3.Error as e:
+                    log_message(f"ERROR al procesar relación {tabla_rel}: {e}")
+            
+            maximos_por_tabla[tabla]["relaciones"] = max_relaciones
+
+        # Calcular la milésima superior del máximo total
+        max_milesima = ((max_total // 1000) + 1) * 1000
+        log_message(f"Máximo total: {max_total}")
+        log_message(f"Milésima superior del máximo total: {max_milesima}")
+
+        # Devolver los resultados
+        return {
+            "maximos_por_tabla": maximos_por_tabla,
+            "max_total": max_total,
+            "max_milesima": max_milesima
+        }
+
+    except sqlite3.Error as e:
+        log_message(f"ERROR en la verificación de máximos: {e}")
+        return None
+
+    finally:
+        log_message("=== Fin de verificación de máximos ===")
+
+
+
+# PARTE 0: CORRREGIR REGISTROS CON RELACIONES ROTAS:
+def validate_and_fix_broken_relations(cursor, conn, config_geom):
+    """
+    Valida y corrige relaciones rotas entre las tablas principales y relacionadas.
+
+    Args:
+        cursor: Cursor activo de la conexión SQLite.
+        conn: Conexión activa a la base de datos SQLite.
+        config_geom (dict): Configuración de las tablas y relaciones.
+    """
+    log_message("=== Validación y corrección de relaciones rotas ===")
+    try:
+        for table, details in config_geom.items():
+            pk_field = details["pk"]
+            relaciones = details["relaciones"]
+
+            if not relaciones:
+                log_message(f"La tabla '{table}' no tiene relaciones definidas. Se omite.")
+                continue
+
+            for related_table, related_field in relaciones.items():
+                log_message(f"Validando relaciones entre {table} y {related_table}...")
+
+                # Logs iniciales para registros válidos
+                select_query = f"""
+                SELECT COUNT(*)
+                FROM {related_table}
+                WHERE {related_table}.{related_field} IS NOT NULL
+                """
+                cursor.execute(select_query)
+                initial_count = cursor.fetchone()[0]
+                log_message(f"Registros válidos iniciales en {related_table}: {initial_count}")
+
+                # Identificar y actualizar relaciones rotas directamente
+                update_query = f"""
+                UPDATE {related_table}
+                SET {related_field} = NULL
+                WHERE {related_field} IS NOT NULL
+                AND EXISTS (
+                    SELECT 1
+                    FROM {table}
+                    WHERE {table}.T_Id_Cop = {related_table}.{related_field}
+                    AND {table}.Ruta IS NOT NULL
+                    AND {table}.Ruta != {related_table}.Ruta
+                )
+                """
+                cursor.execute(update_query)
+                conn.commit()
+
+                # Logs después de la actualización
+                cursor.execute(f"SELECT COUNT(*) FROM {related_table} WHERE {related_field} IS NOT NULL")
+                updated_count = cursor.fetchone()[0]
+                log_message(f"Registros válidos después de la corrección en {related_table}: {updated_count}")
+
+        log_message("=== Finalizada la validación y corrección de relaciones rotas ===")
+
+    except sqlite3.Error as e:
+        log_message(f"ERROR: Ocurrió un error durante la validación y corrección. {e}")
+
+
 
 # Parte 1: Mapeo de registros
 def map_tables(cursor, config_geom):
@@ -257,7 +385,21 @@ def update_related_tables(cursor, conn, config_geom):
 
 # Ejecución principal
 if __name__ == "__main__":
+    #PARTE DE AVERIGUAR MAXIMO
+    resultados = verificar_maximos(cursor, config_geom)
+
+    if resultados:
+        log_message("Resultados:")
+        log_message(f"Máximos por tabla: {resultados['maximos_por_tabla']}")
+        log_message(f"Máximo total: {resultados['max_total']}")
+        log_message(f"Milésima superior: {resultados['max_milesima']}")
+    else:
+        log_message("Ocurrió un error durante la verificación.")
+        
+        
     #PARTE GEOGRAFICA
+    log_message("##### INICIANDO VALIDACIÓN Y CORRECCIÓN DE RELACIONES ROTAS #####")
+    validate_and_fix_broken_relations(cursor, conn, config_geom)
     log_message("##### INICIANDO ACTUALIZACION DE LLAVES FORANEAS EN LAS TABLAS#######")
     map_tables(cursor, config_geom)
     update_related_tables(cursor, conn, config_geom)
