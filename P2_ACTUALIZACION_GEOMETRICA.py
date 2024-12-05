@@ -63,79 +63,14 @@ config_geom = {
         }
     },
 
-    "cca_derecho": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_fuenteadministrativa_derecho": "derecho"
-            }
+    "cca_terreno": {
+        "pk": "fid",
+        "relaciones": {}
     },
 
-    "cca_agrupacioninteresados": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_derecho": "agrupacion_interesados",
-            "cca_miembros": "agrupacion"
-            }
-    },
-
-    "cca_fuenteadministrativa": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_adjunto": "cca_fuenteadminstrtiva_adjunto",
-            "cca_fuenteadministrativa_derecho": "fuente_administrativa"
-            }
-    },
-
-    "cca_interesado": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_adjunto": "cca_interesado_adjunto",
-            "cca_derecho": "interesado",
-            "cca_miembros": "interesado"
-            }
-    },
-
-    "cca_predio": {
-        "pk": "T_Id",
-        "relaciones": {
-            "cca_terreno": "predio",
-            "cca_derecho": "predio",
-            "cca_construccion": "predio",
-            "cca_adjunto": "cca_predio_adjunto",
-            "cca_estructuraamenazariesgovulnerabilidad": "cca_predio_amenazariesgovulnerabilidad",
-            "cca_estructuranovedadfmi": "cca_predio_novedad_fmi",
-            "cca_estructuranovedadnumeropredial": "cca_predio_novedad_numeros_prediales",
-            "cca_ofertasmercadoinmobiliario": "predio",
-            "cca_predio_copropiedad": "unidad_predial",
-            "cca_predio_copropiedad": "matriz",
-            "cca_predio_informalidad": "cca_predio_formal",
-            "cca_predio_informalidad": "cca_predio_informal",
-            "cca_restriccion": "predio",
-            "extdireccion": "cca_predio_direccion",
-            "extreferenciaregistralsistemaantiguo": "cca_predio_referencia_registral_sistema_antiguo"
-        }
-    },
-
-    "cca_usuario": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_predio": "usuario"
-            }
-    },
-
-    "cca_caracteristicasunidadconstruccion": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_unidadconstruccion": "caracteristicasunidadconstruccion"
-            }
-    }, 
-
-
-    "cca_calificacionconvencional": {
-        "pk": "T_Id", 
-        "relaciones": {
-            "cca_caracteristicasunidadconstruccion": "calificacion_convencional"
-            }
+    "extdireccion": {
+        "pk": "fid",
+        "relaciones": {}
     }
 }
 
@@ -164,25 +99,24 @@ def verificar_maximos(cursor, config_geom):
                 max_pk = cursor.fetchone()[0] or 0
                 log_message(f"Máximo valor en {tabla}.{pk_field}: {max_pk}")
                 maximos_por_tabla[tabla] = {"max_pk": max_pk}
-                max_total = max(max_total, max_pk)
+                max_total = max(int(float(max_total)), int(float(max_pk)))
             except sqlite3.Error as e:
                 log_message(f"ERROR al procesar {tabla}: {e}")
                 continue
 
-            # Verificar las relaciones
+            # Verificar las relaciones solo si están definidas
             max_relaciones = {}
             relaciones = detalles.get("relaciones", {})
             for tabla_rel, campo_rel in relaciones.items():
-                try:
-                    cursor.execute(f"SELECT MAX({campo_rel}) FROM {tabla_rel}")
-                    max_rel = cursor.fetchone()[0] or 0
-                    log_message(f"Máximo valor en relación {tabla_rel}.{campo_rel}: {max_rel}")
-                    max_relaciones[tabla_rel] = max_rel
-                    print(f"max_total: {max_total} (type: {type(max_total)})")
-                    print(f"max_rel: {max_rel} (type: {type(max_rel)})")
-                    max_total = max(int(float(max_total)), int(float(max_rel)))
-                except sqlite3.Error as e:
-                    log_message(f"ERROR al procesar relación {tabla_rel}: {e}")
+                if campo_rel:  # Asegurarse de que la relación no sea None
+                    try:
+                        cursor.execute(f"SELECT MAX({campo_rel}) FROM {tabla_rel}")
+                        max_rel = int(float(cursor.fetchone()[0] or 0))
+                        log_message(f"Máximo valor en relación {tabla_rel}.{campo_rel}: {max_rel}")
+                        max_relaciones[tabla_rel] = max_rel
+                        max_total = max(max_total, max_rel)
+                    except sqlite3.Error as e:
+                        log_message(f"ERROR al procesar relación {tabla_rel}: {e}")
             
             maximos_por_tabla[tabla]["relaciones"] = max_relaciones
 
@@ -204,6 +138,8 @@ def verificar_maximos(cursor, config_geom):
 
     finally:
         log_message("=== Fin de verificación de máximos ===")
+
+
 
 
 
@@ -284,6 +220,70 @@ def map_tables(cursor, config_geom):
         else:
             log_message(f"La tabla {table} no tiene registros.")
     log_message("=== Fin del mapeo de tablas ===")
+
+def actualizar_por_ruta(cursor, conn, config_geom):
+    """
+    Actualiza las claves primarias y relaciones basadas en los valores de la columna 'Ruta'.
+
+    Args:
+        cursor: Cursor activo de la conexión SQLite.
+        conn: Conexión activa a la base de datos SQLite.
+        config_geom (dict): Configuración de las tablas y relaciones.
+    """
+    log_message("=== Inicio de actualización por ruta ===")
+    try:
+        for table, details in config_geom.items():
+            pk_field = details["pk"]
+            relaciones = details["relaciones"]
+
+            # Obtener rutas únicas en la tabla principal
+            cursor.execute(f"SELECT DISTINCT Ruta FROM {table} ORDER BY Ruta")
+            rutas = cursor.fetchall()
+
+            if not rutas:
+                log_message(f"No se encontraron rutas en la tabla '{table}'.")
+                continue
+
+            log_message(f"Rutas encontradas en '{table}': {rutas}")
+            incremento = 1000
+
+            for idx, (ruta,) in enumerate(rutas):
+                offset = incremento * (idx + 1)
+                log_message(f"Procesando Ruta='{ruta}' con offset={offset}")
+
+                # Actualizar PK en la tabla principal
+                update_pk_query = f"""
+                UPDATE {table}
+                SET {pk_field} = T_Id_Cop + ?
+                WHERE Ruta = ?;
+                """
+                cursor.execute(update_pk_query, (offset, ruta))
+                conn.commit()
+
+                # Actualizar claves relacionadas en otras tablas
+                if relaciones:
+                    for related_table, related_field in relaciones.items():
+                        log_message(f"Actualizando {related_table} relacionado con {table}...")
+
+                        # Actualizar claves relacionadas
+                        update_related_query = f"""
+                        UPDATE {related_table}
+                        SET {related_field} = {related_field} + ?
+                        WHERE Ruta = ?;
+                        """
+                        cursor.execute(update_related_query, (offset, ruta))
+                        conn.commit()
+
+                        log_message(f"Actualizados registros en {related_table} para Ruta='{ruta}' con offset={offset}")
+
+        log_message("=== Actualización completada exitosamente ===")
+
+    except sqlite3.Error as e:
+        log_message(f"ERROR durante la actualización por ruta: {e}")
+    except Exception as e:
+        log_message(f"ERROR inesperado: {e}")
+    finally:
+        log_message("=== Fin del proceso de actualización ===")
 
 def update_related_tables(cursor, conn, config_geom):
     """
@@ -398,8 +398,11 @@ if __name__ == "__main__":
         
         
     #PARTE GEOGRAFICA
-    log_message("##### INICIANDO VALIDACIÓN Y CORRECCIÓN DE RELACIONES ROTAS #####")
-    validate_and_fix_broken_relations(cursor, conn, config_geom)
+
+#    log_message("##### INICIANDO VALIDACIÓN Y CORRECCIÓN DE RELACIONES ROTAS #####")
+#    validate_and_fix_broken_relations(cursor, conn, config_geom)
+    log_message("##### INICIANDO SUMA DE VALORES EN  LLAVES FORANEAS EN LAS TABLAS#######")    
+    actualizar_por_ruta(cursor, conn, config_geom)
     log_message("##### INICIANDO ACTUALIZACION DE LLAVES FORANEAS EN LAS TABLAS#######")
     map_tables(cursor, config_geom)
     update_related_tables(cursor, conn, config_geom)

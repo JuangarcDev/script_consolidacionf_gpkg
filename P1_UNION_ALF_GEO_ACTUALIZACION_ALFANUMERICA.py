@@ -590,6 +590,42 @@ atributos_mapping = {
 # Conjunto de IDs para verificar duplicados
 id_sets = {table: set() for table in config_tablas}
 
+# Función para ajustar IDs según el índice del .gpkg
+def ajustar_ids_por_indice(df, pk_field, id_set, indice):
+    """
+    Ajusta los IDs en la tabla base para que sean únicos y añade un desplazamiento según el índice del .gpkg.
+    :param df: DataFrame de la tabla base.
+    :param pk_field: Nombre del campo PK en la tabla base.
+    :param id_set: Conjunto de IDs ya usados en la base de datos.
+    :param indice: Índice del archivo .gpkg para calcular el desplazamiento.
+    :return: DataFrame con IDs ajustados y mapeo de IDs originales a nuevos.
+    """
+    log_message(f"Ajustando IDs únicos en DataFrame con {len(df)} registros. Índice de .gpkg: {indice}.")
+    
+    desplazamiento = (indice + 1) * 1000  # Incremento basado en el índice
+    id_map = {}  # Mapeo de IDs originales a IDs ajustados
+    ultimo_id_asignado = max(id_set) if id_set else 0  # Último ID asignado en el conjunto
+
+    for index, row in df.iterrows():
+        original_id = row[pk_field]
+        new_id = original_id + desplazamiento  # Aplicar desplazamiento
+
+        # Asegurarse de que el ID es único
+        while new_id in id_set:
+            log_message(f"Conflicto de ID encontrado: {new_id}. Incrementando para evitar duplicados.")
+            new_id += 1
+
+        # Actualizar el ID en el DataFrame
+        df.at[index, pk_field] = new_id
+        id_map[original_id] = new_id
+        id_set.add(new_id)
+        ultimo_id_asignado = max(ultimo_id_asignado, new_id)
+
+        log_message(f"ID ajustado para índice {index}: Original: {original_id}, Nuevo: {new_id}.")
+
+    log_message("Ajuste de IDs completado.")
+    return df, id_map
+
 # Función para obtener el máximo ID en una tabla
 def obtener_max_id(conn, table, pk_field):
     log_message(f"Obteniendo el máximo ID en la tabla '{table}' para el campo '{pk_field}'.")
@@ -648,39 +684,6 @@ def ajustar_ids_unicos(df, pk_field, id_set):
 
     log_message("Ajuste de IDs completado.")
     return df, id_map
-
-def alinear_atributos(df, tabla_origen, columnas_base, atributos_mapping):
-    """
-    Alinea las columnas del DataFrame con la estructura base,
-    usando el mapeo para adaptar los nombres de los atributos si es necesario.
-    :param df: DataFrame de la tabla a alinear.
-    :param tabla_origen: El nombre de la tabla de origen, usado para identificar los conflictos.
-    :param columnas_base: Lista de columnas en la tabla base.
-    :param atributos_mapping: Diccionario de mapeo de nombres de campos problemáticos.
-    :return: DataFrame alineado.
-    """
-    log_message(f"Alineando atributos para la tabla '{tabla_origen}'.")
-    log_message(f"Columnas base esperadas: {columnas_base}.")
-    log_message(f"Diccionario de mapeo de atributos: {atributos_mapping}.")
-    # Filtrar solo los atributos que son específicos para la tabla de origen
-    mapping_especifico = {campo_origen: campo_destino for (tabla, campo_origen), campo_destino in atributos_mapping.items() if tabla == tabla_origen}
-    log_message(f"Aplicando mapeo específico: {mapping_especifico}.")
-
-    # Renombrar las columnas según el mapeo
-    df.rename(columns=mapping_especifico, inplace=True)
-    log_message(f"Columnas después de renombrar: {df.columns.tolist()}.")
-    
-    # Agregar columnas faltantes con valores NULL
-    for columna in columnas_base:
-        if columna not in df.columns:
-            log_message(f"Agregando columna faltante: {columna} con valores NULL.")
-            df[columna] = None  # Agregar columna faltante con valores NULL
-
-    # Ignorar columnas adicionales que no están en la base
-    df = df[[col for col in columnas_base if col in df.columns]]
-    log_message(f"DataFrame alineado. Columnas finales: {df.columns.tolist()}.")
-    return df
-
 
 def actualizar_fk_en_relaciones(df, fk_field, id_map, ruta_actual):
     """
@@ -749,38 +752,6 @@ def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map, ru
         except Exception as e:
             log_message(f"Error al actualizar FK en '{fk_table}': {e}")
 
-def actualizar_fk_por_ruta(conn_dest, config_geom):
-    """
-    Actualiza las relaciones geográficas por ruta según el diccionario config_geom.
-    """
-    log_message("Iniciando procesamiento de relaciones geográficas por rutas")
-
-    # Iterar sobre cada tabla geográfica en el diccionario config_geom
-    for tabla_geom, geom_info in config_geom.items():
-        pk_field = geom_info["pk"]
-        relaciones = geom_info.get("relaciones", {})
-
-        log_message(f"\n--- Procesando tabla geométrica: {tabla_geom} ---")
-
-        # Obtener las rutas únicas de la capa actual
-        rutas_query = f"SELECT DISTINCT Ruta FROM {tabla_geom}"
-        rutas = [row[0] for row in conn_dest.execute(rutas_query)]
-        log_message(f"Rutas detectadas para la tabla '{tabla_geom}': {', '.join(map(str, rutas))}")
-
-        for ruta_actual in rutas:
-            log_message(f"\n*** Procesando ruta: {ruta_actual} para la tabla '{tabla_geom}' ***")
-
-            # Crear un diccionario de T_Id_Cop a fid por ruta
-            cop_to_fid_por_ruta = generar_diccionario_fid(conn_dest, tabla_geom, pk_field, ruta_actual)
-
-            # Procesar las relaciones asociadas
-            if relaciones:
-                for related_table, fk_field in relaciones.items():
-                    log_message(f"\nProcesando relación con '{related_table}' usando FK '{fk_field}'")
-                    procesar_relacion(conn_dest, related_table, tabla_geom, fk_field, pk_field, ruta_actual, cop_to_fid_por_ruta)
-
-    log_message("\nProcesamiento de relaciones geográficas completado")
-
 
 def generar_diccionario_fid(conn, tabla_geom, pk_field, ruta_actual):
     """
@@ -831,17 +802,17 @@ def procesar_relacion(conn, related_table, tabla_geom, fk_field, pk_field, ruta_
 
 
 
-# Procesamiento de tablas con relaciones, sin relaciones y de dominio
+# Procesamiento de tablas con relaciones y desplazamiento por índice
 with sqlite3.connect(output_file) as conn_dest:
     # Iterar sobre cada archivo .gpkg adicional en gpkg_files
-    for gpkg in gpkg_files[1:]:
+    for indice, gpkg in enumerate(gpkg_files):
         if not os.path.exists(gpkg):
             log_message(f"El archivo '{gpkg}' no existe. Se omitirá.")
             continue
 
         # Conectar al archivo de origen actual
         with sqlite3.connect(gpkg) as conn_src:
-            log_message(f"Procesando archivo de origen: '{gpkg}'")
+            log_message(f"Procesando archivo de origen: '{gpkg}' (Índice: {indice})")
 
             # Procesar cada tabla en el orden especificado en `config_tablas`
             for tabla, info in config_tablas.items():
@@ -859,11 +830,11 @@ with sqlite3.connect(output_file) as conn_dest:
                 except Exception as e:
                     log_message(f"Error al leer la tabla '{tabla}': {e}")
                     continue
+                # SUMAR LOS INCREMENTOS +1000
 
-                # Ajustar IDs en la tabla base
+                # Ajustar IDs en la tabla base usando el desplazamiento por índice
                 max_id = obtener_max_id(conn_dest, tabla, pk_field)
-                offset = int(max_id) + 1
-                df, id_map = ajustar_ids_unicos(df, pk_field, id_sets[tabla])
+                df, id_map = ajustar_ids_por_indice(df, pk_field, id_sets[tabla], indice)
 
                 # Actualizar las tablas relacionadas con el nuevo T_Id
                 actualizar_registros(conn_dest, tabla, pk_field, relaciones, id_map, gpkg)
@@ -881,8 +852,5 @@ with sqlite3.connect(output_file) as conn_dest:
         log_message(f"Iniciando limpieza de columnas temporales en capas procesadas: {capas_a_procesar}")
         #eliminar_columnas_de_paso(gpkg, capas_a_procesar)
         log_message("Limpieza completada.")
-
-    # Procesamiento de relaciones geográficas después de las tablas base            
-    #actualizar_fk_por_ruta(conn_dest, config_geom)    
-
+  
 log_message("Proceso de unión de tablas alfanuméricas completado.")
