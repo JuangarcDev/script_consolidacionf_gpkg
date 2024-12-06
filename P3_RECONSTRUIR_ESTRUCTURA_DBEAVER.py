@@ -641,7 +641,7 @@ modelo_ideal = {
 
     #   ---     PARTE GEOGRAFICA    ---
     "cca_puntolevantamiento": """CREATE TABLE cca_puntolevantamiento (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom POINT NOT NULL, 
     T_Ili_Tid TEXT(200) NULL,
     id_punto_levantamiento TEXT(255) NOT NULL,
@@ -658,7 +658,7 @@ modelo_ideal = {
 );""",
 
     "cca_puntocontrol": """CREATE TABLE cca_puntocontrol (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom POINT NOT NULL, 
     T_Ili_Tid TEXT(200) NULL,
     id_punto_control TEXT(255) NOT NULL,
@@ -674,7 +674,7 @@ modelo_ideal = {
 );""",
 
     "cca_puntolindero": """CREATE TABLE cca_puntolindero (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom POINT NOT NULL, 
     T_Ili_Tid TEXT(200) NULL,
     id_punto_lindero TEXT(255) NOT NULL,
@@ -691,7 +691,7 @@ modelo_ideal = {
 );""",
 
     "cca_puntoreferencia": """CREATE TABLE cca_puntoreferencia (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom POINT NOT NULL, 
     T_Ili_Tid TEXT(200) NULL,
     tipo_punto_referencia INTEGER NULL CONSTRAINT cca_puntoreferencia_tipo_punto_referencia_fkey REFERENCES cca_puntoreferenciatipo DEFERRABLE INITIALLY DEFERRED,
@@ -704,7 +704,7 @@ modelo_ideal = {
 );""",
 
     "cca_construccion": """CREATE TABLE cca_construccion (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom MULTIPOLYGON NULL, 
     T_Ili_Tid TEXT(200) NULL,
     identificador TEXT(20) NOT NULL,
@@ -727,7 +727,7 @@ modelo_ideal = {
 );""",
 
     "cca_terreno": """CREATE TABLE cca_terreno (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom MULTIPOLYGON NULL, 
     T_Ili_Tid TEXT(200) NULL,
     servidumbre_transito BOOLEAN NULL,
@@ -739,7 +739,7 @@ modelo_ideal = {
 );""",
 
     "extdireccion": """CREATE TABLE extdireccion (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom POINT NULL,
     T_Seq INTEGER NULL,
     tipo_direccion INTEGER NOT NULL CONSTRAINT extdireccion_tipo_direccion_fkey REFERENCES extdireccion_tipo_direccion DEFERRABLE INITIALLY DEFERRED,
@@ -761,7 +761,7 @@ modelo_ideal = {
 );""",
 
     "cca_unidadconstruccion": """CREATE TABLE cca_unidadconstruccion (
-    T_Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    T_Id INTEGER PRIMARY KEY NOT NULL,
     geom MULTIPOLYGON NULL, 
     T_Ili_Tid TEXT(200) NULL,tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
     tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,

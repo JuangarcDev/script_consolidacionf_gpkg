@@ -642,56 +642,6 @@ def obtener_max_id(conn, table, pk_field):
     log_message(f"Máximo ID obtenido de la tabla '{table}', campo '{pk_field}': {max_id}.")
     return max_id if max_id else 0
 
-# Función para verificar y ajustar IDs en la tabla base
-def ajustar_ids_unicos(df, pk_field, id_set):
-    """
-    Ajusta los IDs en la tabla base para que no haya duplicados en las tablas relacionadas,
-    intentando limitar las iteraciones para buscar un ID único.
-    :param df: DataFrame de la tabla base.
-    :param pk_field: El nombre del campo PK en la tabla base.
-    :param id_set: Conjunto de IDs ya usados en la base de datos.
-    :return: DataFrame con IDs ajustados.
-    """
-    log_message(f"Ajustando IDs únicos en DataFrame con {len(df)} registros.")
-    log_message(f"Campo PK: '{pk_field}', conjunto de IDs existentes: {len(id_set)} registros en el conjunto.")
-    
-    id_map = {}  # Mapeo de IDs originales a IDs ajustados
-    ultimo_id_asignado = max(id_set) if id_set else 0  # Último ID asignado en el conjunto
-
-    for index, row in df.iterrows():
-        original_id = row[pk_field]
-        log_message(f"Registro índice {index}, ID original: {original_id}.")
-
-        # Si el campo PK es 'fid', mantener el ID original
-        if pk_field == 'fid':
-            log_message(f"El campo PK es 'fid', manteniendo el ID original: {original_id}.")
-            id_map[original_id] = original_id
-            continue
-
-        # Intentar asignar un nuevo ID único
-        new_id = original_id
-        intentos = 0
-        while new_id in id_set and intentos < 10:
-            log_message(f"Conflicto de ID encontrado: {new_id}. Incrementando ID.")
-            new_id += 1
-            intentos += 1
-
-        # Si después de 10 intentos no se encontró un ID único, continuar desde el último ID asignado
-        if new_id in id_set:
-            log_message(f"Conflicto persiste después de 10 intentos. Continuando desde {ultimo_id_asignado + 1}.")
-            new_id = ultimo_id_asignado + 1
-
-        # Asignar el nuevo ID
-        df.at[index, pk_field] = new_id
-        id_map[original_id] = new_id
-        id_set.add(new_id)
-        ultimo_id_asignado = max(ultimo_id_asignado, new_id)
-
-        log_message(f"ID ajustado para índice {index}: Original: {original_id}, Nuevo: {new_id}.")
-
-    log_message("Ajuste de IDs completado.")
-    return df, id_map
-
 def actualizar_fk_en_relaciones(df, fk_field, id_map, ruta_actual):
     """
     Actualiza las claves foráneas en una tabla relacionada con los nuevos valores de PK,
@@ -759,23 +709,6 @@ def actualizar_registros(conn_dest, tabla_base, pk_field, relaciones, id_map, ru
         except Exception as e:
             log_message(f"Error al actualizar FK en '{fk_table}': {e}")
 
-
-def generar_diccionario_fid(conn, tabla_geom, pk_field, ruta_actual):
-    """
-    Genera un diccionario {T_Id_Cop: fid} para una tabla y ruta específica.
-    """
-    diccionario = {}
-    query = f"""
-        SELECT T_Id_Cop, {pk_field}
-        FROM {tabla_geom}
-        WHERE Ruta = ?
-    """
-    registros = conn.execute(query, (ruta_actual,)).fetchall()
-    for t_id_cop, fid in registros:
-        diccionario[t_id_cop] = fid
-
-    log_message(f"Diccionario cop_to_fid generado para ruta '{ruta_actual}': {diccionario}")
-    return diccionario
 
 # Procesamiento de tablas con relaciones y desplazamiento por índice
 with sqlite3.connect(output_file) as conn_dest:

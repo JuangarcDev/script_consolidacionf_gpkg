@@ -274,5 +274,6 @@ LEFT JOIN cca_predio pred ON adj.cca_predio_adjunto = pred.T_Id
 LEFT JOIN cca_fuenteadministrativa fuente ON adj.cca_fuenteadminstrtiva_adjunto = fuente.T_Id
 LEFT JOIN cca_interesado interes ON adj.cca_interesado_adjunto = interes.T_Id
 
-;
+WHERE adj.Ruta = 'C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg';
+
 
