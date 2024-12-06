@@ -49,7 +49,7 @@ JOIN
 JOIN 
     cca_fuenteadministrativa ON cca_fuenteadministrativa_derecho.fuente_administrativa = cca_fuenteadministrativa.T_Id
 
-WHERE cca_predio.Ruta = 'C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg'
+WHERE cca_predio.Ruta = 'C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg';
 
 
 PREDIO -> TERRENO -> CCA_CONSTRUCCION -> CCA_UNIDAD_CONSTRUCCION -> CCA_CARACTERISTICA_UNIDAD_CONSTRUCCION -> CARACTERISTICAS_UNIDAD -> CALIFICACION_CONVENCIONAL -> 
@@ -127,8 +127,8 @@ t.fid as Tid_terreno, t.area_terreno, t.T_Id_Cop, t.Ruta,
 c.fid as Tid_construccion, c.identificador as ident_construccion, c.T_Id_Cop, c.Ruta, ct.iliCode as cons_tipo, 
 dct.iliCode as cons_dominio, 
 c.area_construccion_alfanumerica, c.area_construccion_digital,
-uc.T_Id  as Tid_unidad,
-uc.tipo_planta, uc.area_construida as area_ucos, uc.T_Id_Cop, uc.Ruta,
+uc.fid  as Tid_unidad,
+uc.tipo_planta, uc.area_construida as area_ucos, uc.fid, uc.Ruta,
 cc.identificador as ident_Carac,
 dct.iliCode as ucons_dominio, 
 uct.iliCode as ucons_tipo,  
@@ -165,6 +165,9 @@ left join cca_anexotipo ant
 on cc.tipo_anexo = ant.T_Id 
 left join cca_calificartipo cat 
 on cac.tipo_calificar = cat.T_Id
+
+WHERE p.Ruta = 'C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg';
+
 
 ADJUNTO -> UNIDAD CONSTRU -> CONSTRUCCION -> FUENTE-ADM -> INTERESADO -> PREDIO -> TIPO DE ARCHIVO -> RELACION SOPORTE
 
@@ -269,5 +272,7 @@ LEFT JOIN cca_construccion cons ON adj.cca_construccion_adjunto = cons.fid
 LEFT JOIN cca_unidadconstruccion ucons ON adj.cca_unidadconstruccion_adjunto = ucons.fid
 LEFT JOIN cca_predio pred ON adj.cca_predio_adjunto = pred.T_Id
 LEFT JOIN cca_fuenteadministrativa fuente ON adj.cca_fuenteadminstrtiva_adjunto = fuente.T_Id
-LEFT JOIN cca_interesado interes ON adj.cca_interesado_adjunto = interes.T_Id;
+LEFT JOIN cca_interesado interes ON adj.cca_interesado_adjunto = interes.T_Id
+
+;
 

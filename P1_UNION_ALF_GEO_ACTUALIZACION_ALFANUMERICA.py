@@ -4,6 +4,8 @@ import os
 import shutil
 import pandas as pd
 import sqlite3
+import json
+
 
 #-----PARTE GEOGRAFICA-----
 
@@ -26,39 +28,39 @@ with open(log_file, "w", encoding="utf-8") as log:
 # Lista de archivos .gpkg a combinar
 gpkg_files = [
     r"C:\ACC\CONSOLIDACION_MANZANAS\gpkg_base\modelo_captura_20241029.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0016\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0003\captura_campo_20241008.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0008\captura_campo_20240920.gpkg",
-    r"C:\ACC\CONSOLIDACION_MANZANAS\0017\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0016\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0009\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0003\captura_campo_20241008.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0008\captura_campo_20240920.gpkg",
+    #r"C:\ACC\CONSOLIDACION_MANZANAS\0017\captura_campo_20240920.gpkg",
     #OTRAS RUTAS
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0001\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0002\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0003\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0004\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0005\MN_00000005_20241011_OK\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0006\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0007\MN_00000007_20241015_31\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0008\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0009\MN_00000009_20240923-vf\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0010\MN_00000010_20241105\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0011\MN_00000011_NITOLA\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0012\MN_00000012_20240926\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0013\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0014\MN_00000014_20241025\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_1\MN_00000015_20241010\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_2\MN_00000015_20241105\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0016\MN_00000016_20240923\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0017\00000017-01\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0018\MN_00000018_20240923\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0019\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0021\captura_campo_20241008.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0022\MN_00000022_20240926\captura_campo_20240920.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0023\Captura actualizada\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0024\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0025\MN_00000025_20240926\modelo_captura_20241029.gpkg",
-    #r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0026\captura_campo_20241008.gpkg"
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0001\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0002\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0003\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0004\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0005\MN_00000005_20241011_OK\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0006\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0007\MN_00000007_20241015_31\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0008\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0009\MN_00000009_20240923-vf\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0010\MN_00000010_20241105\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0011\MN_00000011_NITOLA\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0012\MN_00000012_20240926\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0013\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0014\MN_00000014_20241025\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_1\MN_00000015_20241010\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0015_2\MN_00000015_20241105\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0016\MN_00000016_20240923\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0017\00000017-01\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0018\MN_00000018_20240923\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0019\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0020\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0021\captura_campo_20241008.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0022\MN_00000022_20240926\captura_campo_20240920.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0023\Captura actualizada\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0024\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0025\MN_00000025_20240926\modelo_captura_20241029.gpkg",
+    r"C:\ACC\CONSOLIDACION_MANZANAS\20241118_CONSOLIDACION\0026\captura_campo_20241008.gpkg"
 ]
 
 
@@ -68,6 +70,11 @@ output_dcim_folder = os.path.join(os.path.dirname(output_file), "DCIM")
 
 # Crear carpeta DCIM de salida si no existe
 os.makedirs(output_dcim_folder, exist_ok=True)
+
+# Guardar el diccionario en un archivo JSON
+def guardar_desplazamientos(desplazamiento_ruta, nombre_archivo='desplazamientos.json'):
+    with open(nombre_archivo, 'w') as file:
+        json.dump(desplazamiento_ruta, file)
 
 # Diccionario para almacenar capas temporales de registros únicos
 combined_layers = {}
@@ -247,8 +254,8 @@ for gpkg in gpkg_files[1:]:
         continue
 
     # Copiar archivos DCIM asociados al .gpkg actual
-    dcim_folder = os.path.join(os.path.dirname(gpkg), "DCIM")
-    copy_dcim_files(dcim_folder, output_dcim_folder)
+    #dcim_folder = os.path.join(os.path.dirname(gpkg), "DCIM")
+    #copy_dcim_files(dcim_folder, output_dcim_folder)
 
     try:
         # Listar las capas usando fiona
@@ -602,7 +609,7 @@ def ajustar_ids_por_indice(df, pk_field, id_set, indice):
     """
     log_message(f"Ajustando IDs únicos en DataFrame con {len(df)} registros. Índice de .gpkg: {indice}.")
     
-    desplazamiento = (indice + 1) * 1000  # Incremento basado en el índice
+    desplazamiento = (indice + 2) * 2000  # Incremento basado en el índice
     id_map = {}  # Mapeo de IDs originales a IDs ajustados
     ultimo_id_asignado = max(id_set) if id_set else 0  # Último ID asignado en el conjunto
 
@@ -624,7 +631,7 @@ def ajustar_ids_por_indice(df, pk_field, id_set, indice):
         log_message(f"ID ajustado para índice {index}: Original: {original_id}, Nuevo: {new_id}.")
 
     log_message("Ajuste de IDs completado.")
-    return df, id_map
+    return df, id_map, desplazamiento
 
 # Función para obtener el máximo ID en una tabla
 def obtener_max_id(conn, table, pk_field):
@@ -706,7 +713,7 @@ def actualizar_fk_en_relaciones(df, fk_field, id_map, ruta_actual):
     log_message(f"Registros filtrados para la ruta '{ruta_actual}': {len(df_ruta_actual)}.")
 
     # Actualizar las claves foráneas utilizando el mapeo de IDs
-    df_ruta_actual[fk_field] = df_ruta_actual[fk_field].map(id_map).fillna(df_ruta_actual[fk_field])
+    df_ruta_actual[fk_field] = df_ruta_actual[fk_field]
 
     # Reemplazar los registros actualizados en el DataFrame completo
     df.update(df_ruta_actual)
@@ -770,40 +777,10 @@ def generar_diccionario_fid(conn, tabla_geom, pk_field, ruta_actual):
     log_message(f"Diccionario cop_to_fid generado para ruta '{ruta_actual}': {diccionario}")
     return diccionario
 
-
-def procesar_relacion(conn, related_table, tabla_geom, fk_field, pk_field, ruta_actual, cop_to_fid_por_ruta):
-    """
-    Actualiza las claves foráneas de una tabla relacionada.
-    """
-    # Seleccionar los registros relacionados
-    query = f"""
-        SELECT rt.rowid, rt.{fk_field}, bt.{pk_field}
-        FROM {related_table} AS rt
-        JOIN {tabla_geom} AS bt
-        ON rt.{fk_field} = bt.T_Id_Cop
-        WHERE bt.Ruta = ?
-    """
-    registros = conn.execute(query, (ruta_actual,)).fetchall()
-    log_message(f"Registros seleccionados para actualizar en '{related_table}' (ruta {ruta_actual}): {len(registros)}")
-
-    # Actualizar los registros
-    for rowid, old_fk_value, new_fk_value in registros:
-        log_message(f"Actualizando rowid={rowid} en '{related_table}' de FK vieja={old_fk_value} a nueva={new_fk_value}")
-        update_query = f"""
-            UPDATE {related_table}
-            SET {fk_field} = ?
-            WHERE rowid = ?
-        """
-        conn.execute(update_query, (new_fk_value, rowid))
-
-    conn.commit()
-    log_message(f"*** {len(registros)} registros actualizados en '{related_table}' para la ruta '{ruta_actual}' ***")
-
-
-
-
 # Procesamiento de tablas con relaciones y desplazamiento por índice
 with sqlite3.connect(output_file) as conn_dest:
+    # Diccionario para almacenar los desplazamientos
+    desplazamiento_ruta = {}
     # Iterar sobre cada archivo .gpkg adicional en gpkg_files
     for indice, gpkg in enumerate(gpkg_files):
         if not os.path.exists(gpkg):
@@ -834,11 +811,14 @@ with sqlite3.connect(output_file) as conn_dest:
 
                 # Ajustar IDs en la tabla base usando el desplazamiento por índice
                 max_id = obtener_max_id(conn_dest, tabla, pk_field)
-                df, id_map = ajustar_ids_por_indice(df, pk_field, id_sets[tabla], indice)
+                df, id_map, desplazamiento = ajustar_ids_por_indice(df, pk_field, id_sets[tabla], indice)
 
                 # Actualizar las tablas relacionadas con el nuevo T_Id
                 actualizar_registros(conn_dest, tabla, pk_field, relaciones, id_map, gpkg)
 
+                # GUARDAR EL DESPLAZAMIENTO EN EL DICCIONARIO
+                ruta_gpkg = df['Ruta'].iloc[0]  # Extrae el primer valor de la columna 'Ruta'
+                desplazamiento_ruta[ruta_gpkg] = desplazamiento
                 # Insertar la tabla base ajustada
                 try:
                     df.to_sql(tabla, conn_dest, if_exists="append", index=False)
@@ -852,5 +832,14 @@ with sqlite3.connect(output_file) as conn_dest:
         log_message(f"Iniciando limpieza de columnas temporales en capas procesadas: {capas_a_procesar}")
         #eliminar_columnas_de_paso(gpkg, capas_a_procesar)
         log_message("Limpieza completada.")
-  
+
+    # IMPRIMIR EL MAPEO DE desplazamiento ruta:
+    log_message("IMPRIMIENDO VALORES EN DESPLAZAMIENTO POR RUTA: ")
+    for ruta_gpkg, desplazamiento in desplazamiento_ruta.items():
+        log_message(f"PARA LA RUTA DE .GPKG {ruta_gpkg} TENEMOS UN DESPLAZAMIENTO DE: {desplazamiento}")
+    
+    # ... Después de procesar el diccionario
+    
+    guardar_desplazamientos(desplazamiento_ruta)
+
 log_message("Proceso de unión de tablas alfanuméricas completado.")
