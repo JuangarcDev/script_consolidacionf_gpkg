@@ -125,10 +125,8 @@ config_tablas = {
             "cca_estructuranovedadfmi": "cca_predio_novedad_fmi",
             "cca_estructuranovedadnumeropredial": "cca_predio_novedad_numeros_prediales",
             "cca_ofertasmercadoinmobiliario": "predio",
-            "cca_predio_copropiedad": "unidad_predial",
-            "cca_predio_copropiedad": "matriz",
-            "cca_predio_informalidad": "cca_predio_formal",
-            "cca_predio_informalidad": "cca_predio_informal",
+            "cca_predio_copropiedad": ["unidad_predial", "matriz"],
+            "cca_predio_informalidad": ["cca_predio_formal", "cca_predio_informal"],
             "cca_restriccion": "predio",
             "extdireccion": "cca_predio_direccion",
             "extreferenciaregistralsistemaantiguo": "cca_predio_referencia_registral_sistema_antiguo"
@@ -343,22 +341,33 @@ def actualizar_relaciones(cursor, conn, config_geom, desplazamiento_ruta):
                 log_message(f"Procesando Ruta='{ruta}' con incremento={incremento}")
 
                 # Actualizar claves relacionadas en las tablas relacionadas
-                for tabla_relacionada, campo_relacionado in relaciones.items():
-                    log_message(f"Actualizando relaciones en la tabla '{tabla_relacionada}' para el campo '{campo_relacionado}'...")
-
-                    # Consulta actualizada para no incluir la tabla principal
-                    update_related_query = f"""
-                    UPDATE {tabla_relacionada}
-                    SET {campo_relacionado} = {campo_relacionado} + ?
-                    WHERE {campo_relacionado} IS NOT NULL
-                    AND Ruta = ?
-                    """
-                    
-                    # Ejecutar la consulta
-                    cursor.execute(update_related_query, (incremento, ruta))
-                    conn.commit()
-
-                    log_message(f"Registros actualizados en '{tabla_relacionada}' para Ruta='{ruta}' con incremento={incremento}")
+                for tabla_relacionada, campos_relacionados in relaciones.items():
+                    # Si hay múltiples campos relacionados, iterar sobre ellos
+                    if isinstance(campos_relacionados, list):
+                        for campo_relacionado in campos_relacionados:
+                            log_message(f"Actualizando relaciones en la tabla '{tabla_relacionada}' para el campo '{campo_relacionado}'...")
+                            update_related_query = f"""
+                            UPDATE {tabla_relacionada}
+                            SET {campo_relacionado} = {campo_relacionado} + ?
+                            WHERE {campo_relacionado} IS NOT NULL
+                            AND Ruta = ?
+                            """
+                            cursor.execute(update_related_query, (incremento, ruta))
+                            conn.commit()
+                            log_message(f"Registros actualizados en '{tabla_relacionada}' para el campo '{campo_relacionado}' con incremento={incremento}")
+                    else:
+                        # Caso normal si no es una lista
+                        campo_relacionado = campos_relacionados
+                        log_message(f"Actualizando relaciones en la tabla '{tabla_relacionada}' para el campo '{campo_relacionado}'...")
+                        update_related_query = f"""
+                        UPDATE {tabla_relacionada}
+                        SET {campo_relacionado} = {campo_relacionado} + ?
+                        WHERE {campo_relacionado} IS NOT NULL
+                        AND Ruta = ?
+                        """
+                        cursor.execute(update_related_query, (incremento, ruta))
+                        conn.commit()
+                        log_message(f"Registros actualizados en '{tabla_relacionada}' para el campo '{campo_relacionado}' con incremento={incremento}")
 
         log_message("=== Actualización de relaciones completada exitosamente ===")
 
@@ -435,7 +444,7 @@ if __name__ == "__main__":
     #CARGAR JSON CON AUMENTOS
     log_message("IMPRIMIR DICCIONARIO JSON DE DESPLAZAMIENTOS POR RUTA: ")
     desplazamiento_ruta = cargar_desplazamientos('desplazamientos.json')
-    # Ahora puedes usar el diccionario en P2
+    # CARGAR INCREMENTOS POR RUTA
     for ruta_gpkg, desplazamiento in desplazamiento_ruta.items():
         log_message(f"PARA LA RUTA DE .GPKG {ruta_gpkg} TENEMOS UN DESPLAZAMIENTO DE: {desplazamiento}")
 

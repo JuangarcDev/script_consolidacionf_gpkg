@@ -4,7 +4,7 @@ import os
 import codecs
 
 # Ruta al archivo GeoPackage
-db_path = r"/home/daniel/Descargas/PASO_PROYECTO_COMPILACION_GPKG/COP_gpkg_combinado/gpkg_combinado/captura_campo_20240920.gpkg"
+db_path = r"/home/daniel/Descargas/PASO_PROYECTO_COMPILACION_GPKG/Comb_11122024/captura_campo_20240920.gpkg"
 log_path = os.path.join(os.path.dirname(db_path), "migracion_log.txt")
 
 # Función para escribir mensajes en el archivo de log
@@ -763,7 +763,7 @@ modelo_ideal = {
     "cca_unidadconstruccion": """CREATE TABLE cca_unidadconstruccion (
     T_Id INTEGER PRIMARY KEY NOT NULL,
     geom MULTIPOLYGON NULL, 
-    T_Ili_Tid TEXT(200) NULL,tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
+    T_Ili_Tid TEXT(200) NULL,
     tipo_planta INTEGER NULL CONSTRAINT cca_unidadconstruccion_tipo_planta_fkey REFERENCES cca_construccionplantatipo DEFERRABLE INITIALLY DEFERRED,
     planta_ubicacion INTEGER NOT NULL CONSTRAINT cca_unidadconstruccion_planta_ubicacion_check CHECK( planta_ubicacion BETWEEN 0 AND 500),
     area_construida DOUBLE NOT NULL CONSTRAINT cca_unidadconstruccion_area_construida_check CHECK( area_construida BETWEEN 0.0 AND 9.99999999999999E13),
